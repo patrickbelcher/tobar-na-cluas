@@ -61,8 +61,6 @@ function smoothSeek(audio, newTime) {
 }
 
 
-
-
 // CORE FUNCTION 1 — Set the active image
 function setActiveImage(wrap, isPlaying) {
   // Reset previous active
