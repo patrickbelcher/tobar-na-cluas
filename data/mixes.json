@@ -1,0 +1,33 @@
+[
+  {
+    "id": "tbnc-001",
+    "title": "Cold Beaches",
+    "base": "tbnc-001-Cold-Beaches",
+    "formats": {
+      "image": "JPG",
+      "mp3": "mp3",
+      "wav": "wav"
+    },
+    "tracklist": [
+      "Artist : Track Title : Album/EP : Label",
+      "Artist : Track Title : Album/EP : Label",
+      "Artist : Track Title : Album/EP : Label"
+    ]
+  },
+ 
+  {
+    "id": "tbnc-002",
+    "title": "Low Smoke",
+    "base": "tbnc-002-Low-Smoke",
+    "formats": {
+      "image": "JPG",
+      "mp3": "mp3",
+      "wav": "wav"
+    },
+    "tracklist": [
+      "Artist : Track Title : Album/EP : Label",
+      "Artist : Track Title : Album/EP : Label",
+      "Artist : Track Title : Album/EP : Label"
+    ]
+  }
+]

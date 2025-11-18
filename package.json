@@ -1,0 +1,36 @@
+{
+  "name": "tobar-na-cluas",
+  "version": "1.0.0",
+  "description": "Node Web Audio Player App 0.1",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patrickbelcher/tobar-na-cluas.git"
+  },
+  "keywords": [
+    "keywords:",
+    "node",
+    "audio",
+    "player",
+    "music",
+    "web",
+    "javascript",
+    "html5",
+    "sound",
+    "streaming"
+  ],
+  "author": "Patrick J P Belcher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/patrickbelcher/tobar-na-cluas/issues"
+  },
+  "homepage": "https://github.com/patrickbelcher/tobar-na-cluas#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  }
+}

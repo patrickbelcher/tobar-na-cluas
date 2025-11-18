@@ -1,0 +1,435 @@
+/* Google Fonts */
+
+.averia-serif-libre-light {
+  font-family: "Averia Serif Libre", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.averia-serif-libre-regular {
+  font-family: "Averia Serif Libre", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Load Custom Fonts */
+
+/* https://www.gaelchlo.com/langc.html */
+@font-face {
+  font-family: 'Urrtgc';
+  /* bold */
+  src: url('../fonts/urrtgc.woff2') format('woff2');
+  font-weight: 700;
+  /* inherent */
+  font-style: bold;
+  font-display: swap;
+  font-synthesis: none;
+  /* prevent browser fake bold/italic */
+}
+
+/* https://www.gaelchlo.com/langc.html */
+@font-face {
+  font-family: 'Urrgc';
+  /* regular */
+  src: url('../fonts/urrgc.woff2') format('woff2');
+  font-weight: 400;
+  /* inherent */
+  font-style: normal;
+  font-display: swap;
+  font-synthesis: none;
+  /* prevent browser fake bold/italic */
+}
+
+/* ------------
+  Navbar 
+  ------------*/
+
+/* Parent <nav> styling */
+.navbar {
+  border: none !important;
+  font-family: "Averia Serif Libre", serif;
+}
+
+/* Header row (brand + toggler) */
+.navbar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-shrink: 1;  
+  min-width: 0;
+}
+
+/* Tobar text */
+.navbar-brand {
+  font-weight: 400;
+  font-size: clamp(1.5rem, 5vw, 40px);
+  /* dynamic shrink */
+  white-space: nowrap;
+  /* prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: font-size 0.3s ease;
+}
+
+.navbar-brand {
+  color: #000;
+  /* normal state */
+  transition: color 0.2s ease;
+  /* optional, makes hover smooth */
+}
+
+.navbar-brand:hover {
+  color: #528167;
+  ;
+  /* hover color */
+}
+
+.navbar-nav .nav-link.active {
+  color: #F27466;
+}
+
+/* ----------------
+   Toggler
+------------------- */
+
+.navbar-toggler-icon {
+  background-image: none !important;
+  /* removes Bootstrap’s default “hamburger” */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Remove default border and background */
+.navbar-toggler {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #000
+}
+
+/* Remove focus outline and shadow */
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ----------------
+   Nav Items
+------------------- */
+
+/* Nav items (horizontal on large, vertical on collapse) */
+.navbar-nav {
+  display: flex;
+  font-weight: 300;
+  font-size: clamp(1rem, 2vw, 20px);
+  color: #000
+    /* dynamic shrink */
+}
+
+.navbar-nav .nav-link {
+  color: #000;
+  /* normal state */
+  transition: color 0.2s ease;
+  /* optional, makes hover smooth */
+}
+
+.navbar-nav .nav-link:hover {
+  color: #528167;
+  ;
+  /* hover color */
+}
+
+/* ---------------------------
+   Responsive Behavior
+--------------------------- */
+
+/* Collapsed menu styling */
+@media (max-width: 575.98px) {
+
+  .navbar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* Keep brand + toggler on same line */
+  .navbar-brand {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  /* Ensure toggler stays on the far right */
+  .navbar-toggler {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+
+  /* Collapse dropdown below both */
+  .navbar-collapse {
+    width: 100%;
+  }
+
+  /* Vertical stacked links, right-aligned */
+  .navbar-nav {
+    flex-direction: column !important;
+    flex-wrap: wrap;
+    align-items: flex-end !important;
+    text-align: right;
+    gap: 0.15rem;
+  }
+
+  /* reduce link padding (Bootstrap sets this by default) */
+  .navbar-nav .nav-link {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    padding-left: 0;
+    /* optional to remove horizontal padding */
+    padding-right: 0;
+    line-height: 1;
+  }
+
+}
+
+@media (min-width: 576px) {
+
+  /* Hide the toggler when expanded */
+  .navbar-toggler {
+    display: none;
+  }
+}
+
+/* ------------
+  Main Content
+  ------------*/
+
+/* Set Fonts */
+body {
+  padding-top: 100px;
+  padding-bottom: 80px;
+}
+
+/* Responsive headings */
+main h1 {
+  font-family: "Averia Serif Libre", serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+}
+
+main h2 {
+  font-family: "Averia Serif Libre", serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+}
+
+main h3 {
+  font-family: "Averia Serif Libre", serif;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+}
+
+/* Paragraphs */
+main p {
+  font-family: 'Urrgc';
+  font-weight: 400;
+  font-size: clamp(.75rem, 2vw, 16px);
+  /* consistent rem sizing */
+  line-height: 0.75rem;
+}
+
+main h1, main h2, main h3, main p{
+  white-space: nowrap;
+  /* prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: font-size 0.3s ease;
+}
+
+/* ------------
+  Mix Section
+  ------------*/
+
+.mix-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.mix-image img {
+  width: 100%;  
+  max-width: 500px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  
+  .mix-container {
+    flex-direction: column;   /* stack image above text */
+    align-items: flex-start;
+    text-align: center;
+  }
+
+  .mix-image img {     /* smaller on mobile */
+    max-width: 300px;  /* prevents overly large images on tablets */
+  }
+
+  .mix-text {
+    width: 100%;
+    text-align: left; /* optional: keep text left-aligned */
+  }
+}
+
+/* Container for image + overlay */
+.image-hover-wrap {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 4px; /* optional soft corners */
+}
+
+/* The actual image */
+.image-hover-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+/* Overlay covers the image, initially hidden */
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* semi-transparent black */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Make the play icon proportional */
+.image-overlay .play-icon {
+  width: 40%;       
+  height: auto;     /* preserve aspect ratio */
+  max-width: 150px;  /* don't get too big on large images */
+}
+
+/* Show overlay on hover */
+.image-hover-wrap:hover .image-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Image zoom on hover */
+.image-hover-wrap:hover img {
+  transform: scale(1.05);
+}
+
+.image-hover-wrap.active img {
+  filter: brightness(0.7); /* dims the image */
+}
+
+.image-hover-wrap.active .image-overlay {
+  opacity: 1; /* stays visible */
+  background: rgba(0,0,0,0.5); /* darker highlight if you want */
+}
+
+.image-hover-wrap.active .play-icon {
+  transform: scale(1.2); /* optional: slightly larger icon */
+}
+
+
+
+/* ------------
+  Footer Player 
+  ------------*/
+#footer-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  /* total footer height */
+  background: #000;
+  z-index: 1030;
+  display: flex;
+  align-items: center;
+  /* vert*/
+  justify-content: center; 
+  /* horiz*/
+}
+
+/* Player container */
+.player-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  gap: 0.5rem;
+  /* space between elements */
+  padding: 0.5rem;
+  /* horizontal padding left/right */
+}
+
+/* Play/pause button */
+#play-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ;
+}
+
+#play-btn svg {
+  color: white;
+  width: 30px;
+  height: 30px;
+  background: none;
+}
+
+#elapsed-time,
+#total-time {
+  color: #fff;
+  font-size: 0.9rem;
+  width: 40px;
+  /* consistent width so layout doesn’t shift */
+  text-align: center;
+}
+
+/* Progress bar container */
+.progress-wrapper {
+  flex-grow: 1;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Filled portion of the progress */
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #528167;
+  /* fill color */
+  border-radius: 3px 0 0 3px;
+}
