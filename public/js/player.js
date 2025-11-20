@@ -24,14 +24,14 @@ async function setIcon(path) {
 // Initial footer icon
 setIcon(iconPlay);
 
-// Smooth 15ms fade-out + fade-in to prevent clicks on seeking
+// Smooth 150ms fade-out + fade-in to prevent clicks on seeking
 function smoothSeek(audio, newTime) {
-  const fadeDuration = 0.15; // seconds
+  const fadeDuration = 0.25; // seconds
   const originalVolume = audio.volume;
 
   // Fade out quickly
   audio.volume = originalVolume;
-  const fadeOutSteps = 5;
+  const fadeOutSteps = 10;
   const fadeOutInterval = fadeDuration / fadeOutSteps;
 
   let step = 0;
@@ -61,7 +61,7 @@ function smoothSeek(audio, newTime) {
 }
 
 
-// CORE FUNCTION 1 — Set the active image
+// Set the active image
 function setActiveImage(wrap, isPlaying) {
   // Reset previous active
   if (activeImage && activeImage !== wrap) {
@@ -74,7 +74,7 @@ function setActiveImage(wrap, isPlaying) {
   activeImage = wrap;
   wrap.classList.add("active");
 
-  // Set correct overlay icon
+  // Set correct overlay play / pause icon
   const icon = wrap.querySelector('.play-icon');
   if (icon) {
     icon.src = isPlaying ? iconPause : iconPlay;
@@ -83,7 +83,8 @@ function setActiveImage(wrap, isPlaying) {
 
 
 
-// CORE FUNCTION 2 — Switch track and play
+
+// Switch audio source and play
 async function loadAndPlay(mix) {
   const mp3 = `/audio/${mix.base}.${mix.formats.mp3}`;
 
@@ -95,7 +96,7 @@ async function loadAndPlay(mix) {
 }
 
 
-// EVENT: Click on a mix-image
+// Click on a mix-image
 imageWraps.forEach(wrap => {
   wrap.addEventListener('click', async () => {
     const id = wrap.dataset.id;

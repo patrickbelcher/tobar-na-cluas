@@ -40,6 +40,10 @@
   /* prevent browser fake bold/italic */
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* ------------
   Navbar 
   ------------*/
@@ -51,7 +55,7 @@
 }
 
 /* Header row (brand + toggler) */
-.navbar-header {
+.brand-toggle-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -150,7 +154,7 @@
 /* Collapsed menu styling */
 @media (max-width: 575.98px) {
 
-  .navbar-header {
+  .brand-toggle-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -346,7 +350,6 @@ main h1, main h2, main h3, main p{
 
 .image-hover-wrap.active .image-overlay {
   opacity: 1; /* stays visible */
-  background: rgba(0,0,0,0.5); /* darker highlight if you want */
 }
 
 .image-hover-wrap.active .play-icon {

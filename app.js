@@ -1,5 +1,6 @@
 // app.js
 import express from "express"; // for Node v20+, supports ES modules if "type":"module" in package.json
+import expressLayouts from "express-ejs-layouts";
 import path from "path";
 import { fileURLToPath } from "url";
 import { readFileSync } from "fs";
@@ -13,6 +14,8 @@ const PORT = process.env.PORT || 3000;
 // Set EJS as the view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(expressLayouts);
+app.set("layout", "layout");
 
 // Serve static files from "public"
 app.use(express.static(path.join(__dirname, "public")));
@@ -24,7 +27,11 @@ const mixes = JSON.parse(
 
 // Homepage route — render index.ejs and pass mixes data
 app.get("/", (req, res) => {
-  res.render("index", { mixes });
+  res.render("index", { title: "Home", mixes });
+});
+
+app.get("/about", (req, res) => {
+  res.render("about", { title: "About" });
 });
 
 app.listen(PORT, () => {
