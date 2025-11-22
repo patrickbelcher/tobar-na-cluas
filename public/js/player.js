@@ -5,10 +5,11 @@ const progressBar = document.getElementById('progress-bar');
 const elapsedEl = document.getElementById('elapsed-time');
 const totalEl = document.getElementById('total-time');
 const imageWraps = document.querySelectorAll('.image-hover-wrap');
+const nowPlaying = document.getElementById('current-track');
 
 // SVGs
-const iconPlay = '/icons/play.svg';
-const iconPause = '/icons/pause.svg';
+const iconPlay = '/icons/play_circle.svg';
+const iconPause = '/icons/pause_circle.svg';
 
 // Audio
 const audio = new Audio();
@@ -23,6 +24,13 @@ async function setIcon(path) {
 
 // Initial footer icon
 setIcon(iconPlay);
+
+if (!window.mixes) {
+  console.error('window.mixes is undefined');
+} else {
+  console.log('Initializing player. Reading mixes JSON:', window.mixes);
+}
+
 
 // Smooth 150ms fade-out + fade-in to prevent clicks on seeking
 function smoothSeek(audio, newTime) {
@@ -90,6 +98,7 @@ async function loadAndPlay(mix) {
 
   if (audio.src !== mp3) {
     audio.src = mp3;
+    nowPlaying.innerHTML = `playing : <span class="mix-title">${mix.title}</span>`;
   }
 
   await audio.play();
@@ -166,6 +175,7 @@ audio.addEventListener('timeupdate', () => {
 
 // Click-to-seek
 document.querySelector('.progress-wrapper').addEventListener('click', (e) => {
+  if (!audio.src) return; 
   const rect = e.currentTarget.getBoundingClientRect();
   const percent = (e.clientX - rect.left) / rect.width;
   const newTime = percent * audio.duration;

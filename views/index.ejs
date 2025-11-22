@@ -1,35 +1,43 @@
 <main class="container-fluid">
-    <% console.log("EJS mixes:", mixes); %>
-      <% mixes.forEach(mix=> { %>
-        <section class="ms-3 me-3 pb-5 release-section">
+  <% console.log("EJS mixes:", mixes); %>
 
-          <div class="mix-container">
-            <div class="mix-image">
+    <% mixes.forEach(mix=> { %>
+      <section class="ms-3 me-3 pb-5 release-section">
 
-              <div class="image-hover-wrap" data-id="<%= mix.id %>">
+        <div class="mix-container">
+          <div class="mix-image">
 
-                <img src="/img/<%= mix.base %>.<%= mix.formats.image %>" alt="<%= mix.title %>">
+            <div class="image-hover-wrap" data-id="<%= mix.id %>">
 
-                <!-- Overlay -->
-                <div class="image-overlay">
-                  <img class="play-icon" src="/icons/play.svg" alt="Play">
-                </div>
+              <img src="/img/<%= mix.base %>.<%= mix.formats.image %>" alt="<%= mix.title %>">
+
+              <!-- Overlay -->
+              <div class="image-overlay">
+                <img class="play-icon" src="/icons/play.svg" alt="Play">
               </div>
-            </div>
-
-            <div class="mix-text">
-              <h3>
-                <%= mix.id %> : <%= mix.title %>
-              </h3>
-
-              <% mix.tracklist.forEach(line=> { %>
-                <p>
-                  <%= line %>
-                </p>
-                <% }) %>
             </div>
           </div>
 
-        </section>
-        <% }) %>
-  </main>
+          <div class="mix-text">
+            <h3>
+              <%= mix.id %> : <%= mix.title %>
+            </h3>
+
+            <% mix.tracklist.forEach(line=> { %>
+              <p>
+                <%= line %>
+              </p>
+              <% }) %>
+          </div>
+        </div>
+
+      </section>
+      <% }) %>
+
+        <!-- Pass mixes to global JS -->
+        <script>
+          window.mixes = <%- JSON.stringify(mixes) %>;
+          console.log('Mixes JSON:', window.mixes);
+        </script>
+
+</main>
