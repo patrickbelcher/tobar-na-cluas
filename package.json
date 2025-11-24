@@ -31,6 +31,8 @@
   "homepage": "https://github.com/patrickbelcher/tobar-na-cluas#readme",
   "dependencies": {
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "node.js": "^0.0.1-security"
   }
 }
