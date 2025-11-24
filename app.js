@@ -34,6 +34,29 @@ app.get("/about", (req, res) => {
   res.render("about", { title: "About" });
 });
 
+app.get("/download/:id", async (req, res) => {
+  const id = req.params.id;
+  const format = req.query.format;
+
+  // Rate limit
+  if (tooManyDownloads(req.ip)) {
+    return res.status(429).send("Too many downloads");
+  }
+
+  // Lookup mix
+  const mix = mixes.find(m => m.id === id);
+  if (!mix) return res.status(404).end();
+
+  const fileUrl = `https://mycdn.example.com/audio/${mix.base}.${mix.formats[format]}`;
+
+  // Stream securely
+  const response = await fetch(fileUrl);
+  res.setHeader("Content-Disposition", `attachment; filename="${mix.title}.${format}"`);
+
+  response.body.pipe(res);
+});
+
+
 app.listen(PORT, () => {
   console.log(`Tobar Na Cluas running at http://localhost:${PORT}`);
 });

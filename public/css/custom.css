@@ -44,6 +44,57 @@ html {
   scroll-behavior: smooth;
 }
 
+
+/* ------------
+  Main Content
+  ------------*/
+
+/* Set Fonts */
+body {
+  padding-top: 100px;
+  padding-bottom: 100px;
+  background-color: #EBEBE5
+}
+
+/* Responsive headings */
+main h1 {
+  font-family: "Averia Serif Libre", serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+}
+
+main h2 {
+  font-family: "Averia Serif Libre", serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+}
+
+main h3 {
+  font-family: "Averia Serif Libre", serif;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+}
+
+/* Paragraphs */
+main p {
+  font-family: 'Urrgc';
+  font-weight: 400;
+  font-size: clamp(.75rem, 2vw, 16px);
+  /* consistent rem sizing */
+  line-height: 0.75rem;
+}
+
+main h1, main h2, main h3, main p{
+  white-space: nowrap;
+  /* prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: font-size 0.3s ease;
+}
+
 /* ------------
   Navbar 
   ------------*/
@@ -52,6 +103,10 @@ html {
 .navbar {
   border: none !important;
   font-family: "Averia Serif Libre", serif;
+  background-color: #EBEBE5;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow: hidden;
 }
 
 /* Header row (brand + toggler) */
@@ -209,54 +264,6 @@ html {
   }
 }
 
-/* ------------
-  Main Content
-  ------------*/
-
-/* Set Fonts */
-body {
-  padding-top: 100px;
-  padding-bottom: 100px;
-}
-
-/* Responsive headings */
-main h1 {
-  font-family: "Averia Serif Libre", serif;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 400;
-  margin-bottom: 1.25rem;
-}
-
-main h2 {
-  font-family: "Averia Serif Libre", serif;
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 400;
-  margin-bottom: 1.25rem;
-}
-
-main h3 {
-  font-family: "Averia Serif Libre", serif;
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
-  font-weight: 400;
-  margin-bottom: 1.25rem;
-}
-
-/* Paragraphs */
-main p {
-  font-family: 'Urrgc';
-  font-weight: 400;
-  font-size: clamp(.75rem, 2vw, 16px);
-  /* consistent rem sizing */
-  line-height: 0.75rem;
-}
-
-main h1, main h2, main h3, main p{
-  white-space: nowrap;
-  /* prevent wrapping */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: font-size 0.3s ease;
-}
 
 /* ------------
   Mix Section
@@ -300,7 +307,7 @@ main h1, main h2, main h3, main p{
   display: inline-block;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 4px; /* optional soft corners */
+  border-radius: 10px; /* optional soft corners */
 }
 
 /* The actual image */
@@ -326,11 +333,17 @@ main h1, main h2, main h3, main p{
   transition: opacity 0.3s ease;
 }
 
+
+
 /* Make the play icon proportional */
 .image-overlay .play-icon {
   width: 40%;       
   height: auto;     /* preserve aspect ratio */
   max-width: 150px;  /* don't get too big on large images */
+}
+
+.image-hover-wrap:hover {
+  cursor: url('/icons/ladle.svg') 32 32, auto;
 }
 
 /* Show overlay on hover */
@@ -345,7 +358,7 @@ main h1, main h2, main h3, main p{
 }
 
 .image-hover-wrap.active img {
-  filter: brightness(0.7); /* dims the image */
+  filter: brightness(0.9); /* dims the image */
 }
 
 .image-hover-wrap.active .image-overlay {
@@ -354,6 +367,62 @@ main h1, main h2, main h3, main p{
 
 .image-hover-wrap.active .play-icon {
   transform: scale(1.2); /* optional: slightly larger icon */
+}
+
+/* ------------
+  About Page
+  ------------*/
+
+/* .about-page {
+  background-image: url('/img/tobar4.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  border-radius: 10px;
+} */
+
+.about-page {
+  position: relative;           /* for overlay positioning */
+  min-height: 100vh;            /* full viewport */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;            /* for fixed navbar */
+  color: #fff;                  /* text color on top of image */
+  z-index: 0;
+  overflow: hidden;             /* ensure icon and overlays are clipped */
+  cursor: url('/icons/ladle.svg') 32 32, auto;
+}
+
+/* Background image with optional filter */
+.about-page::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/img/tobar1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  /* filter: brightness(0.8);      */
+  z-index: -2;                  /* behind overlay and content */
+  transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+/* Colored overlay for blending */
+.about-page::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  /* background: #52816710;  */
+  border-radius: 10px;       /* semi-transparent overlay using hex alpha */
+  z-index: -1;                  /* behind content, above image */
 }
 
 
@@ -367,14 +436,27 @@ main h1, main h2, main h3, main p{
   width: 100%;
   height: 100px;
   /* total footer height */
-  background: #000;
+  background-color: #D7D6CC;
   z-index: 1030;
   display: flex;
   align-items: center;
   /* vert*/
   justify-content: center; 
   /* horiz*/
+  
 }
+
+/* #footer-player .container-fluid {
+  height: 100px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding: 0 !important;
+  padding-bottom: 0 !important;
+  background-color: #528167;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  overflow: hidden; /* matches navbar clean edges */
+
 
 /* Player container */
 .player-container {
@@ -382,11 +464,10 @@ main h1, main h2, main h3, main p{
   flex-direction: column;
   align-items: center;
   width: 100%;
-
 }
 
 #current-track {
-  color: #fff;
+  color: #000000;
   font-family: "Averia Serif Libre", serif;
   font-weight: 400;
   font-size: clamp(.75rem, 2vw, 16px) !important;
@@ -416,8 +497,16 @@ main h1, main h2, main h3, main p{
   /* horizontal padding left/right */
 }
 
+#playing-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
 #current-track {
-  color: #fff;
+  color: #000000;
   font-size: 1rem;
   text-align: center;
   width: 100%;
@@ -426,6 +515,7 @@ main h1, main h2, main h3, main p{
   white-space: nowrap;
   margin-bottom: 0.25rem;
 }
+
 
 /* Play/pause button */
 #play-btn {
@@ -439,7 +529,7 @@ main h1, main h2, main h3, main p{
 }
 
 #play-btn svg {
-  color: white;
+  color: #000000;
   width: 30px;
   height: 30px;
   background: none;
@@ -447,7 +537,7 @@ main h1, main h2, main h3, main p{
 
 #elapsed-time,
 #total-time {
-  color: #fff;
+  color: #000000;
   font-size: 0.9rem;
   width: 40px;
   /* consistent width so layout doesn’t shift */
@@ -463,6 +553,11 @@ main h1, main h2, main h3, main p{
   overflow: hidden;
   cursor: pointer;
   position: relative;
+  cursor: pointer;
+}
+
+.progress-wrapper.dragging {
+  cursor: pointer
 }
 
 /* Filled portion of the progress */
@@ -472,4 +567,27 @@ main h1, main h2, main h3, main p{
   background: #528167;
   /* fill color */
   border-radius: 3px 0 0 3px;
+}
+
+.download-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: url('/icons/download.svg') no-repeat center center;
+  background-size: contain;
+  
+}
+
+.format-btn {
+  font-family: "Averia Serif Libre", serif;
+  font-size: 0.9rem;
+  background: transparent;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.format-btn:hover {
+  text-decoration: underline; /* optional */
 }

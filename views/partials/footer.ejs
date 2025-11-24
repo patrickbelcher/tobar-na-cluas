@@ -1,26 +1,43 @@
 <!-- custom audio player-->
-  <footer id="footer-player">
-    <div class="player-container my-5">
+<footer id="footer-player">
+  <div class="player-container">
 
+    <div id="playing-details">
       <div id="current-track">playing : <span class="mix-title"></span> </div>
 
-      <div class="player-controls">
-          <!-- Play/Pause button-->
-          <button id="play-btn">
-            <!-- SVG button icon sizing-->
-            <svg id="player-icon"></svg>
-          </button>
 
-          <!-- Elapsed time -->
-          <span id="elapsed-time">0:00</span>
 
-          <!-- Seek bar -->
-          <div class="progress-wrapper">
-            <div id="progress-bar"></div>
-          </div>
+      <!-- <select id="format-select">
+        <option value="mp3" selected>MP3</option>
+        <option value="flac">FLAC</option>
+      </select> -->
 
-          <!-- Total duration -->
-          <span id="total-time">0:00</span>
-        </div>
     </div>
-  </footer>
+
+    <div class="player-controls">
+      <!-- Play/Pause button-->
+      <button id="play-btn">
+        <!-- SVG button icon sizing-->
+        <svg id="player-icon"></svg>
+      </button>
+
+      <!-- Elapsed time -->
+      <span id="elapsed-time">0:00</span>
+
+      <!-- Seek bar -->
+      <div class="progress-wrapper">
+        <div id="progress-bar"></div>
+      </div>
+
+      <!-- Total duration -->
+      <span id="total-time">0:00</span>
+
+      <!-- Download -->
+      <button id="download-btn" class="download-btn" aria-label="Download"></button>
+
+      <!-- File Format -->
+      <button id="format-toggle" class="format-btn">MP3</button>
+
+    </div>
+  </div>
+</footer>

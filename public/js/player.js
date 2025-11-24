@@ -6,6 +6,8 @@ const elapsedEl = document.getElementById('elapsed-time');
 const totalEl = document.getElementById('total-time');
 const imageWraps = document.querySelectorAll('.image-hover-wrap');
 const nowPlaying = document.getElementById('current-track');
+const downloadBtn = document.getElementById("download-btn");
+const formatBtn = document.getElementById('format-toggle');
 
 // SVGs
 const iconPlay = '/icons/play_circle.svg';
@@ -14,6 +16,8 @@ const iconPause = '/icons/pause_circle.svg';
 // Audio
 const audio = new Audio();
 let activeImage = null;
+let currentFormat = "mp3"; // default format
+let seekingAllowed = true;
 
 // Load inline SVG icon into the footer button
 async function setIcon(path) {
@@ -32,80 +36,35 @@ if (!window.mixes) {
 }
 
 
-// Smooth 150ms fade-out + fade-in to prevent clicks on seeking
-function smoothSeek(audio, newTime) {
-  const fadeDuration = 0.25; // seconds
-  const originalVolume = audio.volume;
-
-  // Fade out quickly
-  audio.volume = originalVolume;
-  const fadeOutSteps = 10;
-  const fadeOutInterval = fadeDuration / fadeOutSteps;
-
-  let step = 0;
-  const fadeOut = setInterval(() => {
-    step++;
-    audio.volume = originalVolume * (1 - step / fadeOutSteps);
-
-    if (step >= fadeOutSteps) {
-      clearInterval(fadeOut);
-
-      // Do the actual seek AFTER fade-out
-      audio.currentTime = newTime;
-
-      // Fade in
-      let fadeInStep = 0;
-      const fadeIn = setInterval(() => {
-        fadeInStep++;
-        audio.volume = (originalVolume * fadeInStep) / fadeOutSteps;
-
-        if (fadeInStep >= fadeOutSteps) {
-          audio.volume = originalVolume;
-          clearInterval(fadeIn);
-        }
-      }, fadeOutInterval * 1000);
-    }
-  }, fadeOutInterval * 1000);
-}
-
-
-// Set the active image
-function setActiveImage(wrap, isPlaying) {
-  // Reset previous active
-  if (activeImage && activeImage !== wrap) {
-    const prevIcon = activeImage.querySelector('.play-icon');
-    if (prevIcon) prevIcon.src = iconPlay;
-    activeImage.classList.remove("active");
-  }
-
-  // Set new active
-  activeImage = wrap;
-  wrap.classList.add("active");
-
-  // Set correct overlay play / pause icon
-  const icon = wrap.querySelector('.play-icon');
-  if (icon) {
-    icon.src = isPlaying ? iconPause : iconPlay;
-  }
-}
-
-
-
-
 // Switch audio source and play
-async function loadAndPlay(mix) {
-  const mp3 = `/audio/${mix.base}.${mix.formats.mp3}`;
+async function loadAndPlay(mix, startTime = 0) {
+  const format = currentFormat;
+  const src = `/audio/${mix.base}.${mix.formats[format]}`;
 
-  if (audio.src !== mp3) {
-    audio.src = mp3;
+  if (audio.src !== src) {
+    audio.src = src;
+
     nowPlaying.innerHTML = `playing : <span class="mix-title">${mix.title}</span>`;
+
+    progressBar.style.width = '0%';
+    elapsedEl.textContent = '0:00';
+    totalEl.textContent = '0:00';
   }
 
-  await audio.play();
+  // Start from specified time
+  audio.currentTime = startTime;
+
+  try {
+    await audio.play();
+  } catch (err) {
+    console.error("Audio play failed:", err);
+  }
+
+  blockSeeking();
 }
 
 
-// Click on a mix-image
+// Click on a mix-image events
 imageWraps.forEach(wrap => {
   wrap.addEventListener('click', async () => {
     const id = wrap.dataset.id;
@@ -125,6 +84,27 @@ imageWraps.forEach(wrap => {
   });
 });
 
+// Set the active image
+function setActiveImage(wrap, isPlaying) {
+  // Reset previous active
+  if (activeImage && activeImage !== wrap) {
+    const prevIcon = activeImage.querySelector('.play-icon');
+    if (prevIcon) prevIcon.src = iconPlay;
+    activeImage.classList.remove("active");
+  }
+
+  // Set new active
+  
+  activeImage = wrap;
+  wrap.classList.add("active");
+
+  // Set correct overlay play / pause icon
+  const icon = wrap.querySelector('.play-icon');
+  if (icon) {
+    icon.src = isPlaying ? iconPause : iconPlay;
+  }
+}
+
 
 // FOOTER: Play/Pause button
 playBtn.addEventListener('click', () => {
@@ -133,7 +113,6 @@ playBtn.addEventListener('click', () => {
   if (audio.paused) audio.play();
   else audio.pause();
 });
-
 
 
 // AUDIO EVENTS
@@ -173,13 +152,120 @@ audio.addEventListener('timeupdate', () => {
   elapsedEl.textContent = `${elapsedMin}:${elapsedSec}`;
 });
 
-// Click-to-seek
-document.querySelector('.progress-wrapper').addEventListener('click', (e) => {
-  if (!audio.src) return; 
-  const rect = e.currentTarget.getBoundingClientRect();
-  const percent = (e.clientX - rect.left) / rect.width;
-  const newTime = percent * audio.duration;
 
-  smoothSeek(audio, newTime);  
-});
+// --- CLICK / DRAG SEEK SETUP ---
+const progressWrapper = document.querySelector('.progress-wrapper');
 
+if (progressWrapper) {
+
+  function disableUserSelect() {
+    document.body.style.userSelect = 'none';
+  }
+
+  function enableUserSelect() {
+    document.body.style.userSelect = '';
+  }
+
+  function seekTo(e) {
+    if (!audio.src || isNaN(audio.duration)) return;
+    if (!seekingAllowed) return;
+
+    const rect = progressWrapper.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percent = Math.min(Math.max(x / rect.width, 0), 1);
+
+    // update audio
+    audio.currentTime = percent * audio.duration;
+
+    // update UI instantly
+    progressBar.style.width = (percent * 100) + '%';
+  }
+
+  // ---- MOUSE ----
+  let dragging = false;
+
+  progressWrapper.addEventListener('mousedown', (e) => {
+    dragging = true;
+    disableUserSelect();
+    progressWrapper.classList.add('dragging');
+    seekTo(e);
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (dragging) seekTo(e);
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (dragging) {
+      dragging = false;
+      enableUserSelect();
+      progressWrapper.classList.remove('dragging');
+    }
+  });
+
+  // ---- TOUCH ----
+  progressWrapper.addEventListener('touchstart', (e) => {
+    dragging = true;
+    disableUserSelect();
+    progressWrapper.classList.add('dragging');
+    seekTo(e.touches[0]);
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (dragging) {
+      seekTo(e.touches[0]);
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  document.addEventListener('touchend', () => {
+    dragging = false;
+    enableUserSelect();
+    progressWrapper.classList.remove('dragging');
+  });
+
+
+  // Prevent rapid seeking
+  function blockSeeking() {
+    seekingAllowed = false;
+    setTimeout(() => seekingAllowed = true, 1000);
+  }
+
+  // --- FORMAT TOGGLE BUTTON --
+  formatBtn.addEventListener("click", async () => {
+    if (!activeImage) return; // nothing selected
+
+    const mixId = activeImage.dataset.id;
+    const mix = window.mixes.find(m => m.id === mixId);
+    if (!mix) return;
+
+    const currentTime = audio.currentTime;
+
+    // Toggle format
+    currentFormat = currentFormat === "mp3" ? "flac" : "mp3";
+    formatBtn.textContent = currentFormat.toUpperCase();
+
+    // Reload track in new format, continue from same time
+    await loadAndPlay(mix, currentTime);
+
+    blockSeeking();
+  });
+
+
+  // --- DOWNLOAD BUTTON ---
+
+  downloadBtn.addEventListener("click", () => {
+    if (!activeImage) return;
+    const id = activeImage.dataset.id;
+    const mix = window.mixes.find(m => m.id === id);
+    if (!mix) return;
+
+    const format = currentFormat;     // "mp3" or "flac"
+
+    // Safe: request your backend, not the CDN
+    const url = `/download/${mix.id}?format=${format}`;
+
+    window.location.href = url;
+  });
+
+}
