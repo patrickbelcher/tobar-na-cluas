@@ -9,6 +9,13 @@
 
             <div class="image-hover-wrap" data-id="<%= mix.id %>">
 
+              <!-- Title Overlay -->
+              <div class="mix-title-overlay">
+                <h3>
+                  <%= mix.id %> : <%= mix.title %>
+                </h3>
+              </div>
+
               <img src="/img/<%= mix.base %>.<%= mix.formats.image %>" alt="<%= mix.title %>">
 
               <!-- Overlay -->
@@ -19,10 +26,6 @@
           </div>
 
           <div class="mix-text">
-            <h3>
-              <%= mix.id %> : <%= mix.title %>
-            </h3>
-
             <% mix.tracklist.forEach(line=> { %>
               <p>
                 <%= line %>

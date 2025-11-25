@@ -1,44 +1,72 @@
 /* Google Fonts */
 
-.averia-serif-libre-light {
-  font-family: "Averia Serif Libre", serif;
-  font-weight: 300;
-  font-style: normal;
-}
-
 .averia-serif-libre-regular {
   font-family: "Averia Serif Libre", serif;
   font-weight: 400;
   font-style: normal;
 }
 
-/* Load Custom Fonts */
-
-/* https://www.gaelchlo.com/langc.html */
-@font-face {
-  font-family: 'Urrtgc';
-  /* bold */
-  src: url('../fonts/urrtgc.woff2') format('woff2');
+.averia-serif-libre-bold {
+  font-family: "Averia Serif Libre", serif;
   font-weight: 700;
-  /* inherent */
-  font-style: bold;
-  font-display: swap;
-  font-synthesis: none;
-  /* prevent browser fake bold/italic */
+  font-style: normal;
 }
 
-/* https://www.gaelchlo.com/langc.html */
-@font-face {
-  font-family: 'Urrgc';
-  /* regular */
-  src: url('../fonts/urrgc.woff2') format('woff2');
+.averia-serif-libre-regular-italic {
+  font-family: "Averia Serif Libre", serif;
   font-weight: 400;
-  /* inherent */
-  font-style: normal;
-  font-display: swap;
-  font-synthesis: none;
-  /* prevent browser fake bold/italic */
+  font-style: italic;
 }
+
+.averia-serif-libre-bold-italic {
+  font-family: "Averia Serif Libre", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+
+/* SUSE Mono variable weights */
+.suse-400 {
+  font-family: "SUSE Mono", monospace;
+  font-weight: 400;
+}
+
+.suse-500 {
+  font-family: "SUSE Mono", monospace;
+  font-weight: 500;
+}
+
+.suse-600 {
+  font-family: "SUSE Mono", monospace;
+  font-weight: 600;
+}
+
+.suse-700 {
+  font-family: "SUSE Mono", monospace;
+  font-weight: 700;
+}
+
+/* Cascadia Mono variable weights */
+.cascadia-400 {
+  font-family: "Cascadia Mono", monospace;
+  font-weight: 400;
+}
+
+.cascadia-500 {
+  font-family: "Cascadia Mono", monospace;
+  font-weight: 500;
+}
+
+.cascadia-600 {
+  font-family: "Cascadia Mono", monospace;
+  font-weight: 600;
+}
+
+.cascadia-700 {
+  font-family: "Cascadia Mono", monospace;
+  font-weight: 700;
+}
+
 
 html {
   scroll-behavior: smooth;
@@ -51,10 +79,13 @@ html {
 
 /* Set Fonts */
 body {
-  padding-top: 100px;
-  padding-bottom: 100px;
   background-color: #EBEBE5;
   margin: 0;
+}
+
+main{
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 /* Responsive headings */
@@ -76,25 +107,28 @@ main h3 {
   font-family: "Averia Serif Libre", serif;
   font-size: clamp(1.25rem, 3vw, 1.5rem);
   font-weight: 400;
+  font-style: italic;
   margin-bottom: 1.25rem;
 }
 
 /* Paragraphs */
 main p {
-  font-family: 'Urrgc';
-  font-weight: 400;
-  font-size: clamp(.75rem, 2vw, 16px);
-  /* consistent rem sizing */
-  line-height: 0.75rem;
+  font-family: "SUSE Mono", monospace;
+  font-size: clamp(.5rem, 2vw, 14px);
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
 }
 
-main h1, main h2, main h3, main p{
-  white-space: nowrap;
-  /* prevent wrapping */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: font-size 0.3s ease;
-}
+
+/* main p {
+  font-family: "Cascadia Mono", monospace;
+  font-size: clamp(.5rem, 2vw, 14px);
+  font-weight: 550;
+  line-height: 1.5;
+  margin: 0;
+} */
+
 
 /* ------------
   Navbar 
@@ -104,7 +138,11 @@ main h1, main h2, main h3, main p{
 .navbar {
   border: none !important;
   font-family: "Averia Serif Libre", serif;
+  font-weight: 400;
+  font-style: italic;
   background-color: #EBEBE5;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   overflow: hidden;
@@ -116,13 +154,15 @@ main h1, main h2, main h3, main p{
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  flex-shrink: 1;  
+  flex-shrink: 1;
   min-width: 0;
 }
 
 /* Tobar text */
 .navbar-brand {
-  font-weight: 400;
+  font-weight: 700;
+  font-style: italic;
+  color: #000;
   font-size: clamp(1.5rem, 5vw, 40px);
   /* dynamic shrink */
   white-space: nowrap;
@@ -130,28 +170,21 @@ main h1, main h2, main h3, main p{
   overflow: hidden;
   text-overflow: ellipsis;
   transition: font-size 0.3s ease;
-}
-
-.navbar-brand {
-  color: #000;
-  /* normal state */
   transition: color 0.2s ease;
-  /* optional, makes hover smooth */
 }
 
 .navbar-brand:hover {
   color: #528167;
-  ;
-  /* hover color */
 }
 
-.navbar-nav .nav-link.active {
-  color: #F27466;
+/* Toggler */
+.navbar-toggler {
+  border: none;
+  background: transparent;
+  /* Remove default border and background */
+  cursor: pointer;
+  color: #000
 }
-
-/* ----------------
-   Toggler
-------------------- */
 
 .navbar-toggler-icon {
   background-image: none !important;
@@ -161,13 +194,7 @@ main h1, main h2, main h3, main p{
   justify-content: center;
 }
 
-/* Remove default border and background */
-.navbar-toggler {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #000
-}
+
 
 /* Remove focus outline and shadow */
 .navbar-toggler:focus,
@@ -199,8 +226,6 @@ main h1, main h2, main h3, main p{
 
 .navbar-nav .nav-link:hover {
   color: #528167;
-  ;
-  /* hover color */
 }
 
 /* ---------------------------
@@ -245,12 +270,11 @@ main h1, main h2, main h3, main p{
     gap: 0.15rem;
   }
 
-  /* reduce link padding (Bootstrap sets this by default) */
+  /* reduce link padding (Bootstrap default) */
   .navbar-nav .nav-link {
     padding-top: 0.25rem !important;
     padding-bottom: 0.25rem !important;
     padding-left: 0;
-    /* optional to remove horizontal padding */
     padding-right: 0;
     line-height: 1;
   }
@@ -276,30 +300,95 @@ main h1, main h2, main h3, main p{
   align-items: flex-start;
 }
 
+.mix-image {
+  flex: 0 0 auto;
+  width: 100%;       /* scales with container */
+  max-width: 500px;  /* desktop upper limit */
+  min-width: 200px;  /* mobile lower limit */
+  position: relative; /* for overlay if needed */
+}
+
 .mix-image img {
-  width: 100%;  
-  max-width: 500px;
+  width: 100%;
   height: auto;
   border-radius: 4px;
   object-fit: cover;
 }
 
+.mix-title-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: auto;
+  text-align: right;
+  width: 100%;
+  padding: 1.5rem 0.75rem;
+  background: #52816760;
+  /* semi-transparent background */
+  color: #000;
+  z-index: 2;
+  /* above image, below hover overlay */
+}
+
+.mix-title-overlay h3 {
+  font-weight: 700;
+  margin: 0;
+}
+
+.mix-text {
+  flex: 1;
+  /* take remaining space */
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem;
+}
+
+.mix-text p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0.15rem 0;
+  transition: font-size 0.3s ease;
+  /* ???? */
+}
+
+.mix-text p:hover {
+  overflow: visible;
+  white-space: normal;
+  background: #EBEBE5;
+  z-index: 10;
+  position: relative;
+}
+
+/* ------------------------
+     MOBILE LAYOUT
+-------------------------*/
+
 @media (max-width: 768px) {
-  
+
   .mix-container {
-    flex-direction: column;   /* stack image above text */
+    flex-direction: column;
+    /* stack image above text */
     align-items: flex-start;
     text-align: center;
   }
 
-  .mix-image img {     /* smaller on mobile */
-    max-width: 300px;  /* prevents overly large images on tablets */
+  .mix-image {
+    width: 90%;        /* leave some gutter */
+    max-width: 300px;  /* still reasonable upper limit for small devices */
+    min-width: 150px;  /* ensures image doesn’t vanish */
   }
 
-  .mix-text {
-    width: 100%;
-    text-align: left; /* optional: keep text left-aligned */
+  .mix-image img {
+    /* smaller on mobile */
+    max-width: 300px;
+    /* prevents overly large images on tablets */
   }
+
+  /* .mix-text {
+    width: 100%;
+    text-align: left;
+  } */
 }
 
 /* Container for image + overlay */
@@ -308,7 +397,8 @@ main h1, main h2, main h3, main p{
   display: inline-block;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 10px; /* optional soft corners */
+  border-radius: 10px;
+  /* optional soft corners */
 }
 
 /* The actual image */
@@ -326,7 +416,7 @@ main h1, main h2, main h3, main p{
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* semi-transparent black */
+  background-color: #00000040;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -334,13 +424,11 @@ main h1, main h2, main h3, main p{
   transition: opacity 0.3s ease;
 }
 
-
-
 /* Make the play icon proportional */
 .image-overlay .play-icon {
-  width: 40%;       
-  height: auto;     /* preserve aspect ratio */
-  max-width: 150px;  /* don't get too big on large images */
+  width: 40%;
+  height: auto;
+  max-width: 150px;
 }
 
 .image-hover-wrap:hover {
@@ -359,15 +447,18 @@ main h1, main h2, main h3, main p{
 }
 
 .image-hover-wrap.active img {
-  filter: brightness(0.9); /* dims the image */
+  filter: brightness(0.9);
+  /* dims the image */
 }
 
 .image-hover-wrap.active .image-overlay {
-  opacity: 1; /* stays visible */
+  opacity: 1;
+  /* stays visible */
 }
 
 .image-hover-wrap.active .play-icon {
-  transform: scale(1.2); /* optional: slightly larger icon */
+  transform: scale(1.2);
+  /* optional: slightly larger icon */
 }
 
 /* ------------
@@ -384,16 +475,21 @@ main h1, main h2, main h3, main p{
 } */
 
 .about-page {
-  position: relative;           /* for overlay positioning */
-  min-height: 100vh;            /* full viewport */
+  position: relative;
+  /* for overlay positioning */
+  min-height: 100vh;
+  /* full viewport */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 80px;            /* for fixed navbar */
-  color: #fff;                  /* text color on top of image */
+  padding-top: 80px;
+  /* for fixed navbar */
+  color: #fff;
+  /* text color on top of image */
   z-index: 0;
-  overflow: hidden;             /* ensure icon and overlays are clipped */
+  overflow: hidden;
+  /* ensure icon and overlays are clipped */
   cursor: url('/icons/ladle.svg') 32 32, auto;
 }
 
@@ -401,7 +497,8 @@ main h1, main h2, main h3, main p{
 .about-page::before {
   content: "";
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-image: url('/img/tobar1.jpg');
@@ -410,7 +507,8 @@ main h1, main h2, main h3, main p{
   background-repeat: no-repeat;
   border-radius: 10px;
   /* filter: brightness(0.8);      */
-  z-index: -2;                  /* behind overlay and content */
+  z-index: -2;
+  /* behind overlay and content */
   transition: transform 0.5s ease, filter 0.5s ease;
 }
 
@@ -418,12 +516,15 @@ main h1, main h2, main h3, main p{
 .about-page::after {
   content: "";
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   /* background: #52816710;  */
-  border-radius: 10px;       /* semi-transparent overlay using hex alpha */
-  z-index: -1;                  /* behind content, above image */
+  border-radius: 10px;
+  /* semi-transparent overlay using hex alpha */
+  z-index: -1;
+  /* behind content, above image */
 }
 
 
@@ -435,7 +536,7 @@ main h1, main h2, main h3, main p{
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 80px;
   /* total footer height */
   background-color: transparent;
   z-index: 1030;
@@ -443,34 +544,41 @@ main h1, main h2, main h3, main p{
 
 /* Player container */
 .player-container {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  display: flex;
-  align-items: center;
+  justify-content: flex-end;
   /* vert*/
-  justify-content: center; 
+  align-items: center;
   /* horiz*/
-  height: 100%;
   background-color: #D7D6CC;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   overflow: hidden;
 }
 
+#playing-details {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-top: auto;
+  margin-bottom: 0.1rem;
+}
+
 #current-track {
   color: #000000;
   font-family: "Averia Serif Libre", serif;
   font-weight: 400;
+  font-style: italic;
   font-size: clamp(.75rem, 2vw, 16px) !important;
   /* consistent rem sizing */
   line-height: normal;
-  text-align: center;
+  text-align: flex-end;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.1rem;
 }
 
 #current-track .mix-title {
@@ -484,30 +592,11 @@ main h1, main h2, main h3, main p{
   width: 100%;
   max-width: 800px;
   gap: 0.5rem;
-  /* space between elements */
-  padding: 0.5rem;
-  /* horizontal padding left/right */
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-bottom: 1rem;
+  padding-top: 0 rem;
 }
-
-#playing-details {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 0.25rem;
-}
-
-#current-track {
-  color: #000000;
-  font-size: 1rem;
-  text-align: center;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 0.25rem;
-}
-
 
 /* Play/pause button */
 #play-btn {
@@ -579,5 +668,6 @@ main h1, main h2, main h3, main p{
 }
 
 .format-btn:hover {
-  text-decoration: underline; /* optional */
+  text-decoration: underline;
+  /* optional */
 }

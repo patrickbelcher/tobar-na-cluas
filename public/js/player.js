@@ -253,7 +253,6 @@ if (progressWrapper) {
 
 
   // --- DOWNLOAD BUTTON ---
-
   downloadBtn.addEventListener("click", () => {
     if (!activeImage) return;
     const id = activeImage.dataset.id;

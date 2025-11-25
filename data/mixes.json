@@ -9,16 +9,35 @@
       "wav": "wav"
     },
     "tracklist": [
-      "Sam Gendl : Track Title : Album/EP : Label",
-      "Fitz Gore : Track Title : Album/EP : Label",
-      "Benjamin Lew : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label"
+      "Sam Gendl - Track Title - Album/EP - Label",
+      "Fitz Gore - Track Title - Album/EP - Label",
+      "Benjamin Lew - Track Title - Album/EP - Label",
+      "Anadol - Track Title - Album/EP - Label",
+      "Nat Brichall - Ancient Africa - ... - Label",
+      "Artist - Track Title - Album/EP - Seance Centre",
+      "Mecanica - Track Title - Album/EP - Label",
+      "Mika - Track Title - Album/EP - Label",
+      "Artist - Track Title - Album/EP - Label",
+      "really long Artist - really long Track Title - really long Album/EP - really long Label",
+      "Sam Gendl - Track Title - Album/EP - Label",
+      "Fitz Gore - Track Title - Album/EP - Label",
+      "Benjamin Lew - Track Title - Album/EP - Label",
+      "Anadol - Track Title - Album/EP - Label",
+      "Nat Brichall - Ancient Africa - ... - Label",
+      "Artist - Track Title - Album/EP - Seance Centre",
+      "Mecanica - Track Title - Album/EP - Label",
+      "Mika - Track Title - Album/EP - Label",
+      "Artist - Track Title - Album/EP - Label",
+      "Sam Gendl - Track Title - Album/EP - Label",
+      "Fitz Gore - Track Title - Album/EP - Label",
+      "Benjamin Lew - Track Title - Album/EP - Label",
+      "Anadol - Track Title - Album/EP - Label",
+      "Nat Brichall - Ancient Africa - ... - Label",
+      "Artist - Track Title - Album/EP - Seance Centre",
+      "Mecanica - Track Title - Album/EP - Label",
+      "Mika - Track Title - Album/EP - Label",
+      "Artist - Track Title - Album/EP - Label",
+      "really long Artist - really long Track Title - really long Album/EP - really long Label"
     ]
   },
  
@@ -32,9 +51,11 @@
       "wav": "wav"
     },
     "tracklist": [
-      "Artist : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label",
-      "Artist : Track Title : Album/EP : Label"
+      "Artist - Track Title - Album/EP - Label",
+      "Artist - Track Title - Album/EP - Label",
+      "Artist - Track Title - Album/EP - Label", 
+      "Artist - Track Title - Album/EP - Label",
+      "Artist - Track Title - Album/EP - Label"
     ]
   }
 ]
