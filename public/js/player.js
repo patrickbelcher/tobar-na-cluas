@@ -41,6 +41,8 @@ async function loadAndPlay(mix, startTime = 0) {
   const format = currentFormat;
   const src = `/audio/${mix.base}.${mix.formats[format]}`;
 
+  console.log('Load and play');
+
   if (audio.src !== src) {
     audio.src = src;
 
@@ -57,7 +59,7 @@ async function loadAndPlay(mix, startTime = 0) {
   try {
     await audio.play();
   } catch (err) {
-    console.error("Audio play failed:", err);
+    console.error("Audio play failed: ", err);
   }
 
   blockSeeking();
@@ -68,8 +70,12 @@ async function loadAndPlay(mix, startTime = 0) {
 imageWraps.forEach(wrap => {
   wrap.addEventListener('click', async () => {
     const id = wrap.dataset.id;
-    const mix = window.mixes.find(m => m.id === id);
-    if (!mix) return;
+    console.log('Mix selected: ' + id);
+    const mix = window.mixes.find(m => m.base === id);
+    if (!mix) {
+      console.log('Mix not found');
+      return;
+    }
 
     // If same image clicked → toggle
     if (activeImage === wrap) {
@@ -85,25 +91,52 @@ imageWraps.forEach(wrap => {
 });
 
 // Set the active image
-function setActiveImage(wrap, isPlaying) {
-  // Reset previous active
-  if (activeImage && activeImage !== wrap) {
-    const prevIcon = activeImage.querySelector('.play-icon');
-    if (prevIcon) prevIcon.src = iconPlay;
-    activeImage.classList.remove("active");
-  }
+// function setActiveImage(wrap, isPlaying) {
+//   // Reset previous active
+//   if (activeImage && activeImage !== wrap) {
+//     const prevIcon = activeImage.querySelector('.play-icon');
+//     if (prevIcon) prevIcon.src = iconPlay;
+//     activeImage.classList.remove("active");
+//   }
 
-  // Set new active
-  
+//   // Set new active
+
+//   activeImage = wrap;
+//   wrap.classList.add("active");
+
+//   // Set correct overlay play / pause icon
+//   const icon = wrap.querySelector('.play-icon');
+//   if (icon) {
+//     icon.src = isPlaying ? iconPause : iconPlay;
+//   }
+// }
+
+function setActiveImage(wrap, isPlaying) {
+  // --- existing logic ---
   activeImage = wrap;
   wrap.classList.add("active");
 
-  // Set correct overlay play / pause icon
   const icon = wrap.querySelector('.play-icon');
-  if (icon) {
-    icon.src = isPlaying ? iconPause : iconPlay;
+  if (icon) icon.src = isPlaying ? iconPause : iconPlay;
+
+  // --- NEW: update format toggle button ---
+  const mixId = wrap.dataset.id;
+  const mix = window.mixes.find(m => m.base === mixId);
+  if (!mix) return;
+
+  // If only mp3 exists, force mp3 and disable toggle
+  if (!mix.formats.flac) {
+    currentFormat = "mp3";
+    formatBtn.textContent = "MP3";
+    formatBtn.disabled = true;
+    // formatBtn.title = "FLAC not available for this mix";
+  } else {
+    // FLAC available → enable toggle
+    formatBtn.disabled = false;
+    formatBtn.title = "";
   }
 }
+
 
 
 // FOOTER: Play/Pause button
@@ -152,6 +185,14 @@ audio.addEventListener('timeupdate', () => {
   elapsedEl.textContent = `${elapsedMin}:${elapsedSec}`;
 });
 
+// --- GLOBAL ---
+function blockSeeking() {
+  seekingAllowed = false;
+  console.log('Block seeking')
+  setTimeout(() => seekingAllowed = true, 250);
+  console.log
+}
+
 
 // --- CLICK / DRAG SEEK SETUP ---
 const progressWrapper = document.querySelector('.progress-wrapper');
@@ -179,16 +220,19 @@ if (progressWrapper) {
 
     // update UI instantly
     progressBar.style.width = (percent * 100) + '%';
+    blockSeeking();
   }
 
   // ---- MOUSE ----
   let dragging = false;
 
   progressWrapper.addEventListener('mousedown', (e) => {
+    if (!seekingAllowed) return; // block rapid seeking
     dragging = true;
     disableUserSelect();
     progressWrapper.classList.add('dragging');
     seekTo(e);
+    blockSeeking();
   });
 
   document.addEventListener('mousemove', (e) => {
@@ -224,16 +268,10 @@ if (progressWrapper) {
     progressWrapper.classList.remove('dragging');
   });
 
-
-  // Prevent rapid seeking
-  function blockSeeking() {
-    seekingAllowed = false;
-    setTimeout(() => seekingAllowed = true, 1000);
-  }
-
-  // --- FORMAT TOGGLE BUTTON --
+  // --- FORMAT TOGGLE BUTTON ---
   formatBtn.addEventListener("click", async () => {
-    if (!activeImage) return; // nothing selected
+    if (!activeImage) return;
+    if (!seekingAllowed) return;
 
     const mixId = activeImage.dataset.id;
     const mix = window.mixes.find(m => m.id === mixId);
@@ -241,15 +279,28 @@ if (progressWrapper) {
 
     const currentTime = audio.currentTime;
 
-    // Toggle format
-    currentFormat = currentFormat === "mp3" ? "flac" : "mp3";
-    formatBtn.textContent = currentFormat.toUpperCase();
+    // Determine the next format (toggle)
+    let nextFormat = currentFormat === "mp3" ? "flac" : "mp3";
 
-    // Reload track in new format, continue from same time
+    // Check if the next format exists
+    if (!mix.formats[nextFormat]) {
+      console.warn(`Mix "${mix.title}" does not have a ${nextFormat} file.`);
+      // Optionally: show a tooltip / flash message
+      formatBtn.title = `${nextFormat.toUpperCase()} not available for this mix`;
+      return;
+    }
+
+    // Toggle format
+    currentFormat = nextFormat;
+    formatBtn.textContent = currentFormat.toUpperCase();
+    formatBtn.title = ""; // clear tooltip
+
+    // Reload track in new format from current time
     await loadAndPlay(mix, currentTime);
 
     blockSeeking();
   });
+
 
 
   // --- DOWNLOAD BUTTON ---

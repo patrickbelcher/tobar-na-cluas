@@ -1,48 +1,25 @@
 [
   {
-    "id": "tbnc-001",
+    "who": "tbnc",
     "title": "Cold Beaches",
-    "base": "tbnc-001-Cold-Beaches",
+    "base": "cold-beaches",
     "formats": {
       "image": "JPG",
       "mp3": "mp3",
-      "wav": "wav"
-    },
-    "tracklist": [
-      "Sam Gendel - 06_Tape_Tiger - [Leaving]",
-      "Fitz Gore & The Talismen - Requiem For Julian “Cannonball” Adderley - [Sonorama]",
-      "Benjamin Lew - Le personnage principal est un peuple isolé - [Stroom]",
-      "Anadol - Eciflere Gel [Pingipung]",
-      "Nat Birchall - Ancient Africa - [Ancient Archive Of Sound]",
-      "Jacques Charlier - L'Aube - [Séance Centre]",
-      "Mecanica Popular - Ambrotipo - [Dead-Cert]",
-      "Ø Mika Vainio - Muistetun palaava taajuus - [Sahko]",
-      "Don't DJ X NWAQ - Vanessa - [meakusma]",
-      "Roberto Musci, Giovanni Venosta - Mechanic Soul Vs Pathetic Ambient - [ReR Megacorp]",
-      "Paki & Visnadi - Waterlight - [Aninote]"
-    ]
+      "wav": "wav",
+      "tracklist": "txt"
+    }
   },
+
   {
-    "id": "tbnc-004",
+    "who": "tbnc",
     "title": "Púca (mix for plugd)",
-    "base": "tbnc-004-Púca (mix for plugd)",
+    "base": "puca",
     "formats": {
       "image": "JPG",
       "mp3": "mp3",
-      "wav": "wav"
-    },
-    "tracklist": [
-      "Noda & Wolfers - ダブの原型 Archetypes in Dub - [L.I.E.S]",
-      "C3TRii - A3 - [MAXCED]",
-      "Jimi Tenor - Dub de Pablo - [Bureau B]",
-      "S.T.L. - Out Of The One - [Dark Matters]",
-      "CS + Kreme - April Fool's Day - [T.T.T.]",
-      "Kriedler - Greetings From Dave - [Bureau B]",
-      "I.A.O. - Green Earth - [Left Ear]",
-      "K.S.Eden: 41 Degrees - Silent Towns - [Stroom]",
-      "Roberto Musci / Giovanni Venosta - Nexus On The Beach - [ReR Megacorp]",
-      "Bruxula - A_x - [12th Isle]",
-      "Anadol - Casio Havası - [Pingipung]"
-    ]
+      "wav": "wav",
+      "tracklist": "txt"
+    }
   }
   ]

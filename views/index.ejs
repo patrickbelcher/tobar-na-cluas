@@ -1,18 +1,18 @@
-<main class="container-fluid">
+<main>
   <% console.log("EJS mixes:", mixes); %>
 
     <% mixes.forEach(mix=> { %>
       <section class="ms-3 me-3 pb-5 release-section">
 
         <div class="mix-container">
+
           <div class="mix-image">
 
-            <div class="image-hover-wrap" data-id="<%= mix.id %>">
-
+            <div class="image-hover-wrap" data-id="<%= mix.base %>">
               <!-- Title Overlay -->
               <div class="mix-title-overlay">
                 <h3>
-                  <%= mix.id %> : <%= mix.title %>
+                  <%= mix.who %> : <%= mix.title %>
                 </h3>
               </div>
 
@@ -23,6 +23,7 @@
                 <img class="play-icon" src="/icons/play_circle.svg" alt="Play">
               </div>
             </div>
+
           </div>
 
           <div class="mix-text">
@@ -32,6 +33,7 @@
               </p>
               <% }) %>
           </div>
+
         </div>
 
       </section>
