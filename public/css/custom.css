@@ -309,9 +309,8 @@ main p {
   ------------*/
 
 .mix-image {
-  display: flex;
+  /* display: flex; */
   flex: 2 0 auto;
-  /* max-width: 550px; */
 }
 
 .mix-image img {
@@ -322,7 +321,7 @@ main p {
 }
 
 @media (min-width: 1200px) {
-  .mix-image img {
+  .mix-image {
     max-width: 550px;
   }
 }
@@ -444,14 +443,12 @@ main p {
   transform: scale(1);
 }
 
-/* Image zoom on hover */
 .image-hover-wrap:hover img {
   transform: scale(1.05);
 }
 
 .image-hover-wrap.active img {
   filter: brightness(0.9);
-  /* dims the image */
 }
 
 .image-hover-wrap.active .image-overlay {
@@ -737,5 +734,11 @@ main p {
 
 .format-btn:hover {
   text-decoration: underline;
-  /* optional */
+}
+
+.format-btn:disabled {
+  opacity: 0.4;
+  /* cursor: not-allowed; */
+  text-decoration: none;
+  filter: grayscale(100%);
 }

@@ -274,7 +274,7 @@ if (progressWrapper) {
     if (!seekingAllowed) return;
 
     const mixId = activeImage.dataset.id;
-    const mix = window.mixes.find(m => m.id === mixId);
+    const mix = window.mixes.find(m => m.base === mixId);
     if (!mix) return;
 
     const currentTime = audio.currentTime;
@@ -301,19 +301,17 @@ if (progressWrapper) {
     blockSeeking();
   });
 
-
-
   // --- DOWNLOAD BUTTON ---
   downloadBtn.addEventListener("click", () => {
     if (!activeImage) return;
     const id = activeImage.dataset.id;
-    const mix = window.mixes.find(m => m.id === id);
+    const mix = window.mixes.find(m => m.base === id);
     if (!mix) return;
 
-    const format = currentFormat;     // "mp3" or "flac"
+    const format = 'mp3';
 
     // Safe: request your backend, not the CDN
-    const url = `/download/${mix.id}?format=${format}`;
+    const url = `/download/${mix.base}?format=${format}`;
 
     window.location.href = url;
   });

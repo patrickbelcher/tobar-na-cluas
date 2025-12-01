@@ -4,6 +4,7 @@ import expressLayouts from "express-ejs-layouts";
 import path from "path";
 import { fileURLToPath } from "url";
 import { mixloader }  from "./lib/mixloader.js";
+import { validateDownloadRequest } from "./lib/downloadGuard.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,28 +33,39 @@ app.get("/about", (req, res) => {
   res.render("about", { title: "About" });
 });
 
-app.get("/download/:id", async (req, res) => {
+// Placeholder for CDN downloads
+app.get("/download/:id", validateDownloadRequest, async (req, res) => {
   const id = req.params.id;
   const format = req.query.format;
 
-  // Rate limit
-  if (tooManyDownloads(req.ip)) {
-    return res.status(429).send("Too many downloads");
+  // Find mix
+  const mix = mixes.find(m => m.base === id);
+  if (!mix) return res.status(404).send("Mix not found");
+
+  const ext = mix.formats[format];
+  if (!ext) return res.status(400).send("Invalid format");
+
+  const fileUrl = `https://mycdn.example.com/audio/${mix.base}.${ext}`;
+
+  try {
+    const response = await fetch(fileUrl);
+
+    if (!response.ok) {
+      console.error(`CDN error for ${fileUrl}`);
+      return res.status(502).send("Audio file not available");
+    }
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${mix.title}.${format}"`
+    );
+
+    response.body.pipe(res);
+  } catch (err) {
+    console.error("CDN fetch error:", err);
+    res.status(500).send("Download failed");
   }
-
-  // Lookup mix
-  const mix = mixes.find(m => m.id === id);
-  if (!mix) return res.status(404).end();
-
-  const fileUrl = `https://mycdn.example.com/audio/${mix.base}.${mix.formats[format]}`;
-
-  // Stream securely
-  const response = await fetch(fileUrl);
-  res.setHeader("Content-Disposition", `attachment; filename="${mix.title}.${format}"`);
-
-  response.body.pipe(res);
 });
-
 
 app.listen(PORT, () => {
   console.log(`Tobar Na Cluas running at http://localhost:${PORT}`);
