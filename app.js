@@ -3,7 +3,7 @@ import express from "express"; // for Node v20+, supports ES modules if "type":"
 import expressLayouts from "express-ejs-layouts";
 import path from "path";
 import { fileURLToPath } from "url";
-import { mixloader }  from "./lib/mixloader.js";
+import { loadMixes }  from "./lib/loadMixes.js";
 import { validateDownloadRequest } from "./lib/downloadGuard.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,7 +22,7 @@ app.set("layout", "layout");
 app.use(express.static(path.join(__dirname, "public")));
 
 // Load mixes.json data and tracklists
-const mixes = mixloader();
+const mixes = loadMixes();
 
 // Homepage route — render index.ejs and pass mixes data
 app.get("/", (req, res) => {

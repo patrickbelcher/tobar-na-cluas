@@ -1,8 +1,7 @@
-<main>
   <% console.log("EJS mixes:", mixes); %>
 
     <% mixes.forEach(mix=> { %>
-      <section class="ms-3 me-3 pb-5 release-section">
+      <section class="ms-4 me-4 pb-5 release-section">
 
         <div class="mix-container">
 
@@ -37,6 +36,9 @@
         </div>
 
       </section>
+
+      <!-- <div class="zig-zag-line"></div> -->
+
       <% }) %>
 
         <!-- Pass mixes to global JS -->
@@ -44,5 +46,3 @@
           window.mixes = <%- JSON.stringify(mixes) %>;
           console.log('Mixes JSON:', window.mixes);
         </script>
-
-</main>

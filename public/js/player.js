@@ -112,14 +112,14 @@ imageWraps.forEach(wrap => {
 // }
 
 function setActiveImage(wrap, isPlaying) {
-  // --- existing logic ---
+
   activeImage = wrap;
   wrap.classList.add("active");
 
   const icon = wrap.querySelector('.play-icon');
   if (icon) icon.src = isPlaying ? iconPause : iconPlay;
 
-  // --- NEW: update format toggle button ---
+  // --- Update format toggle button ---
   const mixId = wrap.dataset.id;
   const mix = window.mixes.find(m => m.base === mixId);
   if (!mix) return;
@@ -129,15 +129,13 @@ function setActiveImage(wrap, isPlaying) {
     currentFormat = "mp3";
     formatBtn.textContent = "MP3";
     formatBtn.disabled = true;
-    // formatBtn.title = "FLAC not available for this mix";
+    
   } else {
     // FLAC available → enable toggle
     formatBtn.disabled = false;
     formatBtn.title = "";
   }
 }
-
-
 
 // FOOTER: Play/Pause button
 playBtn.addEventListener('click', () => {

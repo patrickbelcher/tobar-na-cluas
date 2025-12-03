@@ -1,4 +1,6 @@
-/* Google Fonts */
+/* ===========================================================
+   Global Fonts
+=========================================================== */
 
 .averia-serif-libre-regular {
   font-family: "Averia Serif Libre", serif;
@@ -24,8 +26,6 @@
   font-style: italic;
 }
 
-
-/* SUSE Mono variable weights */
 .suse-400 {
   font-family: "SUSE Mono", monospace;
   font-weight: 400;
@@ -46,7 +46,6 @@
   font-weight: 700;
 }
 
-/* Cascadia Mono variable weights */
 .cascadia-400 {
   font-family: "Cascadia Mono", monospace;
   font-weight: 400;
@@ -67,31 +66,159 @@
   font-weight: 700;
 }
 
+/* ===========================================================
+   Global
+=========================================================== */
+
+:root {
+  --space-y: 1rem;
+  --space-x: 1.5rem;
+
+  --nav-radius: 10px;
+  --img-radius: 8px;
+
+  --bg-nav: #EBEBE5;
+  --bg-player: #D7D6CC;
+  --brand-color: #528167;
+}
 
 html {
   scroll-behavior: smooth;
 }
 
-/* ----------------------------------------------------------------------------------------------------*/
-
-/* ------------
-  Main Content
-  ------------*/
-
-/* Set Fonts */
 body {
-  background-color: #EBEBE5;
+  background-color: var(--bg-nav);
   margin: 0;
+  padding: 0;
 }
 
-@media (min-width: 1200px) {
-  main {
-    padding-top: 60px;
-    padding-bottom: 60px;
+.container,
+.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ===========================================================
+   Navbar
+=========================================================== */
+
+.navbar {
+  background-color: var(--bg-nav);
+  font-family: "Averia Serif Libre", serif;
+  font-style: italic;
+  font-weight: 400;
+  border: none;
+  padding: 0;
+  border-radius: 0 0 var(--nav-radius) var(--nav-radius);
+  padding: 0 var(--space-x);
+  overflow: hidden;
+}
+
+
+/* --- Wrapper + Brand --- */
+
+.brand-toggle-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  color: #000;
+  font-size: clamp(1.5rem, 5vw, 40px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: font-size 0.3s ease, color 0.2s ease;
+}
+
+.navbar-brand:hover {
+  color: var(--brand-color);
+}
+
+@media (max-width: 576px) {
+  .navbar-brand {
+    flex-shrink: 1;
   }
 }
 
-/* Responsive headings */
+/* --- Toggler--- */
+
+.navbar-toggler {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #000;
+  display: none; /* default hidden on desktop */
+}
+
+.navbar-toggler-icon {
+  background-image: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 576px) {
+  .navbar-toggler {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* --- Nav items --- */
+
+.navbar-nav {
+  display: flex;
+  font-weight: 300;
+  font-size: clamp(1rem, 2vw, 20px);
+}
+
+.navbar-nav .nav-link {
+  color: #000;
+  transition: color 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--brand-color);
+}
+
+
+@media (max-width: 576px) {
+  .navbar-collapse {
+    width: 100%;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.25rem 0 !important;
+    line-height: 1;
+  }
+}
+
+
+/* ===========================================================
+   Main Content
+=========================================================== */
+
 main h1 {
   font-family: "Averia Serif Libre", serif;
   font-size: clamp(2rem, 5vw, 3rem);
@@ -114,7 +241,6 @@ main h3 {
   margin-bottom: 1.25rem;
 }
 
-/* Paragraphs */
 main p {
   font-family: "SUSE Mono", monospace;
   font-size: clamp(.5rem, 2vw, 14px);
@@ -124,192 +250,24 @@ main p {
 }
 
 
-/* main p {
-  font-family: "Cascadia Mono", monospace;
-  font-size: clamp(.5rem, 2vw, 14px);
-  font-weight: 550;
-  line-height: 1.5;
-  margin: 0;
-} */
-
-
-/* ----------------------------------------------------------------------------------------------------*/
-
-
-
-/* ------------
-  Navbar 
-  ------------*/
-
-/* Parent <nav> styling */
-.navbar {
-  border: none !important;
-  font-family: "Averia Serif Libre", serif;
-  font-weight: 400;
-  font-style: italic;
-  background-color: #EBEBE5;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  overflow: hidden;
-}
-
-/* Header row (brand + toggler) */
-.brand-toggle-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  flex-shrink: 1;
-  min-width: 0;
-}
-
-/* Tobar text */
-.navbar-brand {
-  font-weight: 700;
-  font-style: italic;
-  color: #000;
-  font-size: clamp(1.5rem, 5vw, 40px);
-  /* dynamic shrink */
-  white-space: nowrap;
-  /* prevent wrapping */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: font-size 0.3s ease;
-  transition: color 0.2s ease;
-}
-
-.navbar-brand:hover {
-  color: #528167;
-}
-
-/* Toggler */
-.navbar-toggler {
-  border: none;
-  background: transparent;
-  /* Remove default border and background */
-  cursor: pointer;
-  color: #000
-}
-
-.navbar-toggler-icon {
-  background-image: none !important;
-  /* removes Bootstrap’s default “hamburger” */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Remove focus outline and shadow */
-.navbar-toggler:focus,
-.navbar-toggler:active,
-.navbar-toggler:focus-visible {
-  outline: none;
-  box-shadow: none;
-}
-
-/* ----------------
-   Nav Items
-------------------- */
-
-/* Nav items (horizontal on large, vertical on collapse) */
-.navbar-nav {
-  display: flex;
-  font-weight: 300;
-  font-size: clamp(1rem, 2vw, 20px);
-  color: #000
-    /* dynamic shrink */
-}
-
-.navbar-nav .nav-link {
-  color: #000;
-  /* normal state */
-  transition: color 0.2s ease;
-  /* optional, makes hover smooth */
-}
-
-.navbar-nav .nav-link:hover {
-  color: #528167;
-}
-
-/* ---------------------------
-   Navbar Responsive Behavior
---------------------------- */
-
-/* Collapsed menu styling */
-@media (max-width: 600px) {
-
-  .brand-toggle-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-
-  /* Keep brand + toggler on same line */
-  .navbar-brand {
-    flex-shrink: 1;
-    min-width: 0;
-  }
-
-  /* Ensure toggler stays on the far right */
-  .navbar-toggler {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-  }
-
-  /* Collapse dropdown below both */
-  .navbar-collapse {
-    width: 100%;
-  }
-
-  /* Vertical stacked links, right-aligned */
-  .navbar-nav {
-    flex-direction: column !important;
-    flex-wrap: wrap;
-    align-items: flex-end !important;
-    text-align: right;
-    gap: 0.15rem;
-  }
-
-  /* reduce link padding (Bootstrap default) */
-  .navbar-nav .nav-link {
-    padding-top: 0.25rem !important;
-    padding-bottom: 0.25rem !important;
-    padding-left: 0;
-    padding-right: 0;
-    line-height: 1;
-  }
-}
-
-/* Hide the toggler when expanded */
-@media (min-width: 600px) {
-
-  .navbar-toggler {
-    display: none;
-  }
-}
-
-/* ----------------------------------------------------------------------------------------------------*/
-
-/* ------------
-  Mix Section
-  ------------*/
+/* ===========================================================
+   Mix Section
+=========================================================== */
 
 .mix-container {
   display: flex;
   gap: 20px;
 }
 
-/* ------------
-  Mix-Image
-  ------------*/
+@media (max-width: 1140px) {
+  .mix-container {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+  }
+}
 
 .mix-image {
-  /* display: flex; */
   flex: 2 0 auto;
 }
 
@@ -317,30 +275,51 @@ main p {
   width: 100%;
   height: auto;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: var(--img-radius);
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1140px) {
   .mix-image {
     max-width: 550px;
   }
 }
 
-/* ------------
-  Mix-Text
-  ------------*/
+@media (max-width: 1140px) {
+  .mix-image {
+    display: flex;
+    flex: 0 0 auto;
+  }
+
+  .mix-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--img-radius);
+  }
+}
 
 .mix-text {
   text-align: left;
   padding: 0.75rem;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1140px) {
   .mix-text {
     flex: 1 2 auto;
     max-width: 750px;
     max-height: 550px;
     overflow: auto;
+  }
+}
+
+@media (max-width: 1140px) {
+  .mix-text {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    max-height: 600px;
+    overflow-x: auto;
+    overflow-y: auto;
   }
 }
 
@@ -369,18 +348,13 @@ main p {
   background: #52816760;
 }
 
-
-/* ------------
-  Mix-Image Overlay + Hover Effects
-  ------------*/
-
-/* Container for title overlay, image, icon with hover effects*/
+/* Image hover overlay */
 .image-hover-wrap {
   position: relative;
   display: inline-block;
   cursor: pointer;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: var(--img-radius);
 }
 
 .mix-title-overlay {
@@ -390,12 +364,10 @@ main p {
   left: auto;
   text-align: right;
   width: 100%;
-  padding: 1.5rem 0.75rem;
+  padding: var(--space-x) var(--space-y);
   background: #52816760;
-  /* semi-transparent background */
   color: #000;
   z-index: 2;
-  /* above image, below hover overlay */
 }
 
 .mix-title-overlay h3 {
@@ -403,7 +375,6 @@ main p {
   margin: 0;
 }
 
-/* The actual image */
 .image-hover-wrap img {
   display: block;
   width: 100%;
@@ -411,7 +382,6 @@ main p {
   transition: transform 0.3s ease;
 }
 
-/* Overlay covers the image, initially hidden */
 .image-overlay {
   position: absolute;
   top: 0;
@@ -426,7 +396,6 @@ main p {
   transition: opacity 0.3s ease;
 }
 
-/* Make the play icon proportional */
 .image-overlay .play-icon {
   width: 40%;
   height: auto;
@@ -437,7 +406,6 @@ main p {
   cursor: url('/icons/ladle.svg') 32 32, auto;
 }
 
-/* Show overlay on hover */
 .image-hover-wrap:hover .image-overlay {
   opacity: 1;
   transform: scale(1);
@@ -453,181 +421,58 @@ main p {
 
 .image-hover-wrap.active .image-overlay {
   opacity: 1;
-  /* stays visible */
 }
 
-/* .image-hover-wrap.active .play-icon {
-    transform: scale(1.2);
-} */
 
+/* ===========================================================
+   Section divider
+=========================================================== */
 
-/* ------------------------
-  Mix Section Responsive Layouts
--------------------------*/
-
-@media (max-width: 1200px) {
-
-  main {
-    padding-top: 60px;
-    padding-bottom: 60px;
-  }
-
-  .mix-container {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: center;
-  }
-
-  .mix-image {
-    display: flex;
-    flex: 0 0 auto;
-  }
-
-  .mix-image img {
-    width: 100%;
-    height: auto;
-    /* max-width: 750px; */
-    object-fit: cover;
-    border-radius: 4px;
-  }
-
-  .mix-text {
-    flex: 0 0 auto;
-    width: 100%;
-    min-width: 0;
-    max-height: 600px;
-    overflow-x: auto;
-    overflow-y: auto;
-  }
-
-  .mix-text p {
-    white-space: nowrap;
-  }
-
-}
-
-@media (max-width: 900px) {
-
-  main {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
-
-  .download-btn {
-    display: none;
-  }
-
-  .format-btn {
-    display: none;
-  }
-
-}
-
-/* ----------------------------------------------------------------------------------------------------*/
-
-
-/* ------------
-  About Page
-  ------------*/
-
-/* .about-page {
-  background-image: url('/img/tobar4.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  border-radius: 10px;
-} */
-
-.about-page {
-  position: relative;
-  /* for overlay positioning */
-  min-height: 100vh;
-  /* full viewport */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 80px;
-  /* for fixed navbar */
-  color: #fff;
-  /* text color on top of image */
-  z-index: 0;
-  overflow: hidden;
-  /* ensure icon and overlays are clipped */
-  cursor: url('/icons/ladle.svg') 32 32, auto;
-}
-
-/* Background image with optional filter */
-.about-page::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
+.zig-zag-line {
+  --a: 90deg; /* control the angle */
+  --s: 100px; /* size of the zig-zag */
+  --b: 35px;  /* control the thickness */
+  
+  background: #ff6169;
+  height: calc(var(--b) + var(--s)/(2*tan(var(--a)/2)));
   width: 100%;
-  height: 100%;
-  background-image: url('/img/tobar1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 10px;
-  /* filter: brightness(0.8);      */
-  z-index: -2;
-  /* behind overlay and content */
-  transition: transform 0.5s ease, filter 0.5s ease;
+  --_g:var(--s) repeat-x conic-gradient(from calc(var(--a)/-2) at bottom,
+    #0000,#000 1deg calc(var(--a) - 1deg),#0000 var(--a));
+  mask: 50% calc(-1*var(--b))/var(--_g) exclude,50%/var(--_g);
 }
 
-/* Colored overlay for blending */
-.about-page::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* background: #52816710;  */
-  border-radius: 10px;
-  /* semi-transparent overlay using hex alpha */
-  z-index: -1;
-  /* behind content, above image */
-}
+/* ===========================================================
+   Footer Player
+=========================================================== */
 
-
-/* ------------
-  Footer Player 
-  ------------*/
 #footer-player {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  /* total footer height */
   background-color: transparent;
+  border: none;
+  padding: 0;
   z-index: 1030;
 }
 
 /* Player container */
-.player-container {
+#player-container {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  /* vert*/
-  align-items: center;
-  /* horiz*/
-  background-color: #D7D6CC;
+  justify-content: flex-end; /* vertical alignment */
+  align-items: center; /* horizontal alignment */
+  width: 100%;
+  background-color: var(--bg-player);
+  padding: 0;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   overflow: hidden;
 }
 
+/* Current track info */
 #playing-details {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  margin-top: auto;
-  margin-bottom: 0.1rem;
+  margin-top: 0.5rem;
 }
 
 #current-track {
@@ -635,21 +480,20 @@ main p {
   font-family: "Averia Serif Libre", serif;
   font-weight: 400;
   font-style: italic;
-  font-size: clamp(.75rem, 2vw, 16px) !important;
-  /* consistent rem sizing */
+  font-size: clamp(.75rem, 2vw, 16px);
   line-height: normal;
   text-align: flex-end;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 0.1rem;
 }
 
 #current-track .mix-title {
-  color: #528167;
+  color: var(--brand-color);
 }
 
+/* Player controls */
 .player-controls {
   display: flex;
   align-items: center;
@@ -657,10 +501,8 @@ main p {
   width: 100%;
   max-width: 800px;
   gap: 0.5rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-bottom: 1rem;
-  padding-top: 0 rem;
+  padding: 0 0.75rem 1rem 0.75rem;
+  margin-bottom: 0.2rem;
 }
 
 /* Play/pause button */
@@ -677,9 +519,16 @@ main p {
   color: #000000;
   width: 30px;
   height: 30px;
-  background: none;
 }
 
+@media (max-width: 576px) {
+  #play-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Time display */
 #elapsed-time,
 #total-time {
   color: #000000;
@@ -689,37 +538,41 @@ main p {
   text-align: center;
 }
 
-/* Progress bar container */
+/* Progress bar */
 .progress-wrapper {
   flex-grow: 1;
   height: 6px;
   background: #333;
   border-radius: 3px;
   overflow: hidden;
-  cursor: pointer;
   position: relative;
   cursor: pointer;
 }
 
 .progress-wrapper.dragging {
-  cursor: pointer
+  cursor: pointer;
 }
 
-/* Filled portion of the progress */
 #progress-bar {
   height: 100%;
   width: 0%;
   background: #528167;
-  /* fill color */
   border-radius: 3px 0 0 3px;
 }
 
+/* Download / Format buttons */
 .download-btn {
   width: 24px;
   height: 24px;
   border: none;
   background: url('/icons/download.svg') no-repeat center center;
   background-size: contain;
+}
+
+@media (max-width: 960px) {
+  .download-btn {
+  display: none;
+  }
 }
 
 .format-btn {
@@ -738,7 +591,13 @@ main p {
 
 .format-btn:disabled {
   opacity: 0.4;
-  /* cursor: not-allowed; */
   text-decoration: none;
   filter: grayscale(100%);
 }
+
+@media (max-width: 960px) {
+  .format-btn {
+    display: none;
+  }
+}
+
