@@ -21,36 +21,39 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&family=Geist+Mono:wght@100..900&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&family=Geist+Mono:wght@100..900&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+    rel="stylesheet">
+
   <!-- Bootstrap 5.3.8 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" type="text/css" href="css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
 
 </head>
 
 <body>
+  
+    <!-- Navbar -->
+    <%- include('partials/navbar') %>
 
-  <!-- Navbar (partial) -->
-  <%- include('partials/navbar') %>
-
-    <!-- Page content injected by express-ejs-layouts -->
-    <main id="app" class="container-fluid p-0">
+    <!-- Mix sections injected by express-ejs-layouts -->
+    <main id="spa-main" class="container-fluid">
       <%- body %>
     </main>
 
-    <!-- Footer / Audio Player (partial) -->
+    <!-- Footer / Audio Player -->
     <%- include('partials/footer') %>
 
-      <!-- Global JS -->
-      <script type="module" src="/js/scrollFade.js"></script>
-      <script type="module" src="/js/player.js"></script>
+    <!-- Global JS -->
+    <script type="module" src="/js/scrollFade.js"></script>
+    <script type="module" src="/js/player.js"></script>
+    <script src="/js/nav.js"></script>
 
-      <!-- Bootstrap Bundle -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

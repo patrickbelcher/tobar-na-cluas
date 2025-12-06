@@ -1,0 +1,45 @@
+<div class="mix-page">
+  <section class="mixpage-section">
+
+    <div class="mixpage-container">
+
+      <div class="mixpage-image">
+
+        <div class="mixpage-image-wrap">
+          <!-- Title Overlay -->
+          <div class="mixpage-title-overlay">
+            <div class="mixpage-title">
+              <h3>
+                <%= mix.who %> : <%= mix.title %>
+              </h3>
+            </div>
+          </div>
+
+          <div class="mixpage-audio-control-zone" data-id="<%= mix.base %>">
+            <img src="/img/<%= mix.base %>.<%= mix.formats.image %>" alt="<%= mix.title %>">
+            <!-- Overlay -->
+            <div class="mixpage-image-overlay">
+              <img class="play-icon" src="/icons/play_circle.svg" alt="Play">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mixpage-text">
+        <% mix.tracklist.forEach(line=> { %>
+          <p>
+            <%= line %>
+          </p>
+          <% }) %>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    console.log("MIX PAGE LOADED → <%= mix.base %>", <%- JSON.stringify(mix) %>);
+    window.mixes = window.mixes || {};
+    window.mixes["<%= mix.base %>"] = <%- JSON.stringify(mix) %>;
+  </script>
+</div>

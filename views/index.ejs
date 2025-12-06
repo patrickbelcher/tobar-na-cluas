@@ -1,48 +1,54 @@
-  <% console.log("EJS mixes:", mixes); %>
+<% console.log("EJS mixes:", mixes); %>
 
-    <% mixes.forEach(mix=> { %>
-      <section class="ms-4 me-4 pb-5 release-section">
+  <% mixes.forEach(mix=> { %>
+    <section class="mix-section">
 
-        <div class="mix-container">
+      <div class="mix-container">
 
-          <div class="mix-image">
+        <div class="mix-image">
 
-            <div class="image-hover-wrap" data-id="<%= mix.base %>">
-              <!-- Title Overlay -->
-              <div class="mix-title-overlay">
+          <div class="mix-image-wrap">
+            <!-- Title Overlay -->
+            <div class="mix-title-overlay">
+              <a href="/mix/<%= mix.base %>" class="mix-title-link" data-spa>
                 <h3>
                   <%= mix.who %> : <%= mix.title %>
                 </h3>
-              </div>
+              </a>
+            </div>
 
+            <div class="mix-audio-control-zone" data-id="<%= mix.base %>">
               <img src="/img/<%= mix.base %>.<%= mix.formats.image %>" alt="<%= mix.title %>">
-
               <!-- Overlay -->
               <div class="image-overlay">
                 <img class="play-icon" src="/icons/play_circle.svg" alt="Play">
               </div>
             </div>
-
-          </div>
-
-          <div class="mix-text">
-            <% mix.tracklist.forEach(line=> { %>
-              <p>
-                <%= line %>
-              </p>
-              <% }) %>
           </div>
 
         </div>
 
-      </section>
+        <div class="mix-text">
+          <% mix.tracklist.forEach(line=> { %>
+            <p>
+              <%= line %>
+            </p>
+            <% }) %>
+        </div>
 
-      <!-- <div class="zig-zag-line"></div> -->
+      </div>
 
-      <% }) %>
+    </section>
 
-        <!-- Pass mixes to global JS -->
-        <script>
-          window.mixes = <%- JSON.stringify(mixes) %>;
-          console.log('Mixes JSON:', window.mixes);
-        </script>
+    <!-- <div class="zig-zag-line"></div> -->
+
+    <% }) %>
+
+      <!-- Pass mixes to global JS -->
+      <script>
+        window.mixes = {};
+        <% mixes.forEach(mix => { %>
+          window.mixes["<%= mix.base %>"] = <%- JSON.stringify(mix) %>;
+        <% }) %>
+        console.log("Mixes JSON:", window.mixes);
+      </script>

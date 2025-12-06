@@ -21,16 +21,51 @@ app.set("layout", "layout");
 // Serve static files from "public"
 app.use(express.static(path.join(__dirname, "public")));
 
+// Helper: SPA requests send a custom header "X-SPA: true"
+// If present → return partial; otherwise → full layout.
+function render(req, res, view, data = {}) {
+  const isSPA = req.headers["x-spa"] === "true";
+
+   console.log(`
+      REQUEST:
+      URL: ${req.method} ${req.url}
+      SPA: ${isSPA}
+      View rendered: ${view}
+      Data keys: ${Object.keys(data).join(", ")}
+      `);
+
+  if (req.headers["x-spa"] === "true") {
+    // Return only the inner HTML for <main>
+    return res.render(view, { ...data, layout: false });
+  }
+  // Normal navigation → full layout
+  return res.render(view, data);
+}
+
 // Load mixes.json data and tracklists
 const mixes = loadMixes();
 
 // Homepage route — render index.ejs and pass mixes data
 app.get("/", (req, res) => {
-  res.render("index", { title: "Home", mixes });
+  console.log("→ Route hit: / (homepage)");
+  render(req, res, "index", { title: "Home", mixes });
 });
 
+
 app.get("/about", (req, res) => {
-  res.render("about", { title: "About" });
+  console.log("→ Route hit: /about");
+  render(req, res, "about", { title: "About", mixes });
+});
+
+app.get('/mix/:base', (req, res) => {
+  const mix = mixes.find(m => m.base === req.params.base);
+  console.log(`→ Route hit: /mix/${req.params.base}`);
+
+  if (!mix) {
+    return res.status(404).render('404', { message: 'Mix not found' });
+  }
+
+  render(req, res, "mix", { title: mix.title, mix});
 });
 
 // Placeholder for CDN downloads

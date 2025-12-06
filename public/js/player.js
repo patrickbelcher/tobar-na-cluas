@@ -4,7 +4,7 @@ const playerIcon = document.getElementById('player-icon');
 const progressBar = document.getElementById('progress-bar');
 const elapsedEl = document.getElementById('elapsed-time');
 const totalEl = document.getElementById('total-time');
-const imageWraps = document.querySelectorAll('.image-hover-wrap');
+const imageWraps = document.querySelectorAll('.mix-audio-control-zone');
 const nowPlaying = document.getElementById('current-track');
 const downloadBtn = document.getElementById("download-btn");
 const formatBtn = document.getElementById('format-toggle');
@@ -30,7 +30,7 @@ async function setIcon(path) {
 setIcon(iconPlay);
 
 if (!window.mixes) {
-  console.error('window.mixes is undefined');
+  console.error('(audio)player.js: window.mixes is undefined');
 } else {
   console.log('Initializing player. Reading mixes JSON:', window.mixes);
 }
@@ -41,7 +41,7 @@ async function loadAndPlay(mix, startTime = 0) {
   const format = currentFormat;
   const src = `/audio/${mix.base}.${mix.formats[format]}`;
 
-  console.log('Load and play');
+  console.log(`Loading and playing mix: ${mix.base}, format: ${currentFormat}, src: ${src}`);
 
   if (audio.src !== src) {
     audio.src = src;
@@ -70,8 +70,8 @@ async function loadAndPlay(mix, startTime = 0) {
 imageWraps.forEach(wrap => {
   wrap.addEventListener('click', async () => {
     const id = wrap.dataset.id;
-    console.log('Mix selected: ' + id);
-    const mix = window.mixes.find(m => m.base === id);
+    const mix = window.mixes[id];
+    console.log('Clicked mix image, data-id:', id, 'Mix object:', mix);
     if (!mix) {
       console.log('Mix not found');
       return;
@@ -121,7 +121,7 @@ function setActiveImage(wrap, isPlaying) {
 
   // --- Update format toggle button ---
   const mixId = wrap.dataset.id;
-  const mix = window.mixes.find(m => m.base === mixId);
+  const mix = window.mixes[mixId];
   if (!mix) return;
 
   // If only mp3 exists, force mp3 and disable toggle
@@ -279,6 +279,7 @@ if (progressWrapper) {
 
     // Determine the next format (toggle)
     let nextFormat = currentFormat === "mp3" ? "flac" : "mp3";
+    console.log('Toggling format to:', nextFormat, 'for mix:', mix.base);
 
     // Check if the next format exists
     if (!mix.formats[nextFormat]) {
