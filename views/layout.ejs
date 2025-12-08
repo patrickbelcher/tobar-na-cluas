@@ -35,9 +35,9 @@
 </head>
 
 <body>
-  
-    <!-- Navbar -->
-    <%- include('partials/navbar') %>
+
+  <!-- Navbar -->
+  <%- include('partials/navbar') %>
 
     <!-- Mix sections injected by express-ejs-layouts -->
     <main id="spa-main" class="container-fluid">
@@ -47,13 +47,20 @@
     <!-- Footer / Audio Player -->
     <%- include('partials/footer') %>
 
-    <!-- Global JS -->
-    <script type="module" src="/js/scrollFade.js"></script>
-    <script type="module" src="/js/player.js"></script>
-    <script src="/js/nav.js"></script>
+      <!-- Global JS -->
 
-    <!-- Bootstrap Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+      <!-- GLOBAL mixes browser object -->
+      <script>
+        window.mixes = <%- JSON.stringify(mixes) %>;
+        console.log("Mixes:", window.mixes);
+      </script>
+
+      <script type="module" src="/js/scrollFade.js"></script>
+      <script type="module" src="/js/player.js"></script>
+      <script src="/js/nav.js"></script>
+
+      <!-- Bootstrap Bundle -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

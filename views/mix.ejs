@@ -1,24 +1,24 @@
 <div class="mix-page">
-  <section class="mixpage-section">
+  <section class="mix-section">
 
-    <div class="mixpage-container">
+    <div class="mix-container">
 
-      <div class="mixpage-image">
+      <div class="mix-image">
 
-        <div class="mixpage-image-wrap">
+        <div class="mix-image-wrap">
           <!-- Title Overlay -->
-          <div class="mixpage-title-overlay">
-            <div class="mixpage-title">
+          <div class="mix-title-overlay">
+            <div class="mix-title">
               <h3>
-                <%= mix.who %> : <%= mix.title %>
+                <!-- <%= mix.who %> : <%= mix.title %> -->
               </h3>
             </div>
           </div>
 
-          <div class="mixpage-audio-control-zone" data-id="<%= mix.base %>">
+          <div class="mix-audio-control-zone" data-id="<%= mix.base %>">
             <img src="/img/<%= mix.base %>.<%= mix.formats.image %>" alt="<%= mix.title %>">
             <!-- Overlay -->
-            <div class="mixpage-image-overlay">
+            <div class="image-overlay">
               <img class="play-icon" src="/icons/play_circle.svg" alt="Play">
             </div>
           </div>
@@ -37,9 +37,4 @@
     </div>
   </section>
 
-  <script>
-    console.log("MIX PAGE LOADED → <%= mix.base %>", <%- JSON.stringify(mix) %>);
-    window.mixes = window.mixes || {};
-    window.mixes["<%= mix.base %>"] = <%- JSON.stringify(mix) %>;
-  </script>
 </div>

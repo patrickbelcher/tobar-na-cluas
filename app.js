@@ -26,13 +26,13 @@ app.use(express.static(path.join(__dirname, "public")));
 function render(req, res, view, data = {}) {
   const isSPA = req.headers["x-spa"] === "true";
 
-   console.log(`
-      REQUEST:
-      URL: ${req.method} ${req.url}
-      SPA: ${isSPA}
-      View rendered: ${view}
-      Data keys: ${Object.keys(data).join(", ")}
-      `);
+  console.log(`
+  [REQUEST]
+  URL: ${req.method} ${req.url}
+  SPA: ${isSPA}
+  View rendered: ${view}
+  Data keys: ${Object.keys(data).join(", ")}
+  `);
 
   if (req.headers["x-spa"] === "true") {
     // Return only the inner HTML for <main>
@@ -44,28 +44,29 @@ function render(req, res, view, data = {}) {
 
 // Load mixes.json data and tracklists
 const mixes = loadMixes();
+console.log("[Express] loaded mixes:", mixes);
 
 // Homepage route — render index.ejs and pass mixes data
 app.get("/", (req, res) => {
-  console.log("→ Route hit: / (homepage)");
+  console.log("Route: / (homepage)");
   render(req, res, "index", { title: "Home", mixes });
 });
 
 
 app.get("/about", (req, res) => {
-  console.log("→ Route hit: /about");
+  console.log("Route: /about");
   render(req, res, "about", { title: "About", mixes });
 });
 
 app.get('/mix/:base', (req, res) => {
   const mix = mixes.find(m => m.base === req.params.base);
-  console.log(`→ Route hit: /mix/${req.params.base}`);
+  console.log(`Route: /mix/${req.params.base}`);
 
   if (!mix) {
     return res.status(404).render('404', { message: 'Mix not found' });
   }
 
-  render(req, res, "mix", { title: mix.title, mix});
+  render(req, res, "mix", { title: mix.title, mixes});
 });
 
 // Placeholder for CDN downloads
@@ -103,5 +104,5 @@ app.get("/download/:id", validateDownloadRequest, async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Tobar Na Cluas running at http://localhost:${PORT}`);
+  console.log(`Tobar na Cluas running at http://localhost:${PORT}`);
 });
