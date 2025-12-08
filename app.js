@@ -20,6 +20,9 @@ app.set("layout", "layout");
 
 // Serve static files from "public"
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/mixes', express.static('mixes'));
+// app.use('/mixes', express.static(path.join(process.cwd(), 'mixes')));
+
 
 // Helper: SPA requests send a custom header "X-SPA: true"
 // If present → return partial; otherwise → full layout.
@@ -59,15 +62,23 @@ app.get("/about", (req, res) => {
 });
 
 app.get('/mix/:base', (req, res) => {
-  const mix = mixes.find(m => m.base === req.params.base);
-  console.log(`Route: /mix/${req.params.base}`);
+  const base = req.params.base;
+  const mix = mixes[base];
 
   if (!mix) {
-    return res.status(404).render('404', { message: 'Mix not found' });
+    return res.status(404).render("404", {
+      message: "Mix not found",
+      mixes  
+    });
   }
 
-  render(req, res, "mix", { title: mix.title, mixes});
+  render(req, res, "mix", {
+    mix,
+    title: mix.title,
+    mixes 
+  });
 });
+
 
 // Placeholder for CDN downloads
 app.get("/download/:id", validateDownloadRequest, async (req, res) => {

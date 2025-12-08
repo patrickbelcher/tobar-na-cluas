@@ -1,5 +1,5 @@
-#audio files
-public/audio/
+#all mix files
+mixes/
 
 # Logs
 logs

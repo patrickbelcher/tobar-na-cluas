@@ -39,7 +39,7 @@ if (!window.mixes) {
 // Switch audio source and play
 async function loadAndPlay(mix, startTime = 0) {
   const format = currentFormat;
-  const src = `/audio/${mix.base}.${mix.formats[format]}`;
+  const src = `/mixes/${mix.base}/${mix.formats[format]}`;
 
   console.log(`Loading and playing mix: ${mix.base}, format: ${currentFormat}, src: ${src}`);
 
