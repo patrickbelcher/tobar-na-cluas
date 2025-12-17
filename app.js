@@ -23,7 +23,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/mixes', express.static('mixes'));
 // app.use('/mixes', express.static(path.join(process.cwd(), 'mixes')));
 
-
 // Helper: SPA requests send a custom header "X-SPA: true"
 // If present → return partial; otherwise → full layout.
 function render(req, res, view, data = {}) {
@@ -49,16 +48,21 @@ function render(req, res, view, data = {}) {
 const mixes = loadMixes();
 console.log("[Express] loaded mixes:", mixes);
 
+app.use((req, res, next) => {
+  res.locals.mixes = mixes; // available in *every* EJS view/layout
+  next();
+});
+
 // Homepage route — render index.ejs and pass mixes data
 app.get("/", (req, res) => {
   console.log("Route: / (homepage)");
-  render(req, res, "index", { title: "Home", mixes });
+  render(req, res, "index", { title: "Home"});
 });
 
 
 app.get("/about", (req, res) => {
   console.log("Route: /about");
-  render(req, res, "about", { title: "About", mixes });
+  render(req, res, "about", { title: "About"});
 });
 
 app.get('/mix/:base', (req, res) => {

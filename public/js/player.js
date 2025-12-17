@@ -1,3 +1,20 @@
+if (!window.mixes) {
+  console.error('(audio)player.js: window.mixes is undefined');
+} else {
+  console.log('Initializing player. Reading mixes JSON:', window.mixes);
+}
+
+// INLINE SVG CONSTANTS
+const playCircleSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+  <path d="m383-310 267-170-267-170v340Zm97 230q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-156t86-127Q252-817 325-848.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 82-31.5 155T763-197.5q-54 54.5-127 86T480-80Zm0-60q142 0 241-99.5T820-480q0-142-99-241t-241-99q-141 0-240.5 99T140-480q0 141 99.5 240.5T480-140Zm0-340Z"/>
+</svg>`;
+
+const pauseCircleSVG = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+  <path d="M370-320h60v-320h-60v320Zm160 0h60v-320h-60v320ZM480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-156t86-127Q252-817 325-848.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 82-31.5 155T763-197.5q-54 54.5-127 86T480-80Zm0-60q142 0 241-99.5T820-480q0-142-99-241t-241-99q-141 0-240.5 99T140-480q0 141 99.5 240.5T480-140Zm0-340Z"/>
+</svg>`;
+
 // DOM
 const playBtn = document.getElementById('play-btn');
 const playerIcon = document.getElementById('player-icon');
@@ -9,9 +26,12 @@ const nowPlaying = document.getElementById('current-track');
 const downloadBtn = document.getElementById("download-btn");
 const formatBtn = document.getElementById('format-toggle');
 
-// SVGs
-const iconPlay = '/icons/play_circle.svg';
-const iconPause = '/icons/pause_circle.svg';
+// set default image overlay icons
+function initOverlayIcons(scope = document) {
+  scope.querySelectorAll('.overlay-play-icon').forEach(svg => {
+    svg.innerHTML = playCircleSVG;
+  });
+}
 
 // Audio
 const audio = new Audio();
@@ -19,32 +39,62 @@ let activeImage = null;
 let currentFormat = "mp3"; // default format
 let seekingAllowed = true;
 
-// Load inline SVG icon into the footer button
-async function setIcon(path) {
-  const res = await fetch(path);
-  const svgText = await res.text();
-  playerIcon.innerHTML = svgText;
+// Init player + overlay play/pause icon
+playerIcon.innerHTML = playCircleSVG;
+initOverlayIcons(document);
+
+// Persistent states
+const savedState = JSON.parse(localStorage.getItem("playerState")) || {};
+let activeMixId = savedState.mixId || null;
+currentFormat = savedState.format || "mp3";
+
+// Persistent active-mix state
+if (activeMixId && window.mixes[activeMixId]) {
+  const mix = window.mixes[activeMixId];
+  loadAndPlay(mix, savedState.currentTime || 0);
+
+  // Find the corresponding image overlay and set it active
+  const wrap = document.querySelector(`.mix-audio-control-zone[data-id="${activeMixId}"]`);
+  if (wrap) setActiveImage(wrap, !audio.paused);
 }
 
-// Initial footer icon
-setIcon(iconPlay);
+// Restore active tile & icon after SPA page injection
+async function restoreActiveMixState() {
+  if (!activeMixId) return;
 
-if (!window.mixes) {
-  console.error('(audio)player.js: window.mixes is undefined');
-} else {
-  console.log('Initializing player. Reading mixes JSON:', window.mixes);
+  const wrap = document.querySelector(`.mix-audio-control-zone[data-id="${activeMixId}"]`);
+  if (!wrap) return;
+
+  // Mark correct image as active
+  setActiveImage(wrap, !audio.paused);
+
+  // Ensure correct Now Playing text after injection
+  const mix = window.mixes[activeMixId];
+  if (mix) {
+    nowPlaying.innerHTML = `playing : <span class="mix-title">${mix.title}</span>`;
+  }
 }
 
-
-// Switch audio source and play
+// Set audio source and play
 async function loadAndPlay(mix, startTime = 0) {
   const format = currentFormat;
   const src = `/mixes/${mix.base}/${mix.formats[format]}`;
 
   console.log(`Loading and playing mix: ${mix.base}, format: ${currentFormat}, src: ${src}`);
 
+  // Check against currently loaded mix. If new ->
   if (audio.src !== src) {
     audio.src = src;
+
+    // Set SPA global var 
+    window.activeMixId = mix.base; 
+
+    // Persist to localStorage
+    localStorage.setItem("playerState", JSON.stringify({
+      mixId: mix.base,
+      format: currentFormat,
+      currentTime: audio.currentTime
+    }));
 
     nowPlaying.innerHTML = `playing : <span class="mix-title">${mix.title}</span>`;
 
@@ -65,22 +115,22 @@ async function loadAndPlay(mix, startTime = 0) {
   blockSeeking();
 }
 
-
-// Click on a mix-image events
+// Click on a mix-image event handlers
 imageWraps.forEach(wrap => {
   wrap.addEventListener('click', async () => {
+    
+    // If active mix image clicked -> toggle
+    if (activeImage === wrap) {
+      if (audio.paused) audio.play();
+      else audio.pause();
+      return;
+    }
+
     const id = wrap.dataset.id;
     const mix = window.mixes[id];
     console.log('Clicked mix image, data-id:', id, 'Mix object:', mix);
     if (!mix) {
       console.log('Mix not found');
-      return;
-    }
-
-    // If same image clicked → toggle
-    if (activeImage === wrap) {
-      if (audio.paused) audio.play();
-      else audio.pause();
       return;
     }
 
@@ -90,34 +140,21 @@ imageWraps.forEach(wrap => {
   });
 });
 
-// Set the active image
-// function setActiveImage(wrap, isPlaying) {
-//   // Reset previous active
-//   if (activeImage && activeImage !== wrap) {
-//     const prevIcon = activeImage.querySelector('.play-icon');
-//     if (prevIcon) prevIcon.src = iconPlay;
-//     activeImage.classList.remove("active");
-//   }
-
-//   // Set new active
-
-//   activeImage = wrap;
-//   wrap.classList.add("active");
-
-//   // Set correct overlay play / pause icon
-//   const icon = wrap.querySelector('.play-icon');
-//   if (icon) {
-//     icon.src = isPlaying ? iconPause : iconPlay;
-//   }
-// }
-
+// Update image overlay for active mix
 function setActiveImage(wrap, isPlaying) {
 
-  activeImage = wrap;
-  wrap.classList.add("active");
+  if (activeImage && activeImage !== wrap) {
+    activeImage.classList.remove("active-mix");
 
-  const icon = wrap.querySelector('.play-icon');
-  if (icon) icon.src = isPlaying ? iconPause : iconPlay;
+    const prevIcon = activeImage.querySelector('.overlay-play-icon');
+    if (prevIcon) prevIcon.innerHTML = playCircleSVG;
+  }
+
+  activeImage = wrap;
+  wrap.classList.add("active-mix");
+
+  const icon = wrap.querySelector('.overlay-play-icon');
+  if (icon) icon.innerHTML = isPlaying ? pauseCircleSVG : playCircleSVG;
 
   // --- Update format toggle button ---
   const mixId = wrap.dataset.id;
@@ -129,7 +166,7 @@ function setActiveImage(wrap, isPlaying) {
     currentFormat = "mp3";
     formatBtn.textContent = "MP3";
     formatBtn.disabled = true;
-    
+
   } else {
     // FLAC available → enable toggle
     formatBtn.disabled = false;
@@ -146,23 +183,22 @@ playBtn.addEventListener('click', () => {
 });
 
 
-// AUDIO EVENTS
 audio.addEventListener('play', () => {
-  setIcon(iconPause);
+  playerIcon.innerHTML = pauseCircleSVG;
 
   if (activeImage) {
-    const icon = activeImage.querySelector('.play-icon');
-    if (icon) icon.src = iconPause;
-    activeImage.classList.add("active");
+    const icon = activeImage.querySelector('.overlay-play-icon');
+    if (icon) icon.innerHTML = pauseCircleSVG;
+    activeImage.classList.add("active-mix");
   }
 });
 
 audio.addEventListener('pause', () => {
-  setIcon(iconPlay);
+  playerIcon.innerHTML = playCircleSVG;
 
   if (activeImage) {
-    const icon = activeImage.querySelector('.play-icon');
-    if (icon) icon.src = iconPlay;
+    const icon = activeImage.querySelector('.overlay-play-icon');
+    if (icon) icon.innerHTML = playCircleSVG;
   }
 });
 
@@ -272,20 +308,16 @@ if (progressWrapper) {
     if (!seekingAllowed) return;
 
     const mixId = activeImage.dataset.id;
-    const mix = window.mixes.find(m => m.base === mixId);
+    const mix = window.mixes[mixId];
     if (!mix) return;
 
     const currentTime = audio.currentTime;
 
     // Determine the next format (toggle)
     let nextFormat = currentFormat === "mp3" ? "flac" : "mp3";
-    console.log('Toggling format to:', nextFormat, 'for mix:', mix.base);
 
     // Check if the next format exists
     if (!mix.formats[nextFormat]) {
-      console.warn(`Mix "${mix.title}" does not have a ${nextFormat} file.`);
-      // Optionally: show a tooltip / flash message
-      formatBtn.title = `${nextFormat.toUpperCase()} not available for this mix`;
       return;
     }
 
@@ -314,5 +346,51 @@ if (progressWrapper) {
 
     window.location.href = url;
   });
+
+
+// Re-bind click handlers for newly injected pages
+window.bindMixImageClickHandlers = function () {
+  const imageWraps = document.querySelectorAll('.mix-audio-control-zone');
+
+  imageWraps.forEach(wrap => {
+    wrap.addEventListener('click', async () => {
+      const id = wrap.dataset.id;
+      const mix = window.mixes[id];
+      if (!mix) return;
+
+      if (activeImage === wrap) {
+        if (audio.paused) audio.play();
+        else audio.pause();
+        return;
+      }
+
+      setActiveImage(wrap, true);
+      await loadAndPlay(mix);
+    });
+  });
+};
+
+// Restore active mix based on localStorage
+window.restoreActiveMixState = async function () {
+  const savedState = JSON.parse(localStorage.getItem("playerState"));
+  if (!savedState || !savedState.mixId) return;
+
+  const mixId = savedState.mixId;
+  const mix = window.mixes[mixId];
+  if (!mix) return;
+
+  // Re-highlight correct image if it exists on the injected page
+  const wrap = document.querySelector(`.mix-audio-control-zone[data-id="${mixId}"]`);
+  if (wrap) {
+    setActiveImage(wrap, !audio.paused);
+  }
+
+  // If audio has no source yet, restore it
+  if (!audio.src) {
+    await loadAndPlay(mix, savedState.currentTime || 0);
+  }
+};
+
+window.initOverlayIcons = initOverlayIcons;
 
 }

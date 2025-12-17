@@ -370,7 +370,6 @@ main p {
 .mix-image-wrap {
   position: relative;
   display: inline-block;
-  cursor: pointer;
   overflow: hidden;
   border-radius: var(--img-radius);
 }
@@ -430,14 +429,19 @@ main p {
   transition: opacity 0.3s ease;
 }
 
-.image-overlay .play-icon {
+.image-overlay .overlay-play-icon {
   width: 40%;
   height: auto;
   max-width: 150px;
+  color: #000;
 }
 
 .mix-audio-control-zone:hover {
   cursor: url('/icons/ladle.svg') 6 0, auto;
+}
+
+.mix-audio-control-zone:hover img {
+  transform: scale(1.05);
 }
 
 .mix-audio-control-zone:hover .image-overlay {
@@ -445,16 +449,19 @@ main p {
   transform: scale(1);
 }
 
-.mix-audio-control-zone:hover img {
+.mix-audio-control-zone.active-mix img {
+  filter: brightness(0.6);
   transform: scale(1.05);
-}
-
-.mix-audio-control-zone.active img {
-  filter: brightness(0.9);
-}
-
-.mix-audio-control-zone:hover .image-overlay {
   opacity: 1;
+}
+
+.mix-audio-control-zone.active-mix .image-overlay {
+  opacity: 1;          /* show overlay even without hover */
+}
+
+.mix-audio-control-zone.active-mix .overlay-play-icon {
+  opacity: 1;          /* ensure visible icon */
+  color: var(--brand-color);
 }
 
 
@@ -641,7 +648,7 @@ main p {
   transition: opacity 0.3s ease;
 }
 
-.mixpage-image-overlay .play-icon {
+.mixpage-image-overlay .overlay-play-icon {
   width: 40%;
   height: auto;
   max-width: 150px;
@@ -660,7 +667,7 @@ main p {
   transform: scale(1.05);
 }
 
-.mixpage-audio-control-zone.active img {
+.mixpage-audio-control-zone.active-mix img {
   filter: brightness(0.9);
 }
 
