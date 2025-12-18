@@ -96,7 +96,7 @@ async function loadAndPlay(mix, startTime = 0) {
       currentTime: audio.currentTime
     }));
 
-    nowPlaying.innerHTML = `playing : <span class="mix-title">${mix.title}</span>`;
+    nowPlaying.innerHTML = `playing : <span id="player-mix-title">${mix.title}</span>`;
 
     progressBar.style.width = '0%';
     elapsedEl.textContent = '0:00';

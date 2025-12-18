@@ -23,8 +23,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/mixes', express.static('mixes'));
 // app.use('/mixes', express.static(path.join(process.cwd(), 'mixes')));
 
-// Helper: SPA requests send a custom header "X-SPA: true"
-// If present → return partial; otherwise → full layout.
+// Helper: SPA requests send custom header "X-SPA: true"
+// If present -> return partial; otherwise -> full layout.
 function render(req, res, view, data = {}) {
   const isSPA = req.headers["x-spa"] === "true";
 
@@ -49,7 +49,7 @@ const mixes = loadMixes();
 console.log("[Express] loaded mixes:", mixes);
 
 app.use((req, res, next) => {
-  res.locals.mixes = mixes; // available in *every* EJS view/layout
+  res.locals.mixes = mixes; // available in all EJS views/layouts
   next();
 });
 

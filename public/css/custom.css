@@ -464,74 +464,35 @@ main p {
   color: var(--brand-color);
 }
 
-
-/* ===========================================================
-   Section divider
-=========================================================== */
-
-.zig-zag-line {
-  --a: 90deg; /* control the angle */
-  --s: 100px; /* size of the zig-zag */
-  --b: 35px;  /* control the thickness */
-  
-  background: #ff6169;
-  height: calc(var(--b) + var(--s)/(2*tan(var(--a)/2)));
-  width: 100%;
-  --_g:var(--s) repeat-x conic-gradient(from calc(var(--a)/-2) at bottom,
-    #0000,#000 1deg calc(var(--a) - 1deg),#0000 var(--a));
-  mask: 50% calc(-1*var(--b))/var(--_g) exclude,50%/var(--_g);
-}
-
 /* ===========================================================
    Mixpages
 =========================================================== */
 
-.mixpage-section {
-  margin: var(--margin-y) var(--margin-x);
-}
-
-.mixpage-container {
+.mixpage-top-details-container {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  padding: var(--space-y) var(--space-x);
+  font-family: "Averia Serif Libre", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
 }
 
-@media (max-width: 1140px) {
-  .mixpage-container {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: center;
-  }
+.mixpage-artist {
+  color: var(--brand-color);
 }
 
-.mixpage-image {
-  flex: 2 0 auto;
+.mixpage-mix {
+  color: var(--brand-color);
+} 
+
+.mixpage-external-link a {
+  text-decoration: none;
+  color: #A75149;
 }
 
-.mixpage-image img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: var(--img-radius);
-}
-
-@media (min-width: 1140px) {
-  .mixpage-image {
-    max-width: 550px;
-  }
-}
-
-@media (max-width: 1140px) {
-  .mixpage-image {
-    display: flex;
-    flex: 0 0 auto;
-  }
-
-  .mixpage-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: var(--img-radius);
-  }
+.mixpage-external-link a:hover {
+  text-decoration: underline;
 }
 
 .mixpage-text {
@@ -553,9 +514,7 @@ main p {
     flex: 0 0 auto;
     width: 100%;
     min-width: 0;
-    max-height: 600px;
     overflow-x: auto;
-    overflow-y: auto;
   }
 }
 
@@ -584,96 +543,6 @@ main p {
   background: #52816760;
 }
 
-/* Image hover overlay */
-.mixpage-image-wrap {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  overflow: hidden;
-  border-radius: var(--img-radius);
-}
-
-.mixpage-title-overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: auto;
-  text-align: right;
-  width: 100%;
-  background: #52816760;
-  color: #000;
-  z-index: 2;
-  cursor: pointer; 
-}
-
-.mixpage-title-overlay:hover {
-  background: #528167AA;
-}
-
-.mixpage-title-overlay a {
-  display: block; 
-  align-items: center;   
-  padding: var(--space-x) var(--space-x);
-  text-decoration: none;
-  color: inherit;
-}
-
-.mixpage-title-overlay h3 {
-  font-weight: 700;
-  margin: 0;
-}
-
-.mixpage-title-overlay:hover h3 {
-  text-decoration: underline;
-}
-
-.mixpage-image-wrap img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.3s ease;
-}
-
-.mixpage-image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #00000040;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.mixpage-image-overlay .overlay-play-icon {
-  width: 40%;
-  height: auto;
-  max-width: 150px;
-}
-
-.mixpage-audio-control-zone:hover {
-  cursor: url('/icons/ladle.svg') 6 0, auto;
-}
-
-.mixpage-audio-control-zone:hover .image-overlay {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.mixpage-audio-control-zone:hover img {
-  transform: scale(1.05);
-}
-
-.mixpage-audio-control-zone.active-mix img {
-  filter: brightness(0.9);
-}
-
-.mixpage-audio-control-zone:hover .image-overlay {
-  opacity: 1;
-}
 
 /* ===========================================================
    Footer Player
@@ -688,7 +557,7 @@ main p {
 }
 
 /* Player container */
-#player-container {
+.player-container {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -703,7 +572,7 @@ main p {
 }
 
 /* Current track info */
-#playing-details {
+.playing-details {
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -717,14 +586,13 @@ main p {
   font-style: italic;
   font-size: clamp(.75rem, 2vw, 16px);
   line-height: normal;
-  text-align: flex-end;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-#current-track .mix-title {
+#player-mix-title {
   color: var(--brand-color);
 }
 
