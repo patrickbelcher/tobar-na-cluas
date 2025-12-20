@@ -1,80 +1,78 @@
-<div class="mix-page">
+<div class="mixpage">
+  
   <section class="mix-section">
-
-    <div class="mixpage-top-details-container">
-
-      <div class="mixpage-mix-artist">
-        <div class="mixpage-artist-header">by : <span class="mixpage-artist">
-            <%= mix.who %>
-          </span> </div>
-      </div>
-
-      <div class="mixpage-mix-title">
-        <div class="mixpage-mix-header">mix : <span class="mixpage-mix">
-            <%= mix.title %>
-          </span> </div>
-      </div>
-
-        <% if (mix.link) { %>
-        <div class="mixpage-external-link">
-          <a href="<%= mix.link %>" target="_blank" rel="noopener">
-            <span class="mixpage-external-link"><%= mix.linkText %></span>
-          </a>
-        </div>
-      <% } %>
-
-    </div>
-
-    <div class="mixpage-body-details-container">
-
-      <% if (mix.about) { %>
-      <div class="mixpage-mix-about">
-        
-        <div id="mixpage-about-header">
-          about : <span class="mixpage-about">
-            <%= mix.about %>
-          </span>
-        </div>
-
-      </div>
-      <% } %>
-
-    </div>
 
     <div class="mix-container">
 
       <div class="mix-image">
 
         <div class="mix-image-wrap">
-          <!-- Title Overlay -->
-          <div class="mix-title-overlay">
-            <div class="mix-title">
-              <h3>
-                <!-- <%= mix.who %> : <%= mix.title %> -->
-              </h3>
-            </div>
-          </div>
-
+       
           <div class="mix-audio-control-zone" data-id="<%= mix.base %>">
-            <img src="/mixes/<%= mix.base %>/<%= mix.image %>" alt="<%= mix.title %>">
+            <img src="/mixes/<%= mix.folder %>/<%= mix.image %>" alt="<%= mix.title %>">
             <!-- Overlay -->
             <div class="image-overlay">
               <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
             </div>
           </div>
+
         </div>
 
       </div>
 
       <div class="mixpage-text">
+
+        <div class="mixpage-text-container">
+
+          <div class="mixpage-mix-artist">
+            <div> <span class="mixpage-artist-header">by</span><span class="mixpage-text-spacer"> : </span><span class="mixpage-artist">
+                <%= mix.who %>
+              </span> </div>
+          </div>
+
+          <div class="mixpage-mix-title">
+            <div> <span class="mixpage-mix-header">mix</span><span class="mixpage-text-spacer"> : </span>  <span class="mixpage-mix">
+                <%= mix.title %>
+              </span> </div>
+          </div>
+
+          <% if (mix.link) { %>
+            <div class="mixpage-external-link">
+              <a href="<%= mix.link %>" target="_blank" rel="noopener">
+                <span class="mixpage-external-link">
+                  <%= mix.linkText %>
+                </span>
+              </a>
+            </div>
+            <% } %>
+
+        </div>
+
+        <% if (mix.about) { %>
+          <div class="mixpage-mix-about">
+
+            <div id="mixpage-about-header"><span class="mixpage-about">
+                <p>
+                  <%= mix.about %>
+                </p>
+              </span>
+            </div>
+
+          </div>
+          <% } %>
+
+      </div>
+
+    </div>
+
+    <div class="mix-tracklist">
+        <div id="mixpage-tracklist-header">tracklist</div>
         <% mix.tracklist.forEach(line=> { %>
           <p>
             <%= line %>
           </p>
           <% }) %>
       </div>
-
-    </div>
 
   </section>
 </div>

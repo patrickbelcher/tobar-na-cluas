@@ -35,28 +35,45 @@ function initOverlayIcons(scope = document) {
 
 // Audio
 const audio = new Audio();
+audio.preload = "metadata";
 let activeImage = null;
 let currentFormat = "mp3"; // default format
 let seekingAllowed = true;
+let saveInterval = null;
 
 // Init player + overlay play/pause icon
 playerIcon.innerHTML = playCircleSVG;
 initOverlayIcons(document);
 
 // Persistent states
-const savedState = JSON.parse(localStorage.getItem("playerState")) || {};
-let activeMixId = savedState.mixId || null;
-currentFormat = savedState.format || "mp3";
+const savedState = JSON.parse(localStorage.getItem("playerState"));
 
-// Persistent active-mix state
-if (activeMixId && window.mixes[activeMixId]) {
-  const mix = window.mixes[activeMixId];
-  loadAndPlay(mix, savedState.currentTime || 0);
+if (savedState?.mixId && window.mixes[savedState.mixId]) {
+  const mix = window.mixes[savedState.mixId];
 
-  // Find the corresponding image overlay and set it active
-  const wrap = document.querySelector(`.mix-audio-control-zone[data-id="${activeMixId}"]`);
-  if (wrap) setActiveImage(wrap, !audio.paused);
+  loadMix(mix, savedState.currentTime || 0);
+
+  const wrap = document.querySelector(
+    `.mix-audio-control-zone[data-id="${savedState.mixId}"]`
+  );
+
+  if (wrap) {
+    setActiveImage(wrap, false);
+  }
 }
+
+// localStorage function
+function persistPlayerState() {
+  if (!window.activeMixId) return;
+  if (isNaN(audio.currentTime)) return;
+
+  localStorage.setItem("playerState", JSON.stringify({
+    mixId: window.activeMixId,
+    format: currentFormat,
+    currentTime: audio.currentTime
+  }));
+}
+
 
 // Restore active tile & icon after SPA page injection
 async function restoreActiveMixState() {
@@ -66,7 +83,7 @@ async function restoreActiveMixState() {
   if (!wrap) return;
 
   // Mark correct image as active
-  setActiveImage(wrap, !audio.paused);
+  setActiveImage(wrap, false);
 
   // Ensure correct Now Playing text after injection
   const mix = window.mixes[activeMixId];
@@ -75,50 +92,61 @@ async function restoreActiveMixState() {
   }
 }
 
-// Set audio source and play
-async function loadAndPlay(mix, startTime = 0) {
-  const format = currentFormat;
-  const src = `/mixes/${mix.base}/${mix.formats[format]}`;
 
-  console.log(`Loading and playing mix: ${mix.base}, format: ${currentFormat}, src: ${src}`);
+// Set audio source
+function loadMix(mix, startTime = 0) {
+  const format = currentFormat;
+  const src = `/mixes/${mix.folder}/${mix.formats[format]}`;
+
+  console.log(`Loading mix: ${mix.base}, format: ${currentFormat}, src: ${src}`);
 
   // Check against currently loaded mix. If new ->
   if (audio.src !== src) {
     audio.src = src;
 
     // Set SPA global var 
-    window.activeMixId = mix.base; 
+    window.activeMixId = mix.base;
 
-    // Persist to localStorage
-    localStorage.setItem("playerState", JSON.stringify({
-      mixId: mix.base,
-      format: currentFormat,
-      currentTime: audio.currentTime
-    }));
-
-    nowPlaying.innerHTML = `playing : <span id="player-mix-title">${mix.title}</span>`;
+    nowPlaying.innerHTML =
+      `playing : <span id="player-mix-title">${mix.title}</span>`;
 
     progressBar.style.width = '0%';
     elapsedEl.textContent = '0:00';
     totalEl.textContent = '0:00';
   }
 
-  // Start from specified time
   audio.currentTime = startTime;
+}
 
+function updateProgressUI(time) {
+  if (isNaN(audio.duration)) return;
+
+  const percent = (time / audio.duration) * 100;
+  progressBar.style.width = percent + '%';
+
+  elapsedEl.textContent = formatTime(time);
+  totalEl.textContent = formatTime(audio.duration);
+}
+
+function formatTime(seconds = 0) {
+  const min = Math.floor(seconds / 60);
+  const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
+  return `${min}:${sec}`;
+}
+
+async function playMix() {
   try {
     await audio.play();
+    blockSeeking();
   } catch (err) {
-    console.error("Audio play failed: ", err);
+    console.error("Audio play failed:", err);
   }
-
-  blockSeeking();
 }
 
 // Click on a mix-image event handlers
 imageWraps.forEach(wrap => {
   wrap.addEventListener('click', async () => {
-    
+
     // If active mix image clicked -> toggle
     if (activeImage === wrap) {
       if (audio.paused) audio.play();
@@ -136,7 +164,8 @@ imageWraps.forEach(wrap => {
 
     // Otherwise switch tracks
     setActiveImage(wrap, true);
-    await loadAndPlay(mix);
+    loadMix(mix);
+    await playMix();
   });
 });
 
@@ -174,6 +203,11 @@ function setActiveImage(wrap, isPlaying) {
   }
 }
 
+// UI metadata updates
+audio.addEventListener('loadedmetadata', () => {
+  updateProgressUI(audio.currentTime);
+});
+
 // FOOTER: Play/Pause button
 playBtn.addEventListener('click', () => {
   if (!audio.src) return;
@@ -181,6 +215,7 @@ playBtn.addEventListener('click', () => {
   if (audio.paused) audio.play();
   else audio.pause();
 });
+
 
 
 audio.addEventListener('play', () => {
@@ -191,6 +226,8 @@ audio.addEventListener('play', () => {
     if (icon) icon.innerHTML = pauseCircleSVG;
     activeImage.classList.add("active-mix");
   }
+
+  saveInterval = setInterval(persistPlayerState, 15000);
 });
 
 audio.addEventListener('pause', () => {
@@ -200,23 +237,20 @@ audio.addEventListener('pause', () => {
     const icon = activeImage.querySelector('.overlay-play-icon');
     if (icon) icon.innerHTML = playCircleSVG;
   }
-});
 
-// Metadata loaded → Show total duration
-audio.addEventListener('loadedmetadata', () => {
-  const totalMin = Math.floor(audio.duration / 60);
-  const totalSec = Math.floor(audio.duration % 60).toString().padStart(2, '0');
-  totalEl.textContent = `${totalMin}:${totalSec}`;
+  persistPlayerState();
+  clearInterval(saveInterval);
 });
 
 // Progress + elapsed
 audio.addEventListener('timeupdate', () => {
-  const percent = (audio.currentTime / audio.duration) * 100;
-  progressBar.style.width = percent + '%';
+  updateProgressUI(audio.currentTime);
+//   const percent = (audio.currentTime / audio.duration) * 100;
+//   progressBar.style.width = percent + '%';
 
-  const elapsedMin = Math.floor(audio.currentTime / 60);
-  const elapsedSec = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
-  elapsedEl.textContent = `${elapsedMin}:${elapsedSec}`;
+//   const elapsedMin = Math.floor(audio.currentTime / 60);
+//   const elapsedSec = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+//   elapsedEl.textContent = `${elapsedMin}:${elapsedSec}`;
 });
 
 // --- GLOBAL ---
@@ -278,6 +312,7 @@ if (progressWrapper) {
       dragging = false;
       enableUserSelect();
       progressWrapper.classList.remove('dragging');
+      persistPlayerState();
     }
   });
 
@@ -327,7 +362,8 @@ if (progressWrapper) {
     formatBtn.title = ""; // clear tooltip
 
     // Reload track in new format from current time
-    await loadAndPlay(mix, currentTime);
+    loadMix(mix, currentTime);
+    await playMix();
 
     blockSeeking();
   });
@@ -336,61 +372,64 @@ if (progressWrapper) {
   downloadBtn.addEventListener("click", () => {
     if (!activeImage) return;
     const id = activeImage.dataset.id;
-    const mix = window.mixes.find(m => m.base === id);
+    const mix = window.mixes[id]
+
     if (!mix) return;
 
     const format = 'mp3';
 
     // Safe: request your backend, not the CDN
-    const url = `/download/${mix.base}?format=${format}`;
+    const url = `/download/${mix.folder}?format=${format}`;
 
     window.location.href = url;
   });
 
 
-// Re-bind click handlers for newly injected pages
-window.bindMixImageClickHandlers = function () {
-  const imageWraps = document.querySelectorAll('.mix-audio-control-zone');
+  // Re-bind click handlers for newly injected pages
+  window.bindMixImageClickHandlers = function () {
+    const imageWraps = document.querySelectorAll('.mix-audio-control-zone');
 
-  imageWraps.forEach(wrap => {
-    wrap.addEventListener('click', async () => {
-      const id = wrap.dataset.id;
-      const mix = window.mixes[id];
-      if (!mix) return;
+    imageWraps.forEach(wrap => {
+      wrap.addEventListener('click', async () => {
+        const id = wrap.dataset.id;
+        const mix = window.mixes[id];
+        if (!mix) return;
 
-      if (activeImage === wrap) {
-        if (audio.paused) audio.play();
-        else audio.pause();
-        return;
-      }
+        if (activeImage === wrap) {
+          if (audio.paused) audio.play();
+          else audio.pause();
+          return;
+        }
 
-      setActiveImage(wrap, true);
-      await loadAndPlay(mix);
+        setActiveImage(wrap, true);
+        loadMix(mix);
+        await playMix();
+      });
     });
-  });
-};
+  };
 
-// Restore active mix based on localStorage
-window.restoreActiveMixState = async function () {
-  const savedState = JSON.parse(localStorage.getItem("playerState"));
-  if (!savedState || !savedState.mixId) return;
+  // Restore active mix based on localStorage
+  window.restoreActiveMixState = async function () {
+    const savedState = JSON.parse(localStorage.getItem("playerState"));
+    if (!savedState || !savedState.mixId) return;
 
-  const mixId = savedState.mixId;
-  const mix = window.mixes[mixId];
-  if (!mix) return;
+    const mixId = savedState.mixId;
+    const mix = window.mixes[mixId];
+    if (!mix) return;
 
-  // Re-highlight correct image if it exists on the injected page
-  const wrap = document.querySelector(`.mix-audio-control-zone[data-id="${mixId}"]`);
-  if (wrap) {
-    setActiveImage(wrap, !audio.paused);
-  }
+    // Re-highlight correct image if it exists on the injected page
+    const wrap = document.querySelector(`.mix-audio-control-zone[data-id="${mixId}"]`);
+    if (wrap) {
+      setActiveImage(wrap, !audio.paused);
+    }
 
-  // If audio has no source yet, restore it
-  if (!audio.src) {
-    await loadAndPlay(mix, savedState.currentTime || 0);
-  }
-};
+    // If audio has no source yet, restore it
+    if (!audio.src) {
+      loadMix(mix, savedState.currentTime || 0);
+      await playMix();
+    }
+  };
 
-window.initOverlayIcons = initOverlayIcons;
+  window.initOverlayIcons = initOverlayIcons;
 
 }
