@@ -71,7 +71,6 @@
 =========================================================== */
 
 :root {
-  
   --margin-y: 1.5rem;
   --margin-x: 1.5rem;
   --space-y: 0.5rem;
@@ -83,6 +82,28 @@
   --bg-nav: #EBEBE5DC;
   --bg-player: #D7D6CCDC;
   --brand-color: #528167;
+}
+
+::view-transition-old(main),
+::view-transition-new(main) {
+  animation-duration: 300ms;
+  animation-timing-function: ease;
+}
+
+::view-transition-old(main) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(main) {
+  animation-name: fade-in;
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
 }
 
 html {
@@ -101,9 +122,67 @@ body {
   background-color: var(--bg-nav);
 }
 
+/* body.is-navigating {
+  cursor: progress;
+} */
+
+body.is-navigating, body.is-navigating.is-slow a {
+  pointer-events: none;
+}
+
+body.is-navigating a:focus {
+  outline: none;
+}
+
+body.is-navigating main {
+  opacity: 0.92;
+}
+
+body.is-navigating.is-slow main {
+  opacity: 0.85;
+}
+
+body.is-navigating.is-slow::after {
+  content: "• • •";
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  opacity: 0.4;
+  animation: pulse 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%   { opacity: 0.2; }
+  50%  { opacity: 0.6; }
+  100% { opacity: 0.2; }
+}
+
+/* ### TEST ### */
+body::after {
+  content: "Hello!";
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  color: red;
+}
+
 main {
   flex: 1;
   height: 100%;  
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+main.is-leaving {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+main.is-entering {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 .container,
