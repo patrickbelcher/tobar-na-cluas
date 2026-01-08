@@ -1,5 +1,6 @@
 let isNavigating = false;
 let slowNavTimer = null;
+let navToken = 0;
 
 // Listen for all click events at document level
 document.addEventListener("click", async (event) => {
@@ -8,19 +9,17 @@ document.addEventListener("click", async (event) => {
   // starting from clicked element
   const link = event.target.closest("a[data-spa]");
   if (!link) return;
-
-  if (isNavigating) return; // ignore double clicks
-  isNavigating = true;
-  document.body.classList.add("is-navigating");
-
-  slowNavTimer = setTimeout(() => {
-    document.body.classList.add("is-slow");
-  }, 500);
-
+  
   // Prevent browser default navigation behavior
   // (full page reload)
   event.preventDefault();
 
+  if (isNavigating) return; // ignore double clicks
+
+  isNavigating = true;
+  document.body.classList.add("is-navigating");
+
+  const myToken = ++navToken;
 
   try {
     // Absolute URL from JS link object
@@ -33,9 +32,17 @@ document.addEventListener("click", async (event) => {
     main.classList.add("is-leaving");
 
     // Wait for animation to finish
-    await new Promise(r => setTimeout(r, 250));
+    await new Promise(r => setTimeout(r, 350));
 
-    await delay(5000); // simulate slow network
+    // simulate slow network
+    // await delay(5000); 
+
+    slowNavTimer = setTimeout(() => {
+      // Only apply if this navigation is still current
+      if (isNavigating && myToken === navToken) {
+        document.body.classList.add("is-slow");
+      }
+    }, 500);
 
     // Fetch server-rendered HTML fragment
     const response = await fetch(url, {
@@ -92,7 +99,8 @@ window.addEventListener("popstate", async () => {
   const main = document.querySelector("main");
 
   main.classList.add("is-leaving");
-  await new Promise(r => setTimeout(r, 250));
+
+  await new Promise(r => setTimeout(r, 350));
 
   // Fetch the correct server-rendered HTML fragment for this history entry
   const response = await fetch(url, {
@@ -134,6 +142,7 @@ async function swapMainContent(main, html) {
   }
 }
 
+// Simulate network delay
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

@@ -135,38 +135,31 @@ body.is-navigating a:focus {
 }
 
 body.is-navigating main {
-  opacity: 0.92;
+  opacity: 0.85;
 }
 
 body.is-navigating.is-slow main {
-  opacity: 0.85;
+  opacity: 0.55;
 }
 
 body.is-navigating.is-slow::after {
   content: "• • •";
   position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  font-size: 2rem;
+  top: 50%;                   
+  left: 50%;                
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
   opacity: 0.4;
   animation: pulse 1.2s ease-in-out infinite;
   pointer-events: none;
+  z-index: 9999;            
+  text-align: center; 
 }
 
 @keyframes pulse {
   0%   { opacity: 0.2; }
   50%  { opacity: 0.6; }
   100% { opacity: 0.2; }
-}
-
-/* ### TEST ### */
-body::after {
-  content: "Hello!";
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  font-size: 2rem;
-  color: red;
 }
 
 main {
