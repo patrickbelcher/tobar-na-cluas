@@ -17,28 +17,51 @@ let saveInterval = null;
 // --- AUDIO PLAYER CORE FUNCTIONS ---
 // Set audio source
 function loadMix(mix, startTime = 0) {
-  const format = currentFormat;
+  const format = playerState.currentFormat || 'mp3';
   const src = `/mixes/${mix.folder}/${mix.formats[format]}`;
+
+  // Update MediaSession metadata
   updateMediaSessionMetadata(mix);
 
-  console.log(`Loading mix: ${mix.base}, format: ${currentFormat}, src: ${src}`);
-
-  // Check against currently loaded mix. If new ->
+  // Only reload audio if src changes
   if (audio.src !== src) {
     audio.src = src;
-
-    // Set SPA global var 
-    window.activeMixId = mix.base;
-
-    nowPlaying.innerHTML =
-      `playing : <span id="player-mix-title">${mix.title}</span>`;
-
-    progressBar.style.width = '0%';
-    elapsedEl.textContent = '0:00';
-    totalEl.textContent = '0:00';
   }
 
   audio.currentTime = startTime;
+
+  // Update state
+  playerState.activeMixId = mix.base;
+}
+
+async function playMix() {
+  try {
+    await audio.play();
+    playerState.isPlaying = true;
+    blockSeeking();
+  } catch (err) {
+    console.error("Audio play failed:", err);
+  }
+}
+
+function pauseMix() {
+  audio.pause();
+  playerState.isPlaying = false;
+}
+
+function togglePlayback(forceState) {
+  if (!audio.src) return;
+
+  const shouldPlay =
+    forceState === 'play' ? true :
+    forceState === 'pause' ? false :
+    audio.paused;
+
+  if (shouldPlay) {
+    playMix();
+  } else {
+    pauseMix();
+  }
 }
 
 // Audio Play
@@ -69,12 +92,12 @@ function togglePlayback(forceState) {
 
 // localStorage function
 function persistPlayerState() {
-  if (!window.activeMixId) return;
+  if (!playerState.activeMixId) return;
   if (isNaN(audio.currentTime)) return;
 
   localStorage.setItem("playerState", JSON.stringify({
-    mixId: window.activeMixId,
-    format: currentFormat,
+    mixId: playerState.activeMixId,
+    format: playerState.currentFormat,
     currentTime: audio.currentTime
   }));
 }

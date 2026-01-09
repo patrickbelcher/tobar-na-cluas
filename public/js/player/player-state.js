@@ -4,8 +4,7 @@ window.playerState = {
   isPlaying: false,
   currentTime: 0,
   duration: 0,
-  seekingAllowed: true,
-
-  // UI-related
-  activeImageEl: null,
+  
+  // seekingAllowed: true,
+  // activeImageEl: null,
 };
