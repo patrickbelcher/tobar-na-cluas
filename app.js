@@ -2,8 +2,9 @@
 import express from "express"; // for Node v20+, supports ES modules if "type":"module" in package.json
 import expressLayouts from "express-ejs-layouts";
 import path from "path";
+import 'dotenv/config';
 import { fileURLToPath } from "url";
-import { loadMixes }  from "./lib/loadMixes.js";
+import { loadMixes } from "./lib/loadMixes.js";
 import { validateDownloadRequest } from "./lib/downloadGuard.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -46,79 +47,75 @@ function render(req, res, view, data = {}) {
 }
 
 // Load mixes.json data and tracklists
-const mixes = loadMixes();
-console.log("[Express] loaded mixes:", mixes);
+async function start() {
+  const mixes = await loadMixes();
+  console.log("[Express] loaded mixes:", mixes);
 
-app.use((req, res, next) => {
-  res.locals.mixes = mixes; // available in all EJS views/layouts
-  next();
-});
-
-// Homepage route — render index.ejs and pass mixes data
-app.get("/", (req, res) => {
-  console.log("Route: / (homepage)");
-  render(req, res, "index", { title: "Home"});
-});
-
-
-app.get("/about", (req, res) => {
-  console.log("Route: /about");
-  render(req, res, "about", { title: "About"});
-});
-
-app.get('/mix/:base', (req, res) => {
-  const base = req.params.base;
-  const mix = mixes[base];
-
-  if (!mix) {
-    return res.status(404).render("404", {
-      message: "Mix not found",
-      mixes  
-    });
-  }
-
-  render(req, res, "mix", {
-    mix,
-    title: mix.title,
-    mixes 
+  app.use((req, res, next) => {
+    res.locals.mixes = mixes;
+    next();
   });
-});
 
+  app.get("/", (req, res) => {
+    console.log("Route: / (homepage)");
+    render(req, res, "index", { title: "Home" });
+  });
 
-// Placeholder for CDN downloads
-app.get("/download/:id", validateDownloadRequest, async (req, res) => {
-  const id = req.params.id;
-  const format = req.query.format;
+  app.get("/about", (req, res) => {
+    console.log("Route: /about");
+    render(req, res, "about", { title: "About" });
+  });
 
-  // Find mix
-  const mix = mixes.find(m => m.base === id);
-  if (!mix) return res.status(404).send("Mix not found");
+  app.get('/mix/:base', (req, res) => {
+    const base = req.params.base;
+    const mix = mixes[base];
 
-  const ext = mix.formats[format];
-  if (!ext) return res.status(400).send("Invalid format");
-
-  const fileUrl = `https://mycdn.example.com/audio/${mix.base}.${ext}`;
-
-  try {
-    const response = await fetch(fileUrl);
-
-    if (!response.ok) {
-      console.error(`CDN error for ${fileUrl}`);
-      return res.status(502).send("Audio file not available");
+    if (!mix) {
+      return res.status(404).render("404", {
+        message: "Mix not found",
+        mixes
+      });
     }
 
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="${mix.title}.${format}"`
-    );
+    render(req, res, "mix", {
+      mix,
+      title: mix.title,
+      mixes
+    });
+  });
 
-    response.body.pipe(res);
-  } catch (err) {
-    console.error("CDN fetch error:", err);
-    res.status(500).send("Download failed");
-  }
-});
+  app.get("/download/:id", validateDownloadRequest, async (req, res) => {
+    const id = req.params.id;
+    const mix = mixes[id];
 
-app.listen(PORT, () => {
-  console.log(`Tobar na Cluas running at http://localhost:${PORT}`);
-});
+    if (!mix) return res.status(404).send("Mix not found");
+
+    const fileUrl = mix.formats.mp3;
+    if (!fileUrl) return res.status(404).send("MP3 not available");
+
+    try {
+      const response = await fetch(fileUrl);
+
+      if (!response.ok) {
+        console.error(`CDN error for ${fileUrl}`);
+        return res.status(502).send("Audio file not available");
+      }
+
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${mix.title}.mp3"`
+      );
+
+      response.body.pipe(res);
+    } catch (err) {
+      console.error("CDN fetch error:", err);
+      res.status(500).send("Download failed");
+    }
+  });
+
+  app.listen(PORT, () => {
+    console.log(`Tobar na Cluas running at http://localhost:${PORT}`);
+  });
+}
+
+start();

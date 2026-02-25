@@ -236,7 +236,7 @@ downloadBtn.addEventListener('click', () => {
   const mix = getMix(playerState.loadedMixId);
   if (!mix) return;
 
-  window.location.href = `/download/${mix.folder}?format=mp3`;
+  window.location.href = `/download/${mix.base}`;
 });
 
 // --- SEEK BAR ---

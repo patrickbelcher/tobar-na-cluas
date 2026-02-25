@@ -30,6 +30,8 @@
   },
   "homepage": "https://github.com/patrickbelcher/tobar-na-cluas#readme",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.997.0",
+    "dotenv": "^17.3.1",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-ejs-layouts": "^2.5.1",

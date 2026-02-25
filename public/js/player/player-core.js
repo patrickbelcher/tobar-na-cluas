@@ -3,7 +3,7 @@ import { audio, playerState } from './player-state.js';
 // --- LOAD & PLAYBACK ---
 
 export function loadMix(mix, startTime = 0) {
-  const src = `/mixes/${mix.folder}/${mix.formats[playerState.currentFormat]}`;
+   const src = mix.formats[playerState.currentFormat];
 
   if (audio.src !== src) {
     audio.src = src;

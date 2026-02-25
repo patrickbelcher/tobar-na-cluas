@@ -1,41 +1,41 @@
-  <% Object.values(mixes).forEach(mix=> { %>
-    <section class="mix-section">
+<% Object.values(mixes).forEach(mix=> { %>
+  <section class="mix-section">
 
-      <div class="mix-container">
+    <div class="mix-container">
 
-        <div class="mix-image">
+      <div class="mix-image">
 
-          <div class="mix-image-wrap">
-            <!-- Title Overlay -->
-            <div class="mix-title-overlay">
-              <a href="/mix/<%= mix.base %>" class="mix-title-link" data-spa>
-                <h3>
-                  <%= mix.who %> : <%= mix.title %>
-                </h3>
-              </a>
-            </div>
-
-            <div class="mix-audio-control-zone" data-id="<%= mix.base %>">
-              <img src="/mixes/<%= mix.folder %>/<%= mix.image %>" alt="<%= mix.title %>">
-              <!-- Overlay -->
-              <div class="image-overlay">
-                <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
-              </div>
-            </div>
+        <div class="mix-image-wrap">
+          <!-- Title Overlay -->
+          <div class="mix-title-overlay">
+            <a href="/mix/<%= mix.base %>" class="mix-title-link" data-spa>
+              <h3>
+                <%= mix.who %> : <%= mix.title %>
+              </h3>
+            </a>
           </div>
 
-        </div>
-
-        <div class="mix-tracklist">
-          <% mix.tracklist.forEach(line=> { %>
-            <p>
-              <%= line %>
-            </p>
-            <% }) %>
+          <div class="mix-audio-control-zone" data-id="<%= mix.base %>">
+            <img src="<%= mix.image %>" alt="<%= mix.title %>">
+            <!-- Overlay -->
+            <div class="image-overlay">
+              <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
+            </div>
+          </div>
         </div>
 
       </div>
 
-    </section>
+      <div class="mix-tracklist">
+        <% mix.tracklist.forEach(line=> { %>
+          <p>
+            <%= line %>
+          </p>
+          <% }) %>
+      </div>
 
-    <% }) %>
+    </div>
+
+  </section>
+
+  <% }) %>
