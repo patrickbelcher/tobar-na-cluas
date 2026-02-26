@@ -1,5 +1,7 @@
 function initContactEmail() {
+  console.log('[initContactEmail] running');
   const el = document.getElementById('contact-email');
+  console.log('[initContactEmail] el:', el);
   if (!el) return;
   const parts = ['hello', 'tobarnacluas', 'ie'];
   el.textContent = `${parts[0]}@${parts[1]}.${parts[2]}`;
