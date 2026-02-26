@@ -46,7 +46,13 @@ function render(req, res, view, data = {}) {
 // Load mixes.json data and tracklists
 async function start() {
   const mixes = await loadMixes();
+
+  if (Object.keys(mixes).length === 0) {
+    console.warn("[Express] No mixes loaded — R2 may be unreachable. Site will start with empty mixes.");
+  }
+
   console.log("[Express] loaded mixes:", mixes);
+
 
   app.use((req, res, next) => {
     res.locals.mixes = mixes;
@@ -95,12 +101,12 @@ async function start() {
   });
 
   app.use((req, res) => {
-  res.status(404).render("404", {
-    title: "404 - Not Found",
-    message: "Page not found",
-    mixes
+    res.status(404).render("404", {
+      title: "404 - Not Found",
+      message: "Page not found",
+      mixes
+    });
   });
-});
 }
 
 start();

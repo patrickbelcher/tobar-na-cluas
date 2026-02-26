@@ -661,15 +661,36 @@ main p {
 .other-page-section {
   margin: var(--margin-y) var(--margin-x);
   display: flex;
-  justify-content: flex-end;
-  align-items: baseline;
-  height: max-content;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  min-height: calc(100vh - 80px * 2); /* rough nav + footer */
+  flex: 1;
 }
 
-.other-page-container {
-  padding: var(--space-y) var(--space-x);
+.other-page-top-container {
+  padding: 1rem 2rem 0rem 0rem;
   max-width: 400px;
+  align-self: flex-end; /* top right */
+  justify-self: baseline;
+  text-align: start;
+}
+
+.other-page-bottom-container {
+  padding: 0rem 0rem 2rem 1rem;
+  max-width: 400px;
+  align-self: flex-start; /* bottom left */
+  justify-self: top;
   text-align: end;
+}
+
+#contact-email {
+  font-family: "Averia Serif Libre", serif;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  color: var(--brand-color);
+  font-weight: 400;
+  font-style: italic;
+  margin-bottom: 1.25rem;
 }
 
 /* ===========================================================

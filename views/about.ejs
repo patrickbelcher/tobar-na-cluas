@@ -1,8 +1,18 @@
 <section class="other-page-section">
-    <div class="other-page-container">
+    <div class="other-page-top-container">
+        <a id="contact-email" href="#"></a>
+    </div>
+    <div class="other-page-bottom-container">
         <h3> 
-            Sporadic recordings from the South-West of Ireland. B-sides, forgotten album tracks, new stuff, old stuff, Irish stuff. Tempo agnostic, electronic leaning, situational, with feeling.
+            Sporadic recordings from SW. Ireland. B-sides, forgotten album tracks, new stuff, old stuff, Irish stuff. Tempo agnostic, electronic leaning, situational, with feeling.
         </h3>
     </div>
 </section>
+
+<script>
+  const el = document.getElementById('contact-email');
+  const parts = ['hello', 'tobarnacluas', 'ie'];
+  el.textContent = `${parts[0]}@${parts[1]}.${parts[2]}`;
+  el.href = `mailto:${parts[0]}@${parts[1]}.${parts[2]}`;
+</script>
 
