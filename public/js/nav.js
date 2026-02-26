@@ -1,3 +1,16 @@
+function initContactEmail() {
+  const el = document.getElementById('contact-email');
+  if (!el) return;
+  const parts = ['hello', 'tobarnacluas', 'ie'];
+  el.textContent = `${parts[0]}@${parts[1]}.${parts[2]}`;
+  el.href = `mailto:${parts[0]}@${parts[1]}.${parts[2]}`;
+}
+
+function onPageInit() {
+  initContactEmail();
+  // future per-page init logic goes here
+}
+
 let isNavigating = false;
 let slowNavTimer = null;
 let navToken = 0;
@@ -16,8 +29,6 @@ document.addEventListener("click", async (event) => {
 
   try {
     const url = link.href;
-    // console.log("[NAV] Fetching", url);
-
     const main = document.querySelector("main");
 
     main.classList.add("is-leaving");
@@ -41,8 +52,8 @@ document.addEventListener("click", async (event) => {
     await swapMainContent(main, html);
 
     main.classList.remove("is-entering");
+    onPageInit();
 
-    // Notify the player that new page content has been injected
     document.dispatchEvent(new CustomEvent('player:pagechanged', {
       detail: { scope: main }
     }));
@@ -75,8 +86,8 @@ window.addEventListener("popstate", async () => {
 
   await swapMainContent(main, html);
   main.classList.remove("is-entering");
+  onPageInit();
 
-  // Notify the player that new page content has been injected
   document.dispatchEvent(new CustomEvent('player:pagechanged', {
     detail: { scope: main }
   }));
@@ -95,3 +106,5 @@ async function swapMainContent(main, html) {
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+document.addEventListener('DOMContentLoaded', onPageInit);

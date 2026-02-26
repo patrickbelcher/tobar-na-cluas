@@ -125,10 +125,6 @@ body {
   background-color: var(--bg-nav);
 }
 
-/* body.is-navigating {
-  cursor: progress;
-} */
-
 body.is-navigating,
 body.is-navigating.is-slow a {
   pointer-events: none;
