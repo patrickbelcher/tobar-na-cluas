@@ -5,7 +5,6 @@ import path from "path";
 import 'dotenv/config';
 import { fileURLToPath } from "url";
 import { loadMixes } from "./lib/loadMixes.js";
-import { validateDownloadRequest } from "./lib/downloadGuard.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,21 +21,19 @@ app.disable('x-powered-by');
 
 // Serve static files from "public"
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/mixes', express.static('mixes'));
-// app.use('/mixes', express.static(path.join(process.cwd(), 'mixes')));
 
 // Helper: SPA requests send custom header "X-SPA: true"
 // If present -> return partial; otherwise -> full layout.
 function render(req, res, view, data = {}) {
   const isSPA = req.headers["x-spa"] === "true";
 
-  console.log(`
-  [REQUEST]
-  URL: ${req.method} ${req.url}
-  SPA: ${isSPA}
-  View rendered: ${view}
-  Data keys: ${Object.keys(data).join(", ")}
-  `);
+  // console.log(`
+  // [REQUEST]
+  // URL: ${req.method} ${req.url}
+  // SPA: ${isSPA}
+  // View rendered: ${view}
+  // Data keys: ${Object.keys(data).join(", ")}
+  // `);
 
   if (req.headers["x-spa"] === "true") {
     // Return only the inner HTML for <main>
@@ -57,12 +54,10 @@ async function start() {
   });
 
   app.get("/", (req, res) => {
-    console.log("Route: / (homepage)");
     render(req, res, "index", { title: "Home" });
   });
 
   app.get("/about", (req, res) => {
-    console.log("Route: /about");
     render(req, res, "about", { title: "About" });
   });
 
@@ -72,6 +67,7 @@ async function start() {
 
     if (!mix) {
       return res.status(404).render("404", {
+        title: "404 - Not Found",
         message: "Mix not found",
         mixes
       });
@@ -84,38 +80,28 @@ async function start() {
     });
   });
 
-  app.get("/download/:id", validateDownloadRequest, async (req, res) => {
-    const id = req.params.id;
-    const mix = mixes[id];
-
+  app.get("/download/:id", (req, res) => {
+    const mix = mixes[req.params.id];
     if (!mix) return res.status(404).send("Mix not found");
 
     const fileUrl = mix.formats.mp3;
     if (!fileUrl) return res.status(404).send("MP3 not available");
 
-    try {
-      const response = await fetch(fileUrl);
-
-      if (!response.ok) {
-        console.error(`CDN error for ${fileUrl}`);
-        return res.status(502).send("Audio file not available");
-      }
-
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename="${mix.title}.mp3"`
-      );
-
-      response.body.pipe(res);
-    } catch (err) {
-      console.error("CDN fetch error:", err);
-      res.status(500).send("Download failed");
-    }
+    res.redirect(302, fileUrl);
   });
 
   app.listen(PORT, () => {
     console.log(`Tobar na Cluas running at http://localhost:${PORT}`);
   });
+
+  app.use((req, res) => {
+  res.status(404).render("404", {
+    title: "404 - Not Found",
+    message: "Page not found",
+    mixes
+  });
+});
 }
 
 start();
+

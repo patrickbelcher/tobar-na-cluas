@@ -99,15 +99,18 @@
 }
 
 @keyframes fade-out {
-  to { opacity: 0; }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
+  from {
+    opacity: 0;
+  }
 }
 
 html {
-  /* height: 100%; */
   scroll-behavior: smooth;
 }
 
@@ -126,7 +129,8 @@ body {
   cursor: progress;
 } */
 
-body.is-navigating, body.is-navigating.is-slow a {
+body.is-navigating,
+body.is-navigating.is-slow a {
   pointer-events: none;
 }
 
@@ -145,26 +149,34 @@ body.is-navigating.is-slow main {
 body.is-navigating.is-slow::after {
   content: "• • •";
   position: fixed;
-  top: 50%;                   
-  left: 50%;                
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   font-size: 3rem;
   opacity: 0.4;
   animation: pulse 1.2s ease-in-out infinite;
   pointer-events: none;
-  z-index: 9999;            
-  text-align: center; 
+  z-index: 9999;
+  text-align: center;
 }
 
 @keyframes pulse {
-  0%   { opacity: 0.2; }
-  50%  { opacity: 0.6; }
-  100% { opacity: 0.2; }
+  0% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 0.2;
+  }
 }
 
 main {
   flex: 1;
-  height: 100%;  
+  height: 100%;
   transition: opacity 250ms ease, transform 250ms ease;
 }
 
@@ -230,13 +242,13 @@ main.is-entering {
 }
 
 /* --- Toggler--- */
-
 .navbar-toggler {
   border: none;
   background: transparent;
   cursor: pointer;
   color: #000;
-  display: none; /* default hidden on desktop */
+  display: none;
+  /* default hidden on desktop */
 }
 
 .navbar-toggler-icon {
@@ -454,7 +466,7 @@ main p {
   background: #52816760;
   color: #000;
   z-index: 2;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .mix-title-overlay:hover {
@@ -462,8 +474,8 @@ main p {
 }
 
 .mix-title-overlay a {
-  display: block; 
-  align-items: center;   
+  display: block;
+  align-items: center;
   padding: var(--space-x) var(--space-x);
   text-decoration: none;
   color: inherit;
@@ -526,11 +538,13 @@ main p {
 }
 
 .mix-audio-control-zone.active-mix .image-overlay {
-  opacity: 1;          /* show overlay even without hover */
+  opacity: 1;
+  /* show overlay even without hover */
 }
 
 .mix-audio-control-zone.active-mix .overlay-play-icon {
-  opacity: 1;          /* ensure visible icon */
+  opacity: 1;
+  /* ensure visible icon */
   color: var(--brand-color);
 }
 
@@ -592,11 +606,14 @@ main p {
   background: #52816760;
 }
 
-.mixpage-mix-artist, .mixpage-mix-title, .mixpage-external-link {
+.mixpage-mix-artist,
+.mixpage-mix-title,
+.mixpage-external-link {
   white-space: nowrap;
 }
 
-.mixpage-artist-header, .mixpage-mix-header {
+.mixpage-artist-header,
+.mixpage-mix-header {
   text-decoration: underline;
 }
 
@@ -612,7 +629,7 @@ main p {
 .mixpage-mix {
   color: var(--brand-color);
   text-decoration: none;
-} 
+}
 
 .mixpage-external-link a {
   text-decoration: none;
@@ -637,6 +654,23 @@ main p {
   text-decoration: underline;
 }
 
+/* ===========================================================
+   Other page container
+=========================================================== */
+
+.other-page-section {
+  margin: var(--margin-y) var(--margin-x);
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  height: max-content;
+}
+
+.other-page-container {
+  padding: var(--space-y) var(--space-x);
+  max-width: 400px;
+  text-align: end;
+}
 
 /* ===========================================================
    Footer Player
@@ -655,8 +689,10 @@ main p {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* vertical alignment */
-  align-items: center; /* horizontal alignment */
+  justify-content: flex-end;
+  /* vertical alignment */
+  align-items: center;
+  /* horizontal alignment */
   width: 100%;
   background-color: var(--bg-player);
   padding: var(--space-y) var(--space-x);
@@ -766,7 +802,7 @@ main p {
 
 @media (max-width: 960px) {
   .download-btn {
-  display: none;
+    display: none;
   }
 }
 
@@ -795,4 +831,3 @@ main p {
     display: none;
   }
 }
-

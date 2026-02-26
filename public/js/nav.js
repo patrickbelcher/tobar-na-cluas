@@ -16,7 +16,7 @@ document.addEventListener("click", async (event) => {
 
   try {
     const url = link.href;
-    console.log("[NAV] Fetching", url);
+    // console.log("[NAV] Fetching", url);
 
     const main = document.querySelector("main");
 

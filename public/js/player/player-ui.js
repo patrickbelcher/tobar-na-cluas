@@ -21,7 +21,6 @@ const pauseCircleSVG = `
 </svg>`;
 
 // --- DOM REFS ---
-
 const playBtn     = document.getElementById('play-btn');
 const playerIcon  = document.getElementById('player-icon');
 const progressBar = document.getElementById('progress-bar');
@@ -32,7 +31,6 @@ const downloadBtn = document.getElementById('download-btn');
 const mixTitleEl  = document.getElementById('player-mix-title');
 
 // --- HELPERS ---
-
 // Returns the currently loaded mix image wrap, or null
 function getLoadedWrap() {
   if (!playerState.loadedMixId) return null;
@@ -44,7 +42,6 @@ function getMix(id) {
 }
 
 // --- PROGRESS UI ---
-
 export function updateProgressUI(time) {
   if (isNaN(audio.duration)) return;
 
@@ -61,13 +58,11 @@ function formatTime(seconds = 0) {
 }
 
 // --- FOOTER TITLE ---
-
 function updateFooterTitle(mix) {
   if (mixTitleEl && mix) mixTitleEl.textContent = `${mix.who} : ${mix.title}`;
 }
 
 // --- IMAGE OVERLAY ---
-
 // Sets all overlay icons in a given scope to play state (called after page inject)
 function initOverlayIcons(scope = document) {
   scope.querySelectorAll('.overlay-play-icon').forEach(svg => {
@@ -127,7 +122,7 @@ function bindMixImageClickHandlers() {
       }
 
       // New mix — load and play
-      playerState.currentFormat = mix.formats.flac ? playerState.currentFormat : 'mp3';
+      playerState.currentFormat = 'mp3';
       updateMediaSessionMetadata(mix);
       loadMix(mix);
       updateFooterTitle(mix);
@@ -138,7 +133,6 @@ function bindMixImageClickHandlers() {
 }
 
 // --- AUDIO EVENT LISTENERS ---
-
 audio.addEventListener('loadedmetadata', () => {
   updateProgressUI(audio.currentTime);
 });
@@ -183,7 +177,6 @@ audio.addEventListener('ended', () => {
 });
 
 // --- FOOTER CONTROLS ---
-
 playBtn.addEventListener('click', () => {
   togglePlayback();
 });
@@ -207,7 +200,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 // --- FORMAT TOGGLE ---
-
 formatBtn.addEventListener('click', async () => {
   if (playerState.status === 'idle') return;
   if (!playerState.seekingAllowed) return;
@@ -229,18 +221,19 @@ formatBtn.addEventListener('click', async () => {
 });
 
 // --- DOWNLOAD ---
-
 downloadBtn.addEventListener('click', () => {
   if (playerState.status === 'idle') return;
 
   const mix = getMix(playerState.loadedMixId);
   if (!mix) return;
 
-  window.location.href = `/download/${mix.base}`;
+  const a = document.createElement('a');
+  a.href = `/download/${mix.base}`;
+  a.download = `${mix.title}.mp3`;
+  a.click();
 });
 
 // --- SEEK BAR ---
-
 const progressWrapper = document.querySelector('.progress-wrapper');
 
 if (progressWrapper) {
@@ -301,17 +294,17 @@ if (progressWrapper) {
   });
 }
 
-// --- PAGE CHANGE HANDLER (replaces window bridge) ---
+// --- PAGE CHANGE HANDLER ---
 document.addEventListener('player:pagechanged', (e) => {
   const scope = e.detail?.scope || document;
 
-  // Stamp play icons onto freshly injected DOM
+  // Init play icons onto freshly injected DOM
   initOverlayIcons(scope);
 
   // Re-bind clicks to new elements
   bindMixImageClickHandlers();
 
-  // Sync loaded mix highlight to current page
+  // Sync loaded mix with images (image wraps) on current page
   syncImageUI();
 
   // Restore footer title if a mix is loaded
