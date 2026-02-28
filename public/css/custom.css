@@ -535,12 +535,10 @@ main p {
 
 .mix-audio-control-zone.active-mix .image-overlay {
   opacity: 1;
-  /* show overlay even without hover */
 }
 
 .mix-audio-control-zone.active-mix .overlay-play-icon {
   opacity: 1;
-  /* ensure visible icon */
   color: var(--brand-color);
 }
 
@@ -658,26 +656,38 @@ main p {
   margin: var(--margin-y) var(--margin-x);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
-  min-height: calc(100vh - 80px * 2); /* rough nav + footer */
+  justify-content: space-around;
+  
   flex: 1;
 }
 
 .other-page-top-container {
-  padding: 1rem 2rem 0rem 0rem;
+  padding: 1rem 2rem 1rem 2rem;
   max-width: 400px;
-  align-self: flex-end; /* top right */
+  align-self: flex-end; 
   justify-self: baseline;
-  text-align: start;
+  text-align: right;
 }
 
 .other-page-bottom-container {
-  padding: 0rem 0rem 2rem 1rem;
+  padding: 0rem 2rem 2rem 1rem;
   max-width: 400px;
-  align-self: flex-start; /* bottom left */
+  align-self: flex-end; 
   justify-self: top;
   text-align: end;
+}
+
+
+@media (min-width: 576px) {
+  .other-page-section {
+    align-items: stretch;
+    min-height: calc(100vh - 80px * 2); /* rough nav + footer */
+    justify-content: space-between;
+  }
+
+  .other-page-bottom-container {
+    align-self: flex-start; 
+  }
 }
 
 #contact-email {
