@@ -649,19 +649,18 @@ main p {
 }
 
 /* ===========================================================
-   Other page container
+   Other pages
 =========================================================== */
 
-.other-page-section {
+.about-page-section {
   margin: var(--margin-y) var(--margin-x);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  
   flex: 1;
 }
 
-.other-page-top-container {
+.about-page-top-container {
   padding: 1rem 2rem 1rem 2rem;
   max-width: 400px;
   align-self: flex-end; 
@@ -669,7 +668,7 @@ main p {
   text-align: right;
 }
 
-.other-page-bottom-container {
+.about-page-bottom-container {
   padding: 0rem 2rem 2rem 1rem;
   max-width: 400px;
   align-self: flex-end; 
@@ -677,15 +676,14 @@ main p {
   text-align: end;
 }
 
-
 @media (min-width: 576px) {
-  .other-page-section {
+  .about-page-section {
     align-items: stretch;
     min-height: calc(100vh - 80px * 2); /* rough nav + footer */
     justify-content: space-between;
   }
 
-  .other-page-bottom-container {
+  .about-page-bottom-container {
     align-self: flex-start; 
   }
 }
@@ -697,6 +695,20 @@ main p {
   font-weight: 400;
   font-style: italic;
   margin-bottom: 1.25rem;
+}
+
+.four-o-four-section {
+  margin: var(--margin-y) var(--margin-x);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: calc(100vh - 80px * 2);
+}
+
+.four-o-four-container{
+  align-self: center;
+  justify-self: center;
+  text-align: center;
 }
 
 /* ===========================================================
