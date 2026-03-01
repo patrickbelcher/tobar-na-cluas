@@ -15,7 +15,7 @@
 }
 
 .suse-600 {
-  font-family: "SUSE Mono", monospace;
+  font-family: var(--font-mono);
   font-weight: 600;
 }
 
@@ -268,7 +268,7 @@ main.is-entering {
 =========================================================== */
 
 main p {
-  font-family: "SUSE Mono", monospace;
+  font-family: var(--font-mono);
   font-size: clamp(.5rem, 2vw, 14px);
   font-weight: 600;
   line-height: 1.5;
@@ -452,12 +452,11 @@ main p {
   color: inherit;
 }
 
-.mix-title-overlay h3 {
-  font-weight: 700;
+.mix-title-overlay h2 {
   margin: 0;
 }
 
-.mix-title-overlay:hover h3 {
+.mix-title-overlay:hover h2 {
   text-decoration: underline;
 }
 
