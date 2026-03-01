@@ -3,67 +3,20 @@
 =========================================================== */
 
 .averia-serif-libre-regular {
-  font-family: "Averia Serif Libre", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.averia-serif-libre-bold {
-  font-family: "Averia Serif Libre", serif;
+  font-family: var(--font-serif);
   font-weight: 700;
   font-style: normal;
-}
-
-.averia-serif-libre-regular-italic {
-  font-family: "Averia Serif Libre", serif;
-  font-weight: 400;
-  font-style: italic;
 }
 
 .averia-serif-libre-bold-italic {
-  font-family: "Averia Serif Libre", serif;
+  font-family: var(--font-serif);
   font-weight: 700;
   font-style: italic;
-}
-
-.suse-400 {
-  font-family: "SUSE Mono", monospace;
-  font-weight: 400;
-}
-
-.suse-500 {
-  font-family: "SUSE Mono", monospace;
-  font-weight: 500;
 }
 
 .suse-600 {
   font-family: "SUSE Mono", monospace;
   font-weight: 600;
-}
-
-.suse-700 {
-  font-family: "SUSE Mono", monospace;
-  font-weight: 700;
-}
-
-.cascadia-400 {
-  font-family: "Cascadia Mono", monospace;
-  font-weight: 400;
-}
-
-.cascadia-500 {
-  font-family: "Cascadia Mono", monospace;
-  font-weight: 500;
-}
-
-.cascadia-600 {
-  font-family: "Cascadia Mono", monospace;
-  font-weight: 600;
-}
-
-.cascadia-700 {
-  font-family: "Cascadia Mono", monospace;
-  font-weight: 700;
 }
 
 /* ===========================================================
@@ -82,6 +35,9 @@
   --bg-nav: #EBEBE5DC;
   --bg-player: #D7D6CCDC;
   --brand-color: #528167;
+
+  --font-serif: "Averia Serif Libre", serif;
+  --font-mono: "SUSE Mono", monospace;
 }
 
 ::view-transition-old(main),
@@ -201,7 +157,7 @@ main.is-entering {
   padding: var(--space-y) var(--space-x);
   border: none;
   border-radius: 0 0 var(--nav-radius) var(--nav-radius);
-  font-family: "Averia Serif Libre", serif;
+  font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
   overflow: hidden;
@@ -311,34 +267,53 @@ main.is-entering {
    Main Content
 =========================================================== */
 
-main h1 {
-  font-family: "Averia Serif Libre", serif;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 400;
-  margin-bottom: 1.25rem;
-}
-
-main h2 {
-  font-family: "Averia Serif Libre", serif;
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 400;
-  margin-bottom: 1.25rem;
-}
-
-main h3 {
-  font-family: "Averia Serif Libre", serif;
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
-  font-weight: 400;
-  font-style: italic;
-  margin-bottom: 1.25rem;
-}
-
 main p {
   font-family: "SUSE Mono", monospace;
   font-size: clamp(.5rem, 2vw, 14px);
   font-weight: 600;
   line-height: 1.5;
   margin: 0;
+}
+
+/* UTILITY FONT CLASSES */
+.text-display {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  font-style: italic;
+}
+
+.text-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 400;
+}
+
+.text-subheading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 700;
+  font-style: italic;
+  margin: 0;
+}
+
+.text-about {
+  font-family: var(--font-serif);
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
 }
 
 
@@ -550,7 +525,7 @@ main p {
   display: flex;
   flex-direction: column;
   padding: var(--space-y) var(--space-x);
-  font-family: "Averia Serif Libre", serif;
+  font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(1.5rem, 5vw, 32px);
@@ -641,7 +616,7 @@ main p {
 }
 
 #mixpage-tracklist-header {
-  font-family: "Averia Serif Libre", serif;
+  font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(1.5rem, 5vw, 32px);
@@ -689,7 +664,7 @@ main p {
 }
 
 #contact-email {
-  font-family: "Averia Serif Libre", serif;
+  font-family: var(--font-serif);
   font-size: clamp(1.25rem, 3vw, 1.5rem);
   color: var(--brand-color);
   font-weight: 400;
@@ -750,7 +725,7 @@ main p {
 
 #current-track {
   color: #000000;
-  font-family: "Averia Serif Libre", serif;
+  font-family: var(--font-serif);
   font-weight: 400;
   font-style: italic;
   font-size: clamp(.75rem, 2vw, 16px);
@@ -846,7 +821,7 @@ main p {
 }
 
 .format-btn {
-  font-family: "Averia Serif Libre", serif;
+  font-family: var(--font-serif);
   font-size: 0.9rem;
   background: transparent;
   border: none;
