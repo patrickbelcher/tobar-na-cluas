@@ -35,6 +35,7 @@
   --bg-nav: #EBEBE5DC;
   --bg-player: #D7D6CCDC;
   --brand-color: #528167;
+  --brand-accent: #A75149;
 
   --font-serif: "Averia Serif Libre", serif;
   --font-mono: "SUSE Mono", monospace;
@@ -142,129 +143,8 @@ main.is-entering {
   transform: translateY(-10px);
 }
 
-.container,
-.container-fluid {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
 /* ===========================================================
-   Navbar
-=========================================================== */
-
-.navbar {
-  margin: 0 var(--margin-x) 0;
-  padding: var(--space-y) var(--space-x);
-  border: none;
-  border-radius: 0 0 var(--nav-radius) var(--nav-radius);
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  overflow: hidden;
-  background-color: var(--bg-nav);
-}
-
-/* --- Wrapper + Brand --- */
-.brand-toggle-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  min-width: 0;
-}
-
-.navbar-brand {
-  font-weight: 700;
-  color: #000;
-  font-size: clamp(1.5rem, 5vw, 40px);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: font-size 0.3s ease, color 0.2s ease;
-}
-
-.navbar-brand:hover {
-  color: var(--brand-color);
-}
-
-@media (max-width: 576px) {
-  .navbar-brand {
-    flex-shrink: 1;
-  }
-}
-
-/* --- Toggler--- */
-.navbar-toggler {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: #000;
-  display: none;
-  /* default hidden on desktop */
-}
-
-.navbar-toggler-icon {
-  background-image: none !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.navbar-toggler:focus,
-.navbar-toggler:active,
-.navbar-toggler:focus-visible {
-  outline: none;
-  box-shadow: none;
-}
-
-@media (max-width: 576px) {
-  .navbar-toggler {
-    display: flex;
-    margin-left: auto;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-/* --- Nav items --- */
-
-.navbar-nav {
-  display: flex;
-  font-weight: 300;
-  font-size: clamp(1rem, 2vw, 20px);
-}
-
-.navbar-nav .nav-link {
-  color: #000;
-  transition: color 0.2s ease;
-}
-
-.navbar-nav .nav-link:hover {
-  color: var(--brand-color);
-}
-
-
-@media (max-width: 576px) {
-  .navbar-collapse {
-    width: 100%;
-  }
-
-  .navbar-nav {
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.15rem;
-    text-align: center;
-  }
-
-  .navbar-nav .nav-link {
-    padding: 0.25rem 0 !important;
-    line-height: 1;
-  }
-}
-
-
-/* ===========================================================
-   Main Content
+   Text
 =========================================================== */
 
 main p {
@@ -316,6 +196,107 @@ main p {
   border: 0;
 }
 
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  background: var(--bg-nav);
+  color: #000;
+  font-family: var(--font-serif);
+  border-radius: var(--nav-radius);
+  z-index: 9999;
+}
+
+
+/* ===========================================================
+   Navbar
+=========================================================== */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  margin: 0 var(--margin-x);
+  padding: var(--space-y) var(--space-x);
+  border-radius: 0 0 var(--nav-radius) var(--nav-radius);
+  background-color: var(--bg-nav);
+  overflow: hidden;
+}
+
+.navbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-brand {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(1.5rem, 5vw, 40px);
+  color: #000;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.navbar-brand:hover {
+  color: var(--brand-color);
+}
+
+.nav-link {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 20px);
+  color: #000;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: var(--brand-color);
+}
+
+.nav-icon {
+  display: none;
+}
+
+.ladle-icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+@media (max-width: 1139px) {
+  .nav-text {
+    display: none;
+  }
+
+  .nav-icon {
+    display: block;
+  }
+}
 
 /* ===========================================================
    Mix Section
@@ -327,6 +308,7 @@ main p {
 
 .mix-container {
   display: flex;
+  flex-direction: row;
   gap: 20px;
 }
 
@@ -334,7 +316,6 @@ main p {
   .mix-container {
     flex-direction: column;
     align-items: flex-start;
-    text-align: center;
   }
 }
 
@@ -355,7 +336,7 @@ main p {
   }
 }
 
-@media (max-width: 1140px) {
+@media (max-width: 1139px) {
   .mix-image {
     display: flex;
     flex: 0 0 auto;
@@ -369,9 +350,23 @@ main p {
   }
 }
 
+.mix-audio-control-zone {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  display: block;
+  width: 100%;
+}
+
 .mix-tracklist {
   text-align: left;
   padding: var(--space-y) var(--space-x);
+  list-style: none;
+  white-space: nowrap;
+  transition: font-size 0.3s ease;
 }
 
 @media (min-width: 1140px) {
@@ -394,9 +389,12 @@ main p {
   }
 }
 
-.mix-tracklist p {
-  white-space: nowrap;
-  transition: font-size 0.3s ease;
+.mix-tracklist li {
+  font-family: var(--font-mono);
+  font-size: clamp(.5rem, 2vw, 14px);
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .mix-tracklist::-webkit-scrollbar {
@@ -517,7 +515,7 @@ main p {
 }
 
 /* ===========================================================
-   Mixpages
+   Mix-pages
 =========================================================== */
 
 .mixpage-text-container {
@@ -541,7 +539,7 @@ main p {
   }
 }
 
-@media (max-width: 1140px) {
+@media (max-width: 1139px) {
   .mixpage-text {
     flex: 0 0 auto;
     width: 100%;
@@ -601,7 +599,7 @@ main p {
 
 .mixpage-external-link a {
   text-decoration: none;
-  color: #A75149;
+  color: var(--brand-accent)
 }
 
 .mixpage-external-link a:hover {
@@ -609,17 +607,18 @@ main p {
 }
 
 .mixpage-mix-about {
-  padding: var(--space-y) var(--space-x);
   white-space: wrap;
   text-align: left;
+  padding: var(--space-y) var(--space-x);
 }
 
-#mixpage-tracklist-header {
+.mixpage-tracklist-header {
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(1.5rem, 5vw, 32px);
   text-decoration: underline;
+  padding: 0.5em var(--space-x) 0em;
 }
 
 /* ===========================================================
@@ -690,6 +689,8 @@ main p {
 =========================================================== */
 
 #footer-player {
+  position: sticky;
+  bottom: 0;
   background-color: transparent;
   border: none;
   padding: 0;

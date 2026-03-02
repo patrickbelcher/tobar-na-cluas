@@ -60,7 +60,7 @@ async function start() {
   });
 
   app.get("/", (req, res) => {
-    render(req, res, "index", { title: "Home" });
+    render(req, res, "index", { title: "Mixes" });
   });
 
   app.get("/about", (req, res) => {
@@ -74,7 +74,7 @@ async function start() {
     if (!mix) {
       return res.status(404).render("404", {
         title: "404 - Not Found",
-        message: "Mix not found",
+        message: "Page not found",
         mixes
       });
     }

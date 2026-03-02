@@ -1,30 +1,14 @@
 <!-- Navbar -->
-  <nav class="navbar sticky-top navbar-expand-sm navbar-light">
-    <div class="container-fluid">
-      <!-- Tobar text -->
-      <div class="brand-toggle-wrapper"> <!-- CSS wrapper -->
-        <a class="navbar-brand me-auto" href="/" data-spa>Tobar na Cluas</a>
-
-        <!-- Ladle icon toggle -->
-        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarItems" aria-controls="navbarItems" aria-expanded="false"
-          aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon">
-            <svg class="ladle-icon" viewBox="0 0 100 100">
-              <use href="/icons/ladle.svg#ladle-icon" alt="Menu Icon"></use>
-            </svg>
-          </span>
-        </button>
-      </div>
-
-      <!-- Collapsible menu (stacks underneath on small screens) -->
-      <div class="collapse navbar-collapse" id="navbarItems">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/about" data-spa>About</a>
-          </li>
-        </ul>
-      </div>
-
-    </div>
-  </nav>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="navbar-brand" href="/" data-spa>Tobar na Cluas</a>
+    <a class="nav-link" href="/about" data-spa aria-label="About">
+      <span class="nav-text">About</span>
+      <span class="nav-icon" aria-hidden="true">
+        <svg class="ladle-icon" viewBox="0 0 120 120" focusable="false">
+          <use href="/icons/ladle.svg#ladle-icon"></use>
+        </svg>
+      </span>
+    </a>
+  </div>
+</nav>

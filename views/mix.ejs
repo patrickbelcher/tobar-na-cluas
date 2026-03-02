@@ -1,5 +1,7 @@
 <div class="mixpage">
-  
+  <h1 class="visually-hidden">Tobar na Cluas mix - <%= mix.who %> : <%= mix.title %>
+  </h1>
+
   <section class="mix-section">
 
     <div class="mix-container">
@@ -7,14 +9,15 @@
       <div class="mix-image">
 
         <div class="mix-image-wrap">
-       
-          <div class="mix-audio-control-zone" data-id="<%= mix.base %>">
+
+          <button class="mix-audio-control-zone" data-id="<%= mix.base %>"
+            aria-label="Play mix <%= mix.who %> : <%= mix.title %>">
             <img src="<%= mix.image %>" alt="<%= mix.title %>">
             <!-- Overlay -->
             <div class="image-overlay">
               <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
             </div>
-          </div>
+          </button>
 
         </div>
 
@@ -25,13 +28,16 @@
         <div class="mixpage-text-container">
 
           <div class="mixpage-mix-artist">
-            <div> <span class="mixpage-artist-header">by</span><span class="mixpage-text-spacer"> : </span><span class="mixpage-artist">
+
+            <div> <span class="mixpage-artist-header">by</span><span class="mixpage-text-spacer"> : </span><span
+                class="mixpage-artist">
                 <%= mix.who %>
               </span> </div>
           </div>
 
           <div class="mixpage-mix-title">
-            <div> <span class="mixpage-mix-header">mix</span><span class="mixpage-text-spacer"> : </span>  <span class="mixpage-mix">
+            <div> <span class="mixpage-mix-header">mix</span><span class="mixpage-text-spacer"> : </span> <span
+                class="mixpage-mix">
                 <%= mix.title %>
               </span> </div>
           </div>
@@ -50,14 +56,9 @@
 
         <% if (mix.about) { %>
           <div class="mixpage-mix-about">
-
-            <div id="mixpage-about-header"><span class="mixpage-about">
-                <p>
-                  <%= mix.about %>
-                </p>
-              </span>
-            </div>
-
+            <p>
+              <%= mix.about %>
+            </p>
           </div>
           <% } %>
 
@@ -65,14 +66,16 @@
 
     </div>
 
-    <div class="mix-tracklist">
-        <div id="mixpage-tracklist-header">tracklist</div>
+    <div class="mix-tracklist-section">
+      <h2 class="mixpage-tracklist-header">tracklist</h2>
+      <ol class="mix-tracklist">
         <% mix.tracklist.forEach(line=> { %>
-          <p>
+          <li>
             <%= line %>
-          </p>
+          </li>
           <% }) %>
-      </div>
+      </ol>
+    </div>
 
   </section>
 </div>

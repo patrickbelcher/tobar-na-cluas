@@ -1,6 +1,8 @@
+<h1 class="visually-hidden">Tobar na Cluas mixes</h1>
+
 <% Object.values(mixes).forEach(mix=> { %>
   <section class="mix-section">
-
+    
     <div class="mix-container">
 
       <div class="mix-image">
@@ -15,24 +17,26 @@
             </a>
           </div>
 
-          <div class="mix-audio-control-zone" data-id="<%= mix.base %>">
+          <button class="mix-audio-control-zone" 
+            data-id="<%= mix.base %>"
+            aria-label="Play mix <%= mix.who %> : <%= mix.title %>"
+          >
             <img src="<%= mix.image %>" alt="<%= mix.title %>">
             <!-- Overlay -->
             <div class="image-overlay">
               <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
             </div>
-          </div>
+          </button>
         </div>
-
       </div>
 
-      <div class="mix-tracklist">
+      <ol class="mix-tracklist">
         <% mix.tracklist.forEach(line=> { %>
-          <p>
+          <li>
             <%= line %>
-          </p>
+          </li>
           <% }) %>
-      </div>
+      </ol>
 
     </div>
 
