@@ -225,7 +225,6 @@ main p {
   z-index: 9999;
 }
 
-
 /* ===========================================================
    Navbar
 =========================================================== */
@@ -312,7 +311,7 @@ main p {
   gap: 20px;
 }
 
-@media (max-width: 1140px) {
+@media (max-width: 1139px) {
   .mix-container {
     flex-direction: column;
     align-items: flex-start;
@@ -378,7 +377,7 @@ main p {
   }
 }
 
-@media (max-width: 1140px) {
+@media (max-width: 1139px) {
   .mix-tracklist {
     flex: 0 0 auto;
     width: 100%;

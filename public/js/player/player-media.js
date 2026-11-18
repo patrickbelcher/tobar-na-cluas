@@ -39,13 +39,7 @@ if ('mediaSession' in navigator) {
 export function updateMediaSessionMetadata(mix) {
   if (!('mediaSession' in navigator) || !mix) return;
 
-  const artwork = mix.image
-    ? [{
-        src:   new URL(`/mixes/${mix.folder}/${mix.image}`, window.location.origin).href,
-        sizes: '512x512',
-        type:  'image/png',
-      }]
-    : [];
+  const artwork = mix.image ? [{ src: mix.image }] : [];
 
   navigator.mediaSession.metadata = new MediaMetadata({
     title:   mix.title || 'Unknown title',

@@ -4,7 +4,7 @@ import expressLayouts from "express-ejs-layouts";
 import path from "path";
 import 'dotenv/config';
 import { fileURLToPath } from "url";
-import { loadMixes } from "./lib/loadMixes.js";
+import { loadMixes, getDownloadUrl } from "./lib/loadMixes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,15 +25,8 @@ app.use(express.static(path.join(__dirname, "public")));
 // Helper: SPA requests send custom header "X-SPA: true"
 // If present -> return partial; otherwise -> full layout.
 function render(req, res, view, data = {}) {
-  const isSPA = req.headers["x-spa"] === "true";
-
-  // console.log(`
-  // [REQUEST]
-  // URL: ${req.method} ${req.url}
-  // SPA: ${isSPA}
-  // View rendered: ${view}
-  // Data keys: ${Object.keys(data).join(", ")}
-  // `);
+  // Same URL returns two different bodies, so caches must key on X-SPA
+  res.vary("X-SPA");
 
   if (req.headers["x-spa"] === "true") {
     // Return only the inner HTML for <main>
@@ -41,6 +34,12 @@ function render(req, res, view, data = {}) {
   }
   // Normal navigation → full layout
   return res.render(view, data);
+}
+
+// 404 for both SPA and full-page requests
+function notFound(req, res) {
+  res.status(404);
+  return render(req, res, "404", { title: "404 - Not Found" });
 }
 
 // Load mixes.json data and tracklists
@@ -71,41 +70,27 @@ async function start() {
     const base = req.params.base;
     const mix = mixes[base];
 
-    if (!mix) {
-      return res.status(404).render("404", {
-        title: "404 - Not Found",
-        message: "Page not found",
-        mixes
-      });
-    }
+    if (!mix) return notFound(req, res);
 
     render(req, res, "mix", {
       mix,
       title: mix.title,
-      mixes
     });
   });
 
-  app.get("/download/:id", (req, res) => {
+  app.get("/download/:id", async (req, res) => {
     const mix = mixes[req.params.id];
-    if (!mix) return res.status(404).send("Mix not found");
+    if (!mix?.fileKeys?.mp3) return notFound(req, res);
 
-    const fileUrl = mix.formats.mp3;
-    if (!fileUrl) return res.status(404).send("MP3 not available");
-
-    res.redirect(302, fileUrl);
+    const url = await getDownloadUrl(mix.fileKeys.mp3, `${mix.who} - ${mix.title}.mp3`);
+    res.redirect(302, url);
   });
+
+  // Catch-all 404 — must be the last route
+  app.use(notFound);
 
   app.listen(PORT, () => {
     console.log(`Tobar na Cluas running at http://localhost:${PORT}`);
-  });
-
-  app.use((req, res) => {
-    res.status(404).render("404", {
-      title: "404 - Not Found",
-      message: "Page not found",
-      mixes
-    });
   });
 }
 
