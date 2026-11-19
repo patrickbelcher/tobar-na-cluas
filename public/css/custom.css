@@ -41,6 +41,12 @@
   --font-mono: "SUSE Mono", monospace;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 ::view-transition-old(main),
 ::view-transition-new(main) {
   animation-duration: 300ms;
@@ -149,7 +155,7 @@ main.is-entering {
 
 main p {
   font-family: var(--font-mono);
-  font-size: clamp(.5rem, 2vw, 14px);
+  font-size: clamp(.5rem, 2vw, 0.875rem);
   font-weight: 600;
   line-height: 1.5;
   margin: 0;
@@ -361,6 +367,7 @@ main p {
 }
 
 .mix-tracklist {
+  margin-top: 0;
   text-align: left;
   padding: var(--space-y) var(--space-x);
   list-style: none;
