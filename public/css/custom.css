@@ -503,55 +503,29 @@ main p,
   font-weight: 400;
   font-size: clamp(1.5rem, 5vw, 32px);
   text-align: left;
-  overflow-y: auto;
+}
+
+/* Mix page layout: image, text, tracklist.
+   Below 1140px: stacked in that order (the order in mix.ejs).
+   1140px and up: image and tracklist side by side (like the home page),
+   text below. The tracklist keeps its own 550px cap and scrollbar. */
+.mixpage-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* one column; minmax stops long tracklist lines widening the page */
 }
 
 @media (min-width: 1140px) {
-  .mixpage-text {
-    flex: 1 2 auto;
-    max-width: 750px;
-    max-height: 550px;
-    overflow: auto;
+  .mixpage-layout {
+    grid-template-columns: 550px minmax(0, 750px);
+    grid-template-areas:
+      "image tracklist"
+      "text  text";
+    align-items: start;
   }
-}
 
-@media (max-width: 1139px) {
-  .mixpage-text {
-    flex: 0 0 auto;
-    width: 100%;
-    min-width: 0;
-    overflow-x: auto;
-  }
-}
-
-.mixpage-text p {
-  transition: font-size 0.3s ease;
-}
-
-.mixpage-text::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.mixpage-text::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-}
-
-.mixpage-text::-webkit-scrollbar-thumb {
-  background: #52816740;
-  width: 6px;
-  border-radius: 6px;
-}
-
-.mixpage-text::-webkit-scrollbar-thumb:hover {
-  background: #52816760;
-}
-
-.mixpage-mix-artist,
-.mixpage-mix-title,
-.mixpage-external-link {
-  white-space: nowrap;
+  .mixpage-layout .mix-image     { grid-area: image; }
+  .mixpage-layout .mixpage-text  { grid-area: text; }
+  .mixpage-layout .mix-tracklist { grid-area: tracklist; }
 }
 
 .mixpage-artist-header,
@@ -594,7 +568,24 @@ main p,
   font-weight: 400;
   font-size: clamp(1.5rem, 5vw, 32px);
   text-decoration: underline;
-  padding: 0.5em var(--space-x) 0em;
+  margin: 0;
+  padding: 12px var(--space-x) 0;
+}
+
+/* Tracklist heading: shown when stacked; when the tracklist sits beside the
+   image (1140px+) it's hidden on screen but still read by screen readers */
+@media (min-width: 1140px) {
+  .mixpage-tracklist-header {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 
 /* ===========================================================

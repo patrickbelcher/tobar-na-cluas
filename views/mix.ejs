@@ -1,81 +1,71 @@
 <div class="mixpage">
-  <h1 class="visually-hidden">Tobar na Cluas mix - <%= mix.who %> : <%= mix.title %>
-  </h1>
+  <h1 class="visually-hidden">Tobar na Cluas mix - <%= mix.who %> : <%= mix.title %></h1>
 
-  <section class="mix-section">
+  <!-- Order here = order on phones: image, text, tracklist.
+       On desktop the CSS grid puts the text below image + tracklist (see .mixpage-layout). -->
+  <section class="mix-section mixpage-layout">
 
-    <div class="mix-container">
-
-      <div class="mix-image">
-
-        <div class="mix-image-wrap">
-
-          <button class="mix-audio-control-zone" data-id="<%= mix.base %>"
-            aria-label="Play mix <%= mix.who %> : <%= mix.title %>">
-            <img src="<%= mix.image %>" alt="<%= mix.title %>">
-            <!-- Overlay -->
-            <div class="image-overlay">
-              <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
-            </div>
-          </button>
-
-        </div>
-
+    <div class="mix-image">
+      <div class="mix-image-wrap">
+        <button class="mix-audio-control-zone" data-id="<%= mix.base %>"
+          aria-label="Play mix <%= mix.who %> : <%= mix.title %>">
+          <img src="<%= mix.image %>" alt="<%= mix.title %>">
+          <!-- Overlay -->
+          <div class="image-overlay">
+            <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
+          </div>
+        </button>
       </div>
+    </div>
 
-      <div class="mixpage-text">
+    <div class="mixpage-text">
 
-        <div class="mixpage-text-container">
+      <div class="mixpage-text-container">
 
-          <div class="mixpage-mix-artist">
-
-            <div> <span class="mixpage-artist-header">by</span><span class="mixpage-text-spacer"> : </span><span
-                class="mixpage-artist">
-                <%= mix.who %>
-              </span> </div>
-          </div>
-
-          <div class="mixpage-mix-title">
-            <div> <span class="mixpage-mix-header">mix</span><span class="mixpage-text-spacer"> : </span> <span
-                class="mixpage-mix">
-                <%= mix.title %>
-              </span> </div>
-          </div>
-
-          <% if (mix.link) { %>
-            <div class="mixpage-external-link">
-              <a href="<%= mix.link %>" target="_blank" rel="noopener">
-                <span class="mixpage-external-link">
-                  <%= mix.linkText %>
-                </span>
-              </a>
-            </div>
-            <% } %>
-
+        <div class="mixpage-mix-artist">
+          <div> <span class="mixpage-artist-header">by</span><span class="mixpage-text-spacer"> : </span><span
+              class="mixpage-artist">
+              <%= mix.who %>
+            </span> </div>
         </div>
 
-        <% if (mix.about) { %>
-          <div class="mixpage-mix-about">
-            <p>
-              <%= mix.about %>
-            </p>
+        <div class="mixpage-mix-title">
+          <div> <span class="mixpage-mix-header">mix</span><span class="mixpage-text-spacer"> : </span> <span
+              class="mixpage-mix">
+              <%= mix.title %>
+            </span> </div>
+        </div>
+
+        <% if (mix.link) { %>
+          <div class="mixpage-external-link">
+            <a href="<%= mix.link %>" target="_blank" rel="noopener">
+              <span class="mixpage-external-link">
+                <%= mix.linkText %>
+              </span>
+            </a>
           </div>
           <% } %>
 
       </div>
 
+      <% if (mix.about) { %>
+        <div class="mixpage-mix-about">
+          <p>
+            <%= mix.about %>
+          </p>
+        </div>
+        <% } %>
+
     </div>
 
-    <div class="mix-tracklist-section">
-      <h2 class="mixpage-tracklist-header">tracklist</h2>
-      <ol class="mix-tracklist">
-        <% mix.tracklist.forEach(line=> { %>
-          <li>
-            <%= line %>
-          </li>
-          <% }) %>
-      </ol>
-    </div>
+    <h2 class="mixpage-tracklist-header">tracklist</h2>
+    <ol class="mix-tracklist">
+      <% mix.tracklist.forEach(line=> { %>
+        <li>
+          <%= line %>
+        </li>
+        <% }) %>
+    </ol>
 
   </section>
 </div>
