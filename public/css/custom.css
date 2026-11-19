@@ -1,25 +1,4 @@
 /* ===========================================================
-   Global Fonts
-=========================================================== */
-
-.averia-serif-libre-regular {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  font-style: normal;
-}
-
-.averia-serif-libre-bold-italic {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  font-style: italic;
-}
-
-.suse-600 {
-  font-family: var(--font-mono);
-  font-weight: 600;
-}
-
-/* ===========================================================
    Global
 =========================================================== */
 
@@ -153,9 +132,11 @@ main.is-entering {
    Text
 =========================================================== */
 
-main p {
+/* Body text: paragraphs and tracklist lines */
+main p,
+.mix-tracklist li {
   font-family: var(--font-mono);
-  font-size: clamp(.5rem, 2vw, 0.875rem);
+  font-size: clamp(.75rem, 2vw, 1rem);
   font-weight: 600;
   line-height: 1.5;
   margin: 0;
@@ -320,7 +301,6 @@ main p {
 @media (max-width: 1139px) {
   .mix-container {
     flex-direction: column;
-    align-items: flex-start;
   }
 }
 
@@ -343,15 +323,7 @@ main p {
 
 @media (max-width: 1139px) {
   .mix-image {
-    display: flex;
     flex: 0 0 auto;
-  }
-
-  .mix-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: var(--img-radius);
   }
 }
 
@@ -367,9 +339,9 @@ main p {
 }
 
 .mix-tracklist {
-  margin-top: 0;
   text-align: left;
-  padding: var(--space-y) var(--space-x);
+  margin: var(--space-y) var(--space-x);
+  padding: 0;
   list-style: none;
   white-space: nowrap;
   transition: font-size 0.3s ease;
@@ -387,20 +359,11 @@ main p {
 @media (max-width: 1139px) {
   .mix-tracklist {
     flex: 0 0 auto;
-    width: 100%;
     min-width: 0;
     max-height: 600px;
     overflow-x: auto;
     overflow-y: auto;
   }
-}
-
-.mix-tracklist li {
-  font-family: var(--font-mono);
-  font-size: clamp(.5rem, 2vw, 14px);
-  font-weight: 600;
-  line-height: 1.5;
-  margin: 0;
 }
 
 .mix-tracklist::-webkit-scrollbar {
@@ -415,7 +378,6 @@ main p {
 
 .mix-tracklist::-webkit-scrollbar-thumb {
   background: #52816740;
-  width: 6px;
   border-radius: 6px;
 }
 
@@ -423,10 +385,18 @@ main p {
   background: #52816760;
 }
 
+/* Firefox has no ::-webkit-scrollbar; give it the same colours */
+@supports not selector(::-webkit-scrollbar) {
+  .mix-tracklist {
+    scrollbar-width: thin;
+    scrollbar-color: #52816740 rgba(0, 0, 0, 0.1);
+  }
+}
+
 /* Image hover overlay */
 .mix-image-wrap {
   position: relative;
-  display: inline-block;
+  display: block;
   overflow: hidden;
   border-radius: var(--img-radius);
 }
