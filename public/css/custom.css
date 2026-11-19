@@ -601,6 +601,12 @@ main p,
    Other pages
 =========================================================== */
 
+/* About and 404: main becomes a column so the section can fill it */
+main:has(> .about-page-section, > .four-o-four-section) {
+  display: flex;
+  flex-direction: column;
+}
+
 .about-page-section {
   margin: var(--margin-y) var(--margin-x);
   display: flex;
@@ -613,7 +619,6 @@ main p,
   padding: 1rem 2rem 1rem 2rem;
   max-width: 400px;
   align-self: flex-end; 
-  justify-self: baseline;
   text-align: right;
 }
 
@@ -621,14 +626,12 @@ main p,
   padding: 0rem 2rem 2rem 1rem;
   max-width: 400px;
   align-self: flex-end; 
-  justify-self: top;
   text-align: end;
 }
 
 @media (min-width: 576px) {
   .about-page-section {
     align-items: stretch;
-    min-height: calc(100vh - 80px * 2); /* rough nav + footer */
     justify-content: space-between;
   }
 
@@ -651,12 +654,11 @@ main p,
   display: flex;
   justify-content: center;
   align-items: stretch;
-  min-height: calc(100vh - 80px * 2);
+  flex: 1;
 }
 
 .four-o-four-container{
   align-self: center;
-  justify-self: center;
   text-align: center;
 }
 
