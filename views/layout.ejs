@@ -62,14 +62,14 @@
       <!-- Global JS -->
       <!-- Global mixes browser object -->
       <script>
-        window.mixes = <%- JSON.stringify(mixes) %>;
+        window.mixes = <%- JSON.stringify(mixes).replace(/</g, '\\u003c') %>;
         // console.log("Mixes:", window.mixes);
       </script>
 
       <script type="module" src="/js/scrollFade.js"></script>
       <script type="module" src="/js/player/index.js"></script>
       <script src="/js/nav.js"></script>
-
-</body>
+ 
+</body> 
 
 </html>
