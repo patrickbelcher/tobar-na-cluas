@@ -30,8 +30,19 @@ app.use(expressLayouts);
 app.set("layout", "layout");
 app.disable('x-powered-by');
 
-// Serve static files from "public"
-app.use(express.static(path.join(__dirname, "public")));
+// Cache rules for files in /public.
+// Images and icons rarely change: browsers keep them for 30 days.
+// Everything else (CSS, JS, manifest, robots.txt): browsers check for a newer
+// version every time; the ETag makes that a tiny "not modified" reply if nothing changed.
+const LONG_CACHE = /\.(png|jpe?g|webp|gif|svg|ico|woff2?)$/i;
+
+app.use(express.static(path.join(__dirname, "public"), {
+  setHeaders(res, filePath) {
+    res.setHeader("Cache-Control", LONG_CACHE.test(filePath)
+      ? "public, max-age=2592000"
+      : "no-cache");
+  },
+}));
 
 // Helper: SPA requests send custom header "X-SPA: true"
 // If present -> return partial; otherwise -> full layout.
