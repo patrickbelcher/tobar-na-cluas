@@ -5,8 +5,12 @@
 :root {
   --margin-y: 1.5rem;
   --margin-x: 1.5rem;
+  --margin-y-more: 3rem;
+  --margin-x-more: 3rem;
   --space-y: 0.5rem;
   --space-x: 1.5rem;
+  --space-y-more: 2rem;
+  --space-x-more: 3rem;
 
   --nav-radius: 8px;
   --img-radius: 8px;
@@ -54,6 +58,7 @@
 
 html {
   scroll-behavior: smooth;
+   scrollbar-gutter: stable;
 }
 
 body {
@@ -289,13 +294,12 @@ main p,
 =========================================================== */
 
 .mix-section {
-  margin: var(--margin-y) var(--margin-x);
+  margin: var(--margin-y-more) var(--margin-x);
 }
 
 .mix-container {
   display: flex;
   flex-direction: row;
-  gap: 20px;
 }
 
 @media (max-width: 1139px) {
@@ -309,10 +313,11 @@ main p,
 }
 
 .mix-image img {
+  display: block;
   width: 100%;
   height: auto;
-  object-fit: cover;
   border-radius: var(--img-radius);
+  transition: transform 0.3s ease;
 }
 
 @media (min-width: 1140px) {
@@ -340,11 +345,10 @@ main p,
 
 .mix-tracklist {
   text-align: left;
-  margin: var(--space-y) var(--space-x);
+  margin: var(--space-y) var(--space-x-more);
   padding: 0;
   list-style: none;
   white-space: nowrap;
-  transition: font-size 0.3s ease;
 }
 
 @media (min-width: 1140px) {
@@ -359,10 +363,10 @@ main p,
 @media (max-width: 1139px) {
   .mix-tracklist {
     flex: 0 0 auto;
+    margin: var(--space-y-more) var(--space-x);
     min-width: 0;
     max-height: 600px;
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow: auto;
   }
 }
 
@@ -420,7 +424,6 @@ main p,
 
 .mix-title-overlay a {
   display: block;
-  align-items: center;
   padding: var(--space-x) var(--space-x);
   text-decoration: none;
   color: inherit;
@@ -432,13 +435,6 @@ main p,
 
 .mix-title-overlay:hover h2 {
   text-decoration: underline;
-}
-
-.mix-image-wrap img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.3s ease;
 }
 
 .image-overlay {
@@ -497,7 +493,7 @@ main p,
 .mixpage-text-container {
   display: flex;
   flex-direction: column;
-  padding: var(--space-y) var(--space-x);
+  padding: var(--space-y-more) var(--space-x) 0;
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
@@ -520,12 +516,18 @@ main p,
     grid-template-areas:
       "image tracklist"
       "text  text";
-    align-items: start;
   }
 
   .mixpage-layout .mix-image     { grid-area: image; }
   .mixpage-layout .mixpage-text  { grid-area: text; }
   .mixpage-layout .mix-tracklist { grid-area: tracklist; }
+}
+
+/* Stacked mix page: the list sits close under its "tracklist" heading */
+@media (max-width: 1139px) {
+  .mixpage-layout .mix-tracklist {
+    margin-top: var(--space-y);
+  }
 }
 
 .mixpage-artist-header,
@@ -537,14 +539,9 @@ main p,
   text-decoration: none;
 }
 
-.mixpage-artist {
-  color: var(--brand-color);
-  text-decoration: none;
-}
-
+.mixpage-artist,
 .mixpage-mix {
   color: var(--brand-color);
-  text-decoration: none;
 }
 
 .mixpage-external-link a {
@@ -559,7 +556,7 @@ main p,
 .mixpage-mix-about {
   white-space: wrap;
   text-align: left;
-  padding: var(--space-y) var(--space-x);
+  padding: var(--space-y) var(--space-x) 0;
 }
 
 .mixpage-tracklist-header {
@@ -569,7 +566,7 @@ main p,
   font-size: clamp(1.5rem, 5vw, 32px);
   text-decoration: underline;
   margin: 0;
-  padding: 12px var(--space-x) 0;
+  padding: var(--space-y-more) var(--space-x) 0;
 }
 
 /* Tracklist heading: shown when stacked; when the tracklist sits beside the
