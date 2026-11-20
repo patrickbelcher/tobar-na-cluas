@@ -68,14 +68,29 @@ function notFound(req, res) {
 
 // Load mixes.json data and tracklists
 async function start() {
-  const mixes = await loadMixes();
+    // "let", not "const": the reload below swaps in a fresh copy.
+  // Routes read `mixes` on every request, so they always see the latest.
+  let mixes = await loadMixes();
 
   if (Object.keys(mixes).length === 0) {
     console.warn("[Express] No mixes loaded — R2 may be unreachable. Site will start with empty mixes.");
   }
 
-  console.log("[Express] loaded mixes:", mixes);
+  console.log(`[Express] loaded ${Object.keys(mixes).length} mixes`);
 
+  // Pick up new or changed mixes from R2 without restarting the server
+  const RELOAD_MINUTES = 30;
+  setInterval(async () => {
+    try {
+      const fresh = await loadMixes();
+      if (Object.keys(fresh).length === 0) return; // R2 unreachable: keep the current list
+      mixes = fresh;
+      console.log(`[Express] reloaded ${Object.keys(mixes).length} mixes`);
+    } catch (err) {
+      // An error here must not crash the server: keep the current list
+      console.error("[Express] mix reload failed:", err.message);
+    }
+  }, RELOAD_MINUTES * 60 * 1000);
 
   app.use((req, res, next) => {
     res.locals.mixes = mixes;
