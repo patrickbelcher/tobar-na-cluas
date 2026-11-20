@@ -12,6 +12,17 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Production address, used for canonical links, link previews and the sitemap
+const SITE_URL = process.env.SITE_URL || "https://tobarnacluas.ie";
+const DEFAULT_DESCRIPTION = "Sporadic recordings from SW. Ireland. Lesser trodden selections. Electronic leaning. New, old, Irish stuff.";
+
+// Search engines show about 155–160 characters of a description
+function describeMix(mix) {
+  const text = mix.about
+    || `A mix by ${mix.who}. Tracks from ${mix.tracklist.slice(0, 3).join(", ")} and more.`;
+  return text.length > 160 ? text.slice(0, 157).trimEnd() + "…" : text;
+}
+
 // Set EJS as the view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -41,7 +52,7 @@ function render(req, res, view, data = {}) {
 // 404 for both SPA and full-page requests
 function notFound(req, res) {
   res.status(404);
-  return render(req, res, "404", { title: "404 - Not Found" });
+    return render(req, res, "404", { title: "404 - Not Found", noindex: true });
 }
 
 // Load mixes.json data and tracklists
@@ -57,6 +68,11 @@ async function start() {
 
   app.use((req, res, next) => {
     res.locals.mixes = mixes;
+    // Defaults for the <head> tags in layout.ejs; routes can override them
+    res.locals.description = DEFAULT_DESCRIPTION;
+    res.locals.canonicalUrl = SITE_URL + req.path;
+    res.locals.ogImage = Object.values(mixes)[0]?.image; // newest mix cover
+    res.locals.noindex = false;
     next();
   });
 
@@ -77,6 +93,8 @@ async function start() {
     render(req, res, "mix", {
       mix,
       title: mix.title,
+      description: describeMix(mix),
+      ogImage: mix.image,
     });
   });
 
@@ -86,6 +104,16 @@ async function start() {
 
     const url = await getDownloadUrl(mix.fileKeys.mp3, `${mix.who} - ${mix.title}.mp3`);
     res.redirect(302, url);
+  });
+
+  // Sitemap for search engines: every page, built from the loaded mixes
+  app.get("/sitemap.xml", (req, res) => {
+    const paths = ["/", "/about", ...Object.keys(mixes).map(base => `/mix/${encodeURIComponent(base)}`)];
+    const urls = paths.map(p => `  <url><loc>${SITE_URL}${p}</loc></url>`).join("\n");
+    res.type("application/xml").send(
+      `<?xml version="1.0" encoding="UTF-8"?>\n` +
+      `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+    );
   });
 
   // Catch-all 404 — must be the last route

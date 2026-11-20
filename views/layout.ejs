@@ -7,25 +7,40 @@
   <title>
     Tobar na Cluas | <%= title %>
   </title>
-  <meta name="description" content="Tobar na Cluas | Sporadic recordings from SW. Ireland. Lesser trodden selections. Electronic leaning. New, old, Irish stuff.">
+  <meta name="description" content="<%= description %>">
+  <link rel="canonical" href="<%= canonicalUrl %>">
+  <% if (noindex) { %>
+    <meta name="robots" content="noindex">
+    <% } %>
 
-  <!-- Standard favicons -->
-  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="Tobar na Cluas" />
-  <link rel="manifest" href="/site.webmanifest" />
+      <!-- Link previews (WhatsApp, Facebook, Slack, X, etc.) -->
+      <meta property="og:site_name" content="Tobar na Cluas">
+      <meta property="og:type" content="website">
+      <meta property="og:title" content="Tobar na Cluas | <%= title %>">
+      <meta property="og:description" content="<%= description %>">
+      <meta property="og:url" content="<%= canonicalUrl %>">
+      <% if (ogImage) { %>
+        <meta property="og:image" content="<%= ogImage %>">
+        <% } %>
+          <meta name="twitter:card" content="summary">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap"
-    rel="stylesheet">
+          <!-- Standard favicons -->
+          <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+          <link rel="shortcut icon" href="/favicon.ico" />
+          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+          <meta name="apple-mobile-web-app-title" content="Tobar na Cluas" />
+          <link rel="manifest" href="/site.webmanifest" />
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+          <!-- Fonts -->
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+            rel="stylesheet">
+
+          <!-- Custom CSS -->
+          <link rel="stylesheet" type="text/css" href="/css/custom.css">
 
 </head>
 
@@ -33,13 +48,11 @@
 
   <a href="#spa-main" class="skip-link">Skip to main content</a>
 
-  <!-- Navbar -->     
+  <!-- Navbar -->
   <%- include('partials/navbar') %>
 
     <!-- Mix sections injected by express-ejs-layouts -->
-    <main id="spa-main"
-      role="main"
-      tabindex="-1">
+    <main id="spa-main" role="main" tabindex="-1">
       <%- body %>
     </main>
 
@@ -49,7 +62,7 @@
       <!-- Global JS -->
       <!-- Global mixes browser object -->
       <script>
-        window.mixes = <%- JSON.stringify(mixes) %>;
+        window.mixes = <% - JSON.stringify(mixes) %>;
         // console.log("Mixes:", window.mixes);
       </script>
 
