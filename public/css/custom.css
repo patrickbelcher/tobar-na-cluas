@@ -365,7 +365,7 @@ main p,
     flex: 0 0 auto;
     margin: var(--space-y-more) var(--space-x);
     min-width: 0;
-    overflow: auto;
+    overflow-x: auto;
   }
 }
 
