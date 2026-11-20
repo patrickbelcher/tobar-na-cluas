@@ -1,7 +1,9 @@
-{
+{   
+  "html.format.templating": true,
+    
   "[html]": {
     "editor.formatOnSave": false,
-    "editor.formatOnPaste": false
+    "editor.formatOnPaste": false,
   },
   "[ejs]": {
     "editor.formatOnSave": false,
