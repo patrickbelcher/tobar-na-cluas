@@ -9,7 +9,9 @@
   </title>
   <meta name="description" content="<%= description %>">
   <link rel="canonical" href="<%= canonicalUrl %>">
-  <% if (noindex) { %><meta name="robots" content="noindex"><% } %>
+  <% if (noindex) { %>
+    <meta name="robots" content="noindex">
+    <% } %>
 
       <!-- Link previews (WhatsApp, Facebook, Slack, X, etc.) -->
       <meta property="og:site_name" content="Tobar na Cluas">
@@ -30,12 +32,8 @@
           <meta name="apple-mobile-web-app-title" content="Tobar na Cluas" />
           <link rel="manifest" href="/site.webmanifest" />
 
-          <!-- Fonts -->
-          <link rel="preconnect" href="https://fonts.googleapis.com">
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap"
-            rel="stylesheet">
+          <!-- Fonts (self-hosted, see scripts/fetch-fonts.mjs) -->
+          <link rel="stylesheet" href="/css/fonts.css">
 
           <!-- Custom CSS -->
           <link rel="stylesheet" type="text/css" href="/css/custom.css">
@@ -67,7 +65,7 @@
       <script type="module" src="/js/scrollFade.js"></script>
       <script type="module" src="/js/player/index.js"></script>
       <script src="/js/nav.js"></script>
- 
-</body> 
+
+</body>
 
 </html>
