@@ -29,6 +29,8 @@ function render(req, res, view, data = {}) {
   res.vary("X-SPA");
 
   if (req.headers["x-spa"] === "true") {
+    // Page title for nav.js to set (headers must be plain ASCII, so encode it)
+    res.set("X-Page-Title", encodeURIComponent(`Tobar na Cluas | ${data.title}`));
     // Return only the inner HTML for <main>
     return res.render(view, { ...data, layout: false });
   }

@@ -46,6 +46,13 @@ async function navigate(url, { push = true } = {}) {
 
     if (push) window.history.pushState({}, "", url);
 
+    // Start the new page at the top ("instant" overrides the CSS smooth scrolling)
+    window.scrollTo({ top: 0, behavior: "instant" });
+
+    // Page title sent by the server (see render() in app.js)
+    const title = response.headers.get("X-Page-Title");
+    if (title) document.title = decodeURIComponent(title);
+
     onPageInit();
     document.dispatchEvent(new CustomEvent('player:pagechanged', {
       detail: { scope: main }
