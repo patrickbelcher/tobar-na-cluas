@@ -793,26 +793,63 @@ main:has(> .about-page-section, > .four-o-four-section) {
   text-align: center;
 }
 
-/* Progress bar */
-.progress-wrapper {
+/* Seek slider: a real <input type="range">, drawn like the old bar.
+   --progress is set by player-ui.js; the track is filled up to it. */
+.seek {
+  --progress: 0%;
+  --seek-fill: #528167;
+  --seek-track: #222;
+  --seek-thumb: transparent; /* no dot by default */
+
   flex-grow: 1;
+  min-width: 0;
+  height: 18px; /* easier to hit than the 6px bar; the track itself stays 6px */
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.seek:disabled {
+  cursor: default;
+}
+
+/* Track (Chrome/Safari, then Firefox) */
+.seek::-webkit-slider-runnable-track {
   height: 6px;
-  background: #333;
   border-radius: 3px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
+  background: linear-gradient(to right, var(--seek-fill) var(--progress), var(--seek-track) var(--progress));
 }
 
-.progress-wrapper.dragging {
-  cursor: pointer;
+.seek::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--seek-fill) var(--progress), var(--seek-track) var(--progress));
 }
 
-#progress-bar {
-  height: 100%;
-  width: 0%;
-  background: #528167;
-  border-radius: 3px 0 0 3px;
+.seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -4px; /* centre on the 6px track: (6 - 14) / 2 */
+  border: none;
+  border-radius: 50%;
+  background: var(--seek-thumb);
+}
+
+.seek::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: var(--seek-thumb);
+}
+
+/* Dot only on keyboard focus (the fill shows the position otherwise) */
+.seek:focus-visible {
+  --seek-thumb: #000;
 }
 
 /* Download / Format buttons */

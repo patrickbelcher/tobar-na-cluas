@@ -23,7 +23,7 @@ const pauseCircleSVG = `
 // --- DOM REFS ---
 const playBtn     = document.getElementById('play-btn');
 const playerIcon  = document.getElementById('player-icon');
-const progressBar = document.getElementById('progress-bar');
+const seekEl      = document.getElementById('seek');
 const elapsedEl   = document.getElementById('elapsed-time');
 const totalEl     = document.getElementById('total-time');
 const formatBtn   = document.getElementById('format-toggle');
@@ -42,13 +42,31 @@ function getMix(id) {
 }
 
 // --- PROGRESS UI ---
+let draggingSeek = false; // true while the user drags the slider, so playback doesn't move it
+
 export function updateProgressUI(time) {
   if (isNaN(audio.duration)) return;
 
   const percent = (time / audio.duration) * 100;
-  progressBar.style.width = percent + '%';
+  seekEl.max = audio.duration;
+  if (!draggingSeek) seekEl.value = time;
+  seekEl.style.setProperty('--progress', percent + '%'); // CSS fill
+  seekEl.setAttribute('aria-valuetext', `${spokenTime(time)} of ${spokenTime(audio.duration)}`);
+
   elapsedEl.textContent = formatTime(time);
   totalEl.textContent   = formatTime(audio.duration);
+}
+
+// "1 hour 2 minutes 5 seconds": how screen readers should say a time
+function spokenTime(seconds = 0) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  const parts = [];
+  if (h) parts.push(`${h} hour${h === 1 ? '' : 's'}`);
+  if (m) parts.push(`${m} minute${m === 1 ? '' : 's'}`);
+  parts.push(`${s} second${s === 1 ? '' : 's'}`);
+  return parts.join(' ');
 }
 
 function formatTime(seconds = 0) {
@@ -149,6 +167,7 @@ function bindMixImageClickHandlers() {
 
 // --- AUDIO EVENT LISTENERS ---
 audio.addEventListener('loadedmetadata', () => {
+  seekEl.disabled = false; // a mix is loaded: the slider can be used
   updateProgressUI(audio.currentTime);
 });
 
@@ -207,7 +226,7 @@ document.addEventListener('keydown', (e) => {
   if (el && (
     el.tagName === 'BUTTON'   ||
     el.tagName === 'A'        ||
-    el.tagName === 'INPUT'    ||
+    (el.tagName === 'INPUT' && el !== seekEl) || // the seek slider has no Space action of its own
     el.tagName === 'TEXTAREA' ||
     el.tagName === 'SELECT'   ||
     el.isContentEditable
@@ -255,66 +274,28 @@ downloadBtn.addEventListener('click', () => {
   a.click();
 });
 
-// --- SEEK BAR ---
-const progressWrapper = document.querySelector('.progress-wrapper');
+// --- SEEK SLIDER ---
+// 'input' fires continuously while dragging: move the fill and times, but don't
+// seek yet. 'change' fires on release (and on each Home/End key): seek then.
+seekEl.addEventListener('input', () => {
+  draggingSeek = true;
+  updateProgressUI(Number(seekEl.value));
+});
 
-if (progressWrapper) {
-  let dragging = false;
+seekEl.addEventListener('change', () => {
+  draggingSeek = false;
+  audio.currentTime = Number(seekEl.value);
+  persistPlayerState();
+});
 
-  function seekTo(e) {
-    if (!audio.src || isNaN(audio.duration)) return;
-    if (!playerState.seekingAllowed) return;
-
-    const rect    = progressWrapper.getBoundingClientRect();
-    const percent = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
-
-    audio.currentTime = percent * audio.duration;
-    progressBar.style.width = (percent * 100) + '%';
-    blockSeeking();
-  }
-
-  progressWrapper.addEventListener('mousedown', (e) => {
-    if (!playerState.seekingAllowed) return;
-    dragging = true;
-    document.body.style.userSelect = 'none';
-    progressWrapper.classList.add('dragging');
-    seekTo(e);
-    blockSeeking();
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    if (dragging) seekTo(e);
-  });
-
-  document.addEventListener('mouseup', () => {
-    if (dragging) {
-      dragging = false;
-      document.body.style.userSelect = '';
-      progressWrapper.classList.remove('dragging');
-      persistPlayerState();
-    }
-  });
-
-  progressWrapper.addEventListener('touchstart', (e) => {
-    dragging = true;
-    document.body.style.userSelect = 'none';
-    progressWrapper.classList.add('dragging');
-    seekTo(e.touches[0]);
-  }, { passive: true });
-
-  document.addEventListener('touchmove', (e) => {
-    if (dragging) {
-      seekTo(e.touches[0]);
-      e.preventDefault();
-    }
-  }, { passive: false });
-
-  document.addEventListener('touchend', () => {
-    dragging = false;
-    document.body.style.userSelect = '';
-    progressWrapper.classList.remove('dragging');
-  });
-}
+// Arrow keys jump 10 seconds, Page Up/Down 1 minute (Home/End: browser default)
+seekEl.addEventListener('keydown', (e) => {
+  const jumps = { ArrowRight: 10, ArrowUp: 10, ArrowLeft: -10, ArrowDown: -10, PageUp: 60, PageDown: -60 };
+  if (!(e.key in jumps) || isNaN(audio.duration)) return;
+  e.preventDefault();
+  audio.currentTime = Math.min(Math.max(audio.currentTime + jumps[e.key], 0), audio.duration);
+  updateProgressUI(audio.currentTime);
+});
 
 // --- PAGE CHANGE HANDLER ---
 document.addEventListener('player:pagechanged', (e) => {
