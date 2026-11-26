@@ -18,7 +18,8 @@
   --bg-nav: #EBEBE5DC;
   --bg-player: #D7D6CCDC;
   --brand-color: #528167;
-    --brand-text: #3e614d; /* brand green, darkened so small text passes 4.5:1 */
+  --brand-text: #3e614d;
+  /* brand green, darkened so small text passes 4.5:1 */
   --brand-accent: #A75149;
 
   --font-serif: "Averia Serif Libre", serif;
@@ -71,7 +72,7 @@ main:focus {
 
 html {
   scroll-behavior: smooth;
-   scrollbar-gutter: stable;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -133,7 +134,8 @@ body.is-navigating.is-slow::after {
 main {
   flex: 1;
   height: 100%;
-  scroll-margin-top: 5rem; /* when jumped to (skip link), stop below the sticky nav */
+  scroll-margin-top: 5rem;
+  /* when jumped to (skip link), stop below the sticky nav */
   transition: opacity 250ms ease, transform 250ms ease;
 }
 
@@ -198,7 +200,7 @@ main p,
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
 }
@@ -210,7 +212,7 @@ main p,
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
   text-decoration: none;
 }
@@ -371,7 +373,7 @@ main p,
   .mix-tracklist {
     flex: 1 2 auto;
     max-width: 750px;
-    max-height: 550px;
+    max-height: calc(550px - 2 * var(--space-y));/* 550px image minus the 8px top and bottom margins */
     overflow: auto;
   }
 }
@@ -547,20 +549,30 @@ main p,
    text below. The tracklist keeps its own 550px cap and scrollbar. */
 .mixpage-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr); /* one column; minmax stops long tracklist lines widening the page */
+  grid-template-columns: minmax(0, 1fr);
+  /* one column; minmax stops long tracklist lines widening the page */
 }
 
 @media (min-width: 1140px) {
   .mixpage-layout {
-    grid-template-columns: 550px minmax(0, 750px);
+    grid-template-columns: 550px minmax(0, calc(750px + 2 * var(--space-x-more)));
+    /* 750px list + its side margins, as on the home page */
     grid-template-areas:
       "image tracklist"
       "text  text";
   }
 
-  .mixpage-layout .mix-image     { grid-area: image; }
-  .mixpage-layout .mixpage-text  { grid-area: text; }
-  .mixpage-layout .mix-tracklist { grid-area: tracklist; }
+  .mixpage-layout .mix-image {
+    grid-area: image;
+  }
+
+  .mixpage-layout .mixpage-text {
+    grid-area: text;
+  }
+
+  .mixpage-layout .mix-tracklist {
+    grid-area: tracklist;
+  }
 }
 
 /* Stacked mix page: the list sits close under its "tracklist" heading */
@@ -646,14 +658,14 @@ main:has(> .about-page-section, > .four-o-four-section) {
 .about-page-top-container {
   padding: 1rem 2rem 1rem 2rem;
   max-width: 400px;
-  align-self: flex-end; 
+  align-self: flex-end;
   text-align: right;
 }
 
 .about-page-bottom-container {
   padding: 0rem 2rem 2rem 1rem;
   max-width: 400px;
-  align-self: flex-end; 
+  align-self: flex-end;
   text-align: end;
 }
 
@@ -664,7 +676,7 @@ main:has(> .about-page-section, > .four-o-four-section) {
   }
 
   .about-page-bottom-container {
-    align-self: flex-start; 
+    align-self: flex-start;
   }
 }
 
@@ -685,7 +697,7 @@ main:has(> .about-page-section, > .four-o-four-section) {
   flex: 1;
 }
 
-.four-o-four-container{
+.four-o-four-container {
   align-self: center;
   text-align: center;
 }
@@ -800,11 +812,13 @@ main:has(> .about-page-section, > .four-o-four-section) {
   --progress: 0%;
   --seek-fill: #528167;
   --seek-track: #222;
-  --seek-thumb: transparent; /* no dot by default */
+  --seek-thumb: transparent;
+  /* no dot by default */
 
   flex-grow: 1;
   min-width: 0;
-  height: 18px; /* easier to hit than the 6px bar; the track itself stays 6px */
+  height: 18px;
+  /* easier to hit than the 6px bar; the track itself stays 6px */
   margin: 0;
   background: transparent;
   cursor: pointer;
@@ -834,7 +848,8 @@ main:has(> .about-page-section, > .four-o-four-section) {
   appearance: none;
   width: 14px;
   height: 14px;
-  margin-top: -4px; /* centre on the 6px track: (6 - 14) / 2 */
+  margin-top: -4px;
+  /* centre on the 6px track: (6 - 14) / 2 */
   border: none;
   border-radius: 50%;
   background: var(--seek-thumb);
@@ -871,6 +886,8 @@ main:has(> .about-page-section, > .four-o-four-section) {
 .format-btn {
   font-family: var(--font-serif);
   font-size: 0.9rem;
+  min-width: 3.75em;
+  /* fits "FLAC", so switching formats doesn't resize the slider */
   background: transparent;
   border: none;
   color: #000;
