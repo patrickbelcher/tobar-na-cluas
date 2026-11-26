@@ -59,7 +59,9 @@ function formatTime(seconds = 0) {
 
 // --- FOOTER TITLE ---
 function updateFooterTitle(mix) {
-  if (mixTitleEl && mix) mixTitleEl.textContent = `${mix.who} : ${mix.title}`;
+  if (!mix) return;
+  if (mixTitleEl) mixTitleEl.textContent = `${mix.who} : ${mix.title}`;
+  downloadBtn.setAttribute('aria-label', `Download MP3: ${mix.who} : ${mix.title}`);
 }
 
 // --- IMAGE OVERLAY ---
@@ -75,11 +77,12 @@ function initOverlayIcons(scope = document) {
 // paused → active-mix + play icon on loaded wrap
 // playing → active-mix + pause icon on loaded wrap
 function syncImageUI() {
-  // Clear all wraps first
+  // Reset all wraps first: play icon, "Play mix …" label
   document.querySelectorAll('.mix-audio-control-zone').forEach(wrap => {
     wrap.classList.remove('active-mix');
     const icon = wrap.querySelector('.overlay-play-icon');
     if (icon) icon.innerHTML = playCircleSVG;
+    setCoverLabel(wrap, 'Play');
   });
 
   if (playerState.status === 'idle') return;
@@ -88,9 +91,17 @@ function syncImageUI() {
   const wrap = getLoadedWrap();
   if (!wrap) return;
 
+  const playing = playerState.status === 'playing';
   wrap.classList.add('active-mix');
   const icon = wrap.querySelector('.overlay-play-icon');
-  if (icon) icon.innerHTML = playerState.status === 'playing' ? pauseCircleSVG : playCircleSVG;
+  if (icon) icon.innerHTML = playing ? pauseCircleSVG : playCircleSVG;
+  setCoverLabel(wrap, playing ? 'Pause' : 'Play');
+}
+
+// Screen-reader name for a cover button: says what a click will do
+function setCoverLabel(wrap, action) {
+  const mix = getMix(wrap.dataset.id);
+  if (mix) wrap.setAttribute('aria-label', `${action} mix ${mix.who} : ${mix.title}`);
 }
 
 // Updates format toggle button state for the loaded mix
@@ -102,9 +113,13 @@ function syncFormatBtn() {
     playerState.currentFormat = 'mp3';
     formatBtn.textContent = 'MP3';
     formatBtn.disabled = true;
+    formatBtn.setAttribute('aria-label', 'Audio format MP3');
   } else {
+    const current = playerState.currentFormat.toUpperCase();
+    const other = current === 'MP3' ? 'FLAC' : 'MP3';
     formatBtn.disabled = false;
-    formatBtn.textContent = playerState.currentFormat.toUpperCase();
+    formatBtn.textContent = current;
+    formatBtn.setAttribute('aria-label', `Audio format ${current}, switch to ${other}`);
   }
 }
 
@@ -152,6 +167,7 @@ audio.addEventListener('timeupdate', () => {
 audio.addEventListener('play', () => {
   playerState.status = 'playing';
   playerIcon.innerHTML = pauseCircleSVG;
+  playBtn.setAttribute('aria-label', 'Pause');
   syncImageUI();
 
   playerState.saveInterval = setInterval(persistPlayerState, 15000);
@@ -160,6 +176,7 @@ audio.addEventListener('play', () => {
 audio.addEventListener('pause', () => {
   playerState.status = 'paused';
   playerIcon.innerHTML = playCircleSVG;
+  playBtn.setAttribute('aria-label', 'Play');
   syncImageUI();
 
   persistPlayerState();
@@ -184,8 +201,12 @@ playBtn.addEventListener('click', () => {
 document.addEventListener('keydown', (e) => {
   if (e.code !== 'Space') return;
 
+  // Space on a button or link already "presses" it; inputs need their own Space.
+  // Only act when focus is somewhere neutral (the page, <main>, a tracklist...)
   const el = document.activeElement;
   if (el && (
+    el.tagName === 'BUTTON'   ||
+    el.tagName === 'A'        ||
     el.tagName === 'INPUT'    ||
     el.tagName === 'TEXTAREA' ||
     el.tagName === 'SELECT'   ||
@@ -211,12 +232,13 @@ formatBtn.addEventListener('click', async () => {
   if (!mix.formats[nextFormat]) return;
 
   const currentTime = audio.currentTime;
+  const wasPlaying = playerState.status === 'playing';
 
   playerState.currentFormat = nextFormat;
-  formatBtn.textContent = nextFormat.toUpperCase();
+  syncFormatBtn(); // button text and label
 
   loadMix(mix, currentTime);
-  await playMix();
+  if (wasPlaying) await playMix();
   blockSeeking();
 });
 

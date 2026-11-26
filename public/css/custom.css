@@ -745,6 +745,11 @@ main:has(> .about-page-section, > .four-o-four-section) {
   color: var(--brand-color);
 }
 
+/* Nothing loaded yet: hide "playing :" (keeps its space, so the footer doesn't jump) */
+#current-track:has(#player-mix-title:empty) {
+  visibility: hidden;
+}
+
 /* Player controls */
 .player-controls {
   display: flex;
