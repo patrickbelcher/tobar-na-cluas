@@ -6,9 +6,20 @@ function initContactEmail() {
   el.href = `mailto:${parts[0]}@${parts[1]}.${parts[2]}`;
 }
 
+// Mark the nav link for the current page; screen readers announce "current page"
+function updateCurrentNav() {
+  document.querySelectorAll(".navbar a[data-spa]").forEach(link => {
+    if (new URL(link.href).pathname === window.location.pathname) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
+
 function onPageInit() {
   initContactEmail();
-  // future per-page init logic goes here
+  updateCurrentNav();
 }
 
 const LEAVE_MS = 350;   // length of the fade-out before fetching
@@ -50,6 +61,10 @@ async function navigate(url, { push = true } = {}) {
 
     // Start the new page at the top ("instant" overrides the CSS smooth scrolling)
     window.scrollTo({ top: 0, behavior: "instant" });
+
+    // Move keyboard/screen-reader focus to the new content, so the next Tab
+    // starts there and screen readers read the new page (no ring: see main:focus)
+    main.focus({ preventScroll: true });
 
     // Page title sent by the server (see render() in app.js)
     const title = response.headers.get("X-Page-Title");
