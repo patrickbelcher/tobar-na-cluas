@@ -18,6 +18,7 @@
   --bg-nav: #EBEBE5DC;
   --bg-player: #D7D6CCDC;
   --brand-color: #528167;
+    --brand-text: #3e614d; /* brand green, darkened so small text passes 4.5:1 */
   --brand-accent: #A75149;
 
   --font-serif: "Averia Serif Libre", serif;
@@ -670,7 +671,7 @@ main:has(> .about-page-section, > .four-o-four-section) {
 #contact-email {
   font-family: var(--font-serif);
   font-size: clamp(1.25rem, 3vw, 1.5rem);
-  color: var(--brand-color);
+  color: var(--brand-text);
   font-weight: 400;
   font-style: italic;
   margin-bottom: 1.25rem;
@@ -742,7 +743,7 @@ main:has(> .about-page-section, > .four-o-four-section) {
 }
 
 #player-mix-title {
-  color: var(--brand-color);
+  color: var(--brand-text);
 }
 
 /* Nothing loaded yet: hide "playing :" (keeps its space, so the footer doesn't jump) */
