@@ -42,13 +42,13 @@
 
 <body>
 
-  <a href="#spa-main" class="skip-link">Skip to main content</a>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- Navbar -->
   <%- include('partials/navbar') %>
 
-    <!-- Mix sections injected by express-ejs-layouts -->
-    <main id="spa-main" role="main" tabindex="-1">
+     <!-- Page content: express-ejs-layouts puts each view here -->
+    <main id="main-content" tabindex="-1">
       <%- body %>
     </main>
 

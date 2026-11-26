@@ -1,5 +1,6 @@
 <div class="mixpage">
-  <h1 class="visually-hidden">Tobar na Cluas mix - <%= mix.who %> : <%= mix.title %></h1>
+  <h1 class="visually-hidden">Tobar na Cluas mix - <%= mix.who %> : <%= mix.title %>
+  </h1>
 
   <!-- Order here = order on phones: image, text, tracklist.
        On desktop the CSS grid puts the text below image + tracklist (see .mixpage-layout). -->
@@ -9,10 +10,10 @@
       <div class="mix-image-wrap">
         <button class="mix-audio-control-zone" data-id="<%= mix.base %>"
           aria-label="Play mix <%= mix.who %> : <%= mix.title %>">
-          <img src="<%= mix.image %>" alt="<%= mix.title %>">
+          <img src="<%= mix.image %>" alt="">
           <!-- Overlay -->
           <div class="image-overlay">
-            <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
+            <svg class="overlay-play-icon" data-id="<%= mix.base %>" aria-hidden="true"></svg>
           </div>
         </button>
       </div>
@@ -41,7 +42,7 @@
             <a href="<%= mix.link %>" target="_blank" rel="noopener">
               <span class="mixpage-external-link">
                 <%= mix.linkText %>
-              </span>
+              </span><span class="visually-hidden"> (opens in new tab)</span>
             </a>
           </div>
           <% } %>

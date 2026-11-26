@@ -1,7 +1,7 @@
 <h1 class="visually-hidden">Tobar na Cluas mixes</h1>
 
 <% Object.values(mixes).forEach(mix=> { %>
-  <section class="mix-section">
+  <article class="mix-section">
     
     <div class="mix-container">
 
@@ -21,10 +21,10 @@
             data-id="<%= mix.base %>"
             aria-label="Play mix <%= mix.who %> : <%= mix.title %>"
           >
-            <img src="<%= mix.image %>" alt="<%= mix.title %>">
+            <img src="<%= mix.image %>" alt="">
             <!-- Overlay -->
             <div class="image-overlay">
-              <svg class="overlay-play-icon" data-id="<%= mix.base %>"></svg>
+              <svg class="overlay-play-icon" data-id="<%= mix.base %>" aria-hidden="true"></svg>
             </div>
           </button>
         </div>
@@ -40,6 +40,6 @@
 
     </div>
 
-  </section>
+  </article>
 
   <% }) %>

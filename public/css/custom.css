@@ -30,6 +30,18 @@
   box-sizing: border-box;
 }
 
+/* Keyboard focus ring on anything focusable. :focus-visible shows it for
+   keyboard use, not for mouse clicks. Black = 17:1 on the page background. */
+:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+/* <main> is focused by script after page changes (for screen readers): no ring */
+main:focus {
+  outline: none;
+}
+
 ::view-transition-old(main),
 ::view-transition-new(main) {
   animation-duration: 300ms;
@@ -120,6 +132,7 @@ body.is-navigating.is-slow::after {
 main {
   flex: 1;
   height: 100%;
+  scroll-margin-top: 5rem; /* when jumped to (skip link), stop below the sticky nav */
   transition: opacity 250ms ease, transform 250ms ease;
 }
 
@@ -185,6 +198,7 @@ main p,
   margin: -1px;
   overflow: hidden;
   clip: rect(0,0,0,0);
+  white-space: nowrap;
   border: 0;
 }
 
@@ -203,7 +217,8 @@ main p,
 .skip-link:focus {
   position: fixed;
   top: 1rem;
-  left: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   width: auto;
   height: auto;
   padding: 0.5rem 1rem;
@@ -417,9 +432,6 @@ main p,
   cursor: pointer;
 }
 
-.mix-title-overlay:hover {
-  background: #528167AA;
-}
 
 .mix-title-overlay a {
   display: block;
@@ -430,10 +442,6 @@ main p,
 
 .mix-title-overlay h2 {
   margin: 0;
-}
-
-.mix-title-overlay:hover h2 {
-  text-decoration: underline;
 }
 
 .image-overlay {
@@ -457,17 +465,49 @@ main p,
   color: #000;
 }
 
-.mix-audio-control-zone:hover {
-  cursor: url('/icons/ladle.svg') 6 0, auto;
+/* Hover effects only on devices with a real pointer: on touch screens
+   they would "stick" after a tap */
+@media (hover: hover) {
+  .mix-title-overlay:hover {
+    background: #528167AA;
+  }
+
+  .mix-title-overlay:hover h2 {
+    text-decoration: underline;
+  }
+
+  .mix-audio-control-zone:hover {
+    cursor: url('/icons/ladle.svg') 6 0, auto;
+  }
+
+  .mix-audio-control-zone:hover img {
+    transform: scale(1.05);
+  }
+
+  .mix-audio-control-zone:hover .image-overlay {
+    opacity: 1;
+  }
 }
 
-.mix-audio-control-zone:hover img {
-  transform: scale(1.05);
-}
-
-.mix-audio-control-zone:hover .image-overlay {
+/* Keyboard focus on a cover shows the play overlay, like hovering does */
+.mix-audio-control-zone:focus-visible .image-overlay {
   opacity: 1;
-  transform: scale(1);
+}
+
+/* The cover button fills .mix-image-wrap, whose overflow: hidden would clip
+   the button's own ring, so draw the ring around the wrap instead */
+.mix-audio-control-zone:focus-visible {
+  outline: none;
+}
+
+.mix-image-wrap:has(.mix-audio-control-zone:focus-visible) {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+/* The title link also sits inside the wrap: draw its ring just inside it */
+.mix-title-overlay a:focus-visible {
+  outline-offset: -4px;
 }
 
 .mix-audio-control-zone.active-mix img {
@@ -808,5 +848,34 @@ main:has(> .about-page-section, > .four-o-four-section) {
 @media (max-width: 960px) {
   .format-btn {
     display: none;
+  }
+}
+
+/* ===========================================================
+   Reduced motion (last, so it overrides the rules above)
+=========================================================== */
+
+/* Visitors who ask their system for less motion get none */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  ::view-transition-old(main),
+  ::view-transition-new(main) {
+    animation: none;
+  }
+
+  main.is-leaving,
+  main.is-entering {
+    transform: none;
   }
 }

@@ -13,6 +13,7 @@ function onPageInit() {
 
 const LEAVE_MS = 350;   // length of the fade-out before fetching
 let navToken = 0;       // increases with every navigation; the newest one wins
+let currentPath = window.location.pathname; // page currently shown in <main>
 
 async function navigate(url, { push = true } = {}) {
   const myToken = ++navToken;
@@ -45,6 +46,7 @@ async function navigate(url, { push = true } = {}) {
     main.classList.remove("is-entering");
 
     if (push) window.history.pushState({}, "", url);
+    currentPath = window.location.pathname;
 
     // Start the new page at the top ("instant" overrides the CSS smooth scrolling)
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -82,6 +84,9 @@ document.addEventListener("click", (event) => {
 });
 
 window.addEventListener("popstate", () => {
+  // Only the #fragment changed (e.g. the skip link, or Back after using it):
+  // same page, nothing to load
+  if (window.location.pathname === currentPath) return;
   navigate(window.location.pathname, { push: false });
 });
 
